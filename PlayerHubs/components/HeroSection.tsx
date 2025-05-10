@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react'
 
 const HeroSection = () => {
   return (
-    <div className="container px-4 md:px-6 flex ">
+    <div className="container px-4 md:px-6 flex justify-center items-center min-h-screen ">
         <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">

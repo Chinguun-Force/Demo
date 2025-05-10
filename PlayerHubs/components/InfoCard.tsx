@@ -2,7 +2,7 @@ import React from 'react'
 
 const InfoCard = () => {
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center lg:translate-x-20">
     <div className="relative h-[450px] w-[350px] rounded-lg bg-muted p-2 shadow-xl">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-muted rounded-lg">
         <div className="absolute inset-0 flex items-center justify-center">
