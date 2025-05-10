@@ -9,7 +9,7 @@
 
 # production
 /build
-
+/lib/demo.erd.json
 # debug
 npm-debug.log*
 yarn-debug.log*
