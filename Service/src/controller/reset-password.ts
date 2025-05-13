@@ -20,8 +20,8 @@ export const resetRequest = async (req, res) => {
       port: 587,
       secure: false,
       auth: {
-        user: "chinguunbats9@gmail.com",
-        pass: "jaqiglfgezugldvf",
+        user: "player.crm4040@gmail.com",
+        pass: "yjrnxnzkhcxclqgb",
       },
     });
   
@@ -32,7 +32,7 @@ export const resetRequest = async (req, res) => {
     const info = await transporter.sendMail({
       from: "Food delivery service", // sender address
       to: email, // list of receivers
-      subject: "Reset password", // Subject line
+      subject: "Нууц үг солих хүсэлт", // Subject line
       html: `
         <h1>Reset password</h1>
         <p>Click <a href="http://localhost:3000/reset-password?token=${token}"> <button style="padding: 6px 12px; background-color: #3768FF; text: #FFF;">here </button> </a>  to reset your password</p>
