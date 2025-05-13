@@ -45,5 +45,8 @@ export const login = async (req, res) => {
       expiresIn: "1h",
     });
   
-    res.status(200).json({ success: true, token });
+    res.status(200).json({ success: true, token : token, message : "Login success" });
   };
+export const forgotPassword = async (req,res ) => {
+  
+}
