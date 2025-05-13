@@ -58,3 +58,4 @@ const playerSchema = new mongoose.Schema({
         default : {},
     }
 })
+export const Player = mongoose.model("Player", playerSchema);
