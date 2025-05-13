@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -17,12 +16,30 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
   const router = useRouter()
   const { toast } = useToast()
 
+  const validatePassword = (password: string) => {
+    // Example password validation: at least 8 characters, one uppercase, one number
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/
+    if (!passwordRegex.test(password)) {
+      return "Password must be at least 8 characters long, include one uppercase letter, and one number."
+    }
+    return null
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    const error = validatePassword(password)
+    if (error) {
+      setPasswordError(error)
+      return
+    }
+
     setIsLoading(true)
+    setPasswordError(null)
 
     try {
       // Simulate authentication
@@ -94,6 +111,7 @@ export default function LoginPage() {
                 <span className="sr-only">{showPassword ? "Hide password" : "Show password"}</span>
               </Button>
             </div>
+            {passwordError && <p className="text-sm text-red-500">{passwordError}</p>}
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
