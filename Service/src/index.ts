@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import cors from 'cors'
 import { connection } from './utils/connection'
 import { authRouter } from './routes/auth'
+import { playerRouter } from './routes/player'
 
 dotenv.config()
 const port = 8000
@@ -17,6 +18,7 @@ app.get('/', (req,res)=>{
 // app.use('/api/v1/foods', foodRouter);
 // app.use('/api/v1/categories', categoryRouter);
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/players', playerRouter)
 app.listen(port, async() => {
     const connectDb = async () => {
       try{
