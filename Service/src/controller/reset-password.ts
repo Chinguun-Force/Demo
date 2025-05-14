@@ -24,6 +24,9 @@ export const forgotPassword = async (req, res) => {
         pass: "yjrnxnzkhcxclqgb",
       },
     });
+    const token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET_KEY, {
+      expiresIn: "1h",
+    });
     const info = await transporter.sendMail({
       from: "Food delivery service", // sender address
       to: email, // list of receivers
