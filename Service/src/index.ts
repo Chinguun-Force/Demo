@@ -18,6 +18,9 @@ app.get('/', (req, res) => {
 app.get('/test', (req, res) => {
   res.send('Test Route')
 })
+app.get('/api', (req, res) => {
+  res.send('API Route')
+})
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/players', playerRouter)
 const connectDb = async () => {

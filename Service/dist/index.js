@@ -29,6 +29,9 @@ app.get('/', (req, res) => {
 app.get('/test', (req, res) => {
     res.send('Test Route');
 });
+app.get('/api', (req, res) => {
+    res.send('API Route');
+});
 app.use('/api/v1/auth', auth_1.authRouter);
 app.use('/api/v1/players', player_1.playerRouter);
 const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
