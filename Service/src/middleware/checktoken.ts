@@ -10,7 +10,7 @@ export const checkToken = async (req, res, next) => {
 
     const decode = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
 
-    if (decode.user.role != "ADMIN") {
+    if (typeof decode !== "object" || !("user" in decode) || decode.user.role != "ADMIN") {
       res.status(401).json({ success: false, error: "unauthorization" });
       return;
     }
@@ -18,6 +18,5 @@ export const checkToken = async (req, res, next) => {
     next();
   } catch (error) {
     res.status(401).json({ success: false, error: error.message });
-    console.log("tttt")
   }
 };

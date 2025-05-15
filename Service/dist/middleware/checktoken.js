@@ -22,7 +22,7 @@ const checkToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         }
         const [_, token] = req.headers["authorization"].split(" ");
         const decode = jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
-        if (decode.user.role != "ADMIN") {
+        if (typeof decode !== "object" || !("user" in decode) || decode.user.role != "ADMIN") {
             res.status(401).json({ success: false, error: "unauthorization" });
             return;
         }
@@ -30,7 +30,6 @@ const checkToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         res.status(401).json({ success: false, error: error.message });
-        console.log("tttt");
     }
 });
 exports.checkToken = checkToken;

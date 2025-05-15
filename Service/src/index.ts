@@ -18,22 +18,16 @@ app.get('/', (req, res) => {
 app.get('/test', (req, res) => {
   res.send('Test Route')
 })
-// app.use('/api/v1/foods', foodRouter);
-// app.use('/api/v1/categories', categoryRouter);
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/players', playerRouter)
-
-const connectDb = async () => {
-  try {
-    await connection()
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-connectDb()
-
-app.listen(port, async () => {
-
-  console.log(`Server is running on port ${port}`)
-})
+app.listen(port, async() => {
+    const connectDb = async () => {
+      try{
+        await connection()
+      }catch(err){
+        console.error(err)
+      }
+    }
+    connectDb()
+    console.log(`Server is running on port ${port}`)
+  })

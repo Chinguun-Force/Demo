@@ -12,16 +12,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forgotPassword = exports.login = exports.signUp = void 0;
+exports.login = exports.signUp = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../schema/user");
 const saltRounds = 12;
+const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+        return "Password must be at least 8 characters long, include one uppercase letter, one number, and one special character.";
+    }
+    return null;
+};
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { password } = req.body;
+        // Validate password
+        const passwordError = validatePassword(password);
+        if (passwordError) {
+            return res.status(400).json({ success: false, message: passwordError });
+        }
         const salt = bcrypt_1.default.genSaltSync(saltRounds);
-        const hash = bcrypt_1.default.hashSync(req.body.password, salt);
+        const hash = bcrypt_1.default.hashSync(password, salt);
         const user = yield user_1.User.create(Object.assign(Object.assign({}, req.body), { password: hash }));
         res.status(201).json({ success: true, user });
     }
@@ -29,6 +41,9 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log(error);
         if (error.code === 11000) {
             res.status(400).json({ success: false, message: "User already exists" });
+        }
+        else {
+            res.status(500).json({ success: false, message: "Internal server error" });
         }
     }
 });
@@ -52,10 +67,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = jsonwebtoken_1.default.sign({ user }, process.env.ACCESS_TOKEN_SECRET_KEY, {
         expiresIn: "1h",
     });
-    res.status(200).json({ success: true, token: token, message: "Login success" });
+    res.status(200).json({ success: true, token });
 });
 exports.login = login;
-const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-});
-exports.forgotPassword = forgotPassword;
 //# sourceMappingURL=auth.js.map

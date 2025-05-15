@@ -17,6 +17,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = require("./utils/connection");
 const auth_1 = require("./routes/auth");
+const player_1 = require("./routes/player");
 dotenv_1.default.config();
 const port = 8000;
 const app = (0, express_1.default)();
@@ -28,9 +29,8 @@ app.get('/', (req, res) => {
 app.get('/test', (req, res) => {
     res.send('Test Route');
 });
-// app.use('/api/v1/foods', foodRouter);
-// app.use('/api/v1/categories', categoryRouter);
 app.use('/api/v1/auth', auth_1.authRouter);
+app.use('/api/v1/players', player_1.playerRouter);
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
         try {

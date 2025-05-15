@@ -12,36 +12,51 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forgotPassword = void 0;
+exports.updatePassword = exports.resetRequest = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const user_1 = require("../schema/user");
 const saltRounds = 12;
-const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const { email } = req.body;
-    // const user = await User.findOne({email:email});
-    // if (!user) {
-    //     res.status(404).json({ success: false, error: 'User not found' });
-    //     return;
-    // }
+const resetRequest = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.body;
+    const user = yield user_1.User.findOne({ email: email });
+    if (!user) {
+        res.json({ message: "User not found" });
+        return;
+    }
     const transporter = nodemailer_1.default.createTransport({
         host: "smtp.gmail.com",
         port: 587,
-        secure: false, // true for 465, false for other ports
+        secure: false,
         auth: {
-            user: "chinguunbats9@gmail.com",
-            pass: "jaqiglfgezugldvf",
+            user: "player.crm4040@gmail.com",
+            pass: "yjrnxnzkhcxclqgb",
         },
     });
+    const token = jsonwebtoken_1.default.sign({ user }, process.env.ACCESS_TOKEN_SECRET_KEY, {
+        expiresIn: "1h",
+    });
     const info = yield transporter.sendMail({
-        from: "Test", // sender address
-        to: "chinguunbats9@gmail.com", // list of receivers
-        subject: "Reset password", // Subject line
+        from: "Food delivery service", // sender address
+        to: email, // list of receivers
+        subject: "Нууц үг солих хүсэлт", // Subject line
         html: `
-          <h1>Reset password</h1>
-          <p>Click<button style="padding: 6px 12px; background-color: #3768FF; text: #FFF;">here </button> </a>  to reset your password</p>
-        `,
+        <h1>Reset password</h1>
+        <p>Click <a href="http://localhost:3000/reset-password?token=${token}"> <button style="padding: 6px 12px; background-color: #3768FF; text: #FFF;">here </button> </a>  to reset your password</p>
+      `,
     });
     console.log(info);
     res.json({ message: "Mail sent" });
 });
-exports.forgotPassword = forgotPassword;
+exports.resetRequest = resetRequest;
+const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { _id, password } = req.body;
+    const salt = bcrypt_1.default.genSaltSync(saltRounds);
+    const hash = bcrypt_1.default.hashSync(password, salt);
+    const user = yield user_1.User.findByIdAndUpdate(_id, { password: hash });
+    console.log(user);
+    res.json({ success: true });
+});
+exports.updatePassword = updatePassword;
 //# sourceMappingURL=reset-password.js.map

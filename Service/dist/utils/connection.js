@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connection = void 0;
+exports.validatePassword = validatePassword;
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -22,4 +23,9 @@ const connection = () => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Connected to database");
 });
 exports.connection = connection;
+function validatePassword(password) {
+    if (password.length < 8)
+        return "Password must be at least 8 characters.";
+    return null;
+}
 //# sourceMappingURL=connection.js.map
