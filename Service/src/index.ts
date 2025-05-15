@@ -20,8 +20,7 @@ app.get('/test', (req, res) => {
 })
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/players', playerRouter)
-app.listen(port, async() => {
-    const connectDb = async () => {
+const connectDb = async () => {
       try{
         await connection()
       }catch(err){
@@ -29,5 +28,6 @@ app.listen(port, async() => {
       }
     }
     connectDb()
+app.listen(port, async() => {
     console.log(`Server is running on port ${port}`)
   })

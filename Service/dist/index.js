@@ -31,16 +31,16 @@ app.get('/test', (req, res) => {
 });
 app.use('/api/v1/auth', auth_1.authRouter);
 app.use('/api/v1/players', player_1.playerRouter);
+const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield (0, connection_1.connection)();
+    }
+    catch (err) {
+        console.error(err);
+    }
+});
+connectDb();
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
-    const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
-        try {
-            yield (0, connection_1.connection)();
-        }
-        catch (err) {
-            console.error(err);
-        }
-    });
-    connectDb();
     console.log(`Server is running on port ${port}`);
 }));
 //# sourceMappingURL=index.js.map
