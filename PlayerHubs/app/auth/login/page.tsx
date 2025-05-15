@@ -26,7 +26,14 @@ export default function LoginPage() {
 
     try {
       // Simulate authentication
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await fetch("http://localhost:8000/api/v1/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+
 
       // In a real app, you would call your auth API here
       // const response = await signIn(email, password)
@@ -36,7 +43,7 @@ export default function LoginPage() {
         description: "Welcome back to the Player Management System",
       })
 
-      router.push("/dashboard")
+      // router.push("/dashboard")
     } catch (error) {
       toast({
         variant: "destructive",

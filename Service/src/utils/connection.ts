@@ -8,3 +8,7 @@ export const connection = async () => {
     await mongoose.connect(MONGODB_URI);
     console.log("Connected to database");
 };
+export function validatePassword(password) {
+    if (password.length < 8) return "Password must be at least 8 characters.";
+    return null;
+  }
