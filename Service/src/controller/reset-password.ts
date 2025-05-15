@@ -5,36 +5,55 @@ import { User } from '../schema/user';
 
 const saltRounds = 12;
 
-export const forgotPassword = async (req, res) => {
-    // const { email } = req.body;
-
-    // const user = await User.findOne({email:email});
-
-    // if (!user) {
-    //     res.status(404).json({ success: false, error: 'User not found' });
-    //     return;
-    // }
-
+export const resetRequest = async (req, res) => {
+    const { email } = req.body;
+  
+    const user = await User.findOne({ email: email });
+  
+    if (!user) {
+      res.json({ message: "User not found" });
+      return;
+    }
+  
     const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: "chinguunbats9@gmail.com",
-            pass: "jaqiglfgezugldvf",
-        },
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "player.crm4040@gmail.com",
+        pass: "yjrnxnzkhcxclqgb",
+      },
     });
+  
+    const token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET_KEY, {
+      expiresIn: "1h",
+    });
+  
     const info = await transporter.sendMail({
-        from: "Test", // sender address
-        to: "chinguunbats9@gmail.com", // list of receivers
-        subject: "Reset password", // Subject line
-        html: `
-          <h1>Reset password</h1>
-          <p>Click<button style="padding: 6px 12px; background-color: #3768FF; text: #FFF;">here </button> </a>  to reset your password</p>
-        `,
-      });
+      from: "Food delivery service", // sender address
+      to: email, // list of receivers
+      subject: "Нууц үг солих хүсэлт", // Subject line
+      html: `
+        <h1>Reset password</h1>
+        <p>Click <a href="http://localhost:3000/reset-password?token=${token}"> <button style="padding: 6px 12px; background-color: #3768FF; text: #FFF;">here </button> </a>  to reset your password</p>
+      `,
+    });
+  
+    console.log(info);
+  
+    res.json({ message: "Mail sent" });
+  };
+
+  export const updatePassword = async (req, res) => {
+    const { _id, password } = req.body;
     
-      console.log(info);
-    
-      res.json({ message: "Mail sent" });
-}
+    const salt = bcrypt.genSaltSync(saltRounds);
+  
+    const hash = bcrypt.hashSync(password, salt);
+  
+    const user = await User.findByIdAndUpdate(_id, { password: hash });
+  
+    console.log(user);
+  
+    res.json({ success: true });
+  };
