@@ -11,23 +11,23 @@ app.use(cors())
 
 app.use(express.json())
 
-app.get('/', (req,res)=>{
-    res.send('Hello World!')
+app.get('/', (req, res) => {
+  res.send('Hello World!')
 })
-app.get('/test', (req , res) => {
-    res.send('Test Route')
+app.get('/test', (req, res) => {
+  res.send('Test Route')
 })
 // app.use('/api/v1/foods', foodRouter);
 // app.use('/api/v1/categories', categoryRouter);
 app.use('/api/v1/auth', authRouter)
-app.listen(port, async() => {
-    const connectDb = async () => {
-      try{
-        await connection()
-      }catch(err){
-        console.error(err)
-      }
+app.listen(port, async () => {
+  const connectDb = async () => {
+    try {
+      await connection()
+    } catch (err) {
+      console.error(err)
     }
-    connectDb()
-    console.log(`Server is running on port ${port}`)
-  })
+  }
+  connectDb()
+  console.log(`Server is running on port ${port}`)
+})

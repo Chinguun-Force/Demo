@@ -25,6 +25,9 @@ app.use(express_1.default.json());
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
+app.get('/test', (req, res) => {
+    res.send('Test Route');
+});
 // app.use('/api/v1/foods', foodRouter);
 // app.use('/api/v1/categories', categoryRouter);
 app.use('/api/v1/auth', auth_1.authRouter);
