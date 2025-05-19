@@ -17,15 +17,13 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const router = useRouter()
   const { toast } = useToast()
-
+  const router = useRouter()
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
-      // Simulate authentication
       await fetch("http://localhost:8000/api/v1/auth/login", {
         method: "POST",
         headers: {
@@ -33,11 +31,17 @@ export default function LoginPage() {
         },
         body: JSON.stringify({ email, password }),
       })
-
-
-      // In a real app, you would call your auth API here
-      // const response = await signIn(email, password)
-
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok")
+          }
+          return response.json()
+        })
+        .then((data) => {
+          console.log(data)
+            localStorage.setItem("token", data.token)
+    
+        })
       toast({
         title: "Login successful",
         description: "Welcome back to the Player Management System",

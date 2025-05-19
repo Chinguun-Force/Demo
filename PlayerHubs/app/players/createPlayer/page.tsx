@@ -12,7 +12,11 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
+import { useToast } from "@/hooks/use-toast"
+
 import { Separator } from "@/components/ui/separator"
+import { useRouter } from "next/navigation"
+
 
 export default function PlayerForm() {
   const [isLoading, setIsLoading] = useState(false)
@@ -44,8 +48,9 @@ export default function PlayerForm() {
   const [newTeam, setNewTeam] = useState("")
   const [newAchievement, setNewAchievement] = useState("")
   const [newSocialLink, setNewSocialLink] = useState("")
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const { toast } = useToast()
+  const router = useRouter()
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
@@ -71,11 +76,37 @@ export default function PlayerForm() {
     }
 
     // Simulate API call
-    setTimeout(() => {
-      console.log("Player data submitted:", playerData)
-      setIsLoading(false)
-      // Here you would typically send the data to your API
-    }, 1500)
+    try {
+      await fetch("http://localhost:8000/api/v1/players",{
+        
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(playerData),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok")
+          }
+          return response.json()
+        })
+        .then((data) => {
+          console.log(data)
+          if(data.success){
+            toast
+            ({
+              title: "Та өөрийн профайлыг амжилттай үүсгэлээ",
+              description: "Таны профайл амжилттай үүсгэлээ",
+            })
+      router.push("/dashboard")
+          }
+        })
+    } catch (error) {
+      console.error("Error creating player profile:", error)
+    }
+
   }
 
   const addCareerTeam = () => {
@@ -364,7 +395,7 @@ export default function PlayerForm() {
                   Saving player data...
                 </>
               ) : (
-                "Save Player Profile"
+                "Create Player Profile"
               )}
             </Button>
             <div className="text-center text-sm">
