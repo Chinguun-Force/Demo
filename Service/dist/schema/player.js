@@ -6,10 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Player = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const playerSchema = new mongoose_1.default.Schema({
-    id: {
-        type: String,
-        require: true,
-        unique: true,
+    userId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "User",
     },
     name: {
         type: String,
@@ -29,14 +28,12 @@ const playerSchema = new mongoose_1.default.Schema({
     },
     position: {
         type: String,
-        require: true,
     },
     team: {
         type: String,
     },
     jerseyNumber: {
         type: Number,
-        require: true,
     },
     status: {
         type: String,
