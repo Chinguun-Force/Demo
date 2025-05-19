@@ -43,7 +43,7 @@ export default function LoginPage() {
         description: "Welcome back to the Player Management System",
       })
 
-      // router.push("/dashboard")
+      router.push("/dashboard")
     } catch (error) {
       toast({
         variant: "destructive",
