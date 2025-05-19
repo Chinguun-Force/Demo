@@ -8,12 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllPlayers = exports.createPlayer = void 0;
+exports.updatePlayer = exports.getAllPlayers = exports.getUserProfile = exports.getProfileById = exports.createPlayer = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const player_1 = require("../schema/player");
 const createPlayer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const player = yield player_1.Player.create(req.body);
+        const [_, token] = req.headers["authorization"].split(" ");
+        const decode = jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
+        const userId = (typeof decode === 'object' && decode !== null && 'user' in decode && typeof decode.user === 'object')
+            ? decode.user._id
+            : undefined;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Invalid token" });
+        }
+        const player = yield player_1.Player.create(Object.assign(Object.assign({}, req.body), { userId }));
         res.status(201).json({ success: true, player });
     }
     catch (error) {
@@ -27,6 +39,41 @@ const createPlayer = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.createPlayer = createPlayer;
+const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const player = yield player_1.Player.findById(req.params.id);
+        if (!player) {
+            return res.status(404).json({ success: false, message: "Player not found" });
+        }
+        res.status(200).json({ success: true, player });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+exports.getProfileById = getProfileById;
+const getUserProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const [_, token] = req.headers["authorization"].split(" ");
+        const decode = jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
+        console.log(decode);
+        const userId = (typeof decode === 'object' && decode !== null && 'user' in decode && typeof decode.user === 'object')
+            ? decode.user._id
+            : undefined;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Invalid token" });
+        }
+        const player = yield player_1.Player.findOne({ userId: userId });
+        if (!player) {
+            return res.status(404).json({ success: false, message: "Player not found" });
+        }
+        res.status(200).json({ success: true, player });
+    }
+    catch (error) {
+    }
+});
+exports.getUserProfile = getUserProfile;
 const getAllPlayers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const players = yield player_1.Player.find();
@@ -38,4 +85,30 @@ const getAllPlayers = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.getAllPlayers = getAllPlayers;
+const updatePlayer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const authHeader = req.headers["authorization"];
+        if (!authHeader || !authHeader.startsWith("bearer ")) {
+            return res.status(401).json({ success: false, message: "Unauthorized" });
+        }
+        const token = authHeader.split(" ")[1];
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
+        const userId = (typeof decoded === 'object' && decoded !== null && 'user' in decoded && typeof decoded.user === 'object')
+            ? decoded.user._id
+            : undefined;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Invalid token" });
+        }
+        const profile = yield player_1.Player.findOneAndUpdate({ userId: userId }, req.body, { new: true });
+        if (!profile) {
+            return res.status(404).json({ success: false, message: "Player not found" });
+        }
+        res.json({ success: true, profile });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+exports.updatePlayer = updatePlayer;
 //# sourceMappingURL=player.js.map
