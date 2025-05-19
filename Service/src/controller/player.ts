@@ -1,8 +1,17 @@
+import jwt from 'jsonwebtoken';
 import { Player } from '../schema/player';
 
 export const createPlayer = async (req, res) => {
     try {
-        const player = await Player.create(req.body);
+        const [_, token] = req.headers["authorization"].split(" ");
+        const decode = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
+        const userId = (typeof decode === 'object' && decode !== null && 'user' in decode && typeof (decode as any).user === 'object')
+            ? (decode as any).user._id
+            : undefined;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Invalid token" });
+        }
+        const player = await Player.create({ ...req.body, userId });
         res.status(201).json({ success: true, player });
     } catch (error) {
         console.log(error);

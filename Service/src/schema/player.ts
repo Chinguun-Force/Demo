@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
 
 const playerSchema = new mongoose.Schema({
-    id:{
-        type : String,
-        require: true,
-        unique : true,
+    userId:{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "User",
     },
     name: {
         type : String,
@@ -24,14 +23,14 @@ const playerSchema = new mongoose.Schema({
     },
     position: {
         type : String,
-        require : true,
+        
     },
     team: {
         type : String,
     },
     jerseyNumber: {
         type : Number,
-        require : true,
+        
     },
     status: {
         type : String,
