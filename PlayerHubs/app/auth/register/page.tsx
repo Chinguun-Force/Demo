@@ -18,7 +18,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-  const [userType, setUserType] = useState("fan")
+  const [role, setRole] = useState("FAN")
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
@@ -39,23 +39,30 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
-      // Simulate registration
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      // Simulate authentication
+      await fetch("http://localhost:8000/api/v1/auth/sign-up", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, role}),
+      })
 
-      // In a real app, you would call your registration API here
-      // const response = await register(name, email, password, userType)
+
+      // In a real app, you would call your auth API here
+      // const response = await signIn(email, password)
 
       toast({
-        title: "Registration successful",
-        description: "Your account has been created",
+        title: "Login successful",
+        description: "Welcome back to the Player Management System",
       })
 
       router.push("/auth/login")
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Registration failed",
-        description: "There was a problem creating your account",
+        title: "Login failed",
+        description: "Please check your credentials and try again",
       })
     } finally {
       setIsLoading(false)
@@ -123,24 +130,24 @@ export default function RegisterPage() {
             <Label>I am a:</Label>
             <RadioGroup
               defaultValue="fan"
-              value={userType}
-              onValueChange={setUserType}
+              value={role}
+              onValueChange={setRole}
               className="flex flex-col space-y-1"
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="fan" id="fan" />
+                <RadioGroupItem value="FAN" id="fan" />
                 <Label htmlFor="fan" className="font-normal">
                   Fan
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="player" id="player" />
+                <RadioGroupItem value="PLAYER" id="player" />
                 <Label htmlFor="player" className="font-normal">
                   Player
                 </Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="team-owner" id="team-owner" />
+                <RadioGroupItem value="OWNER" id="team-owner" />
                 <Label htmlFor="team-owner" className="font-normal">
                   Team Owner
                 </Label>
