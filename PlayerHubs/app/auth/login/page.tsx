@@ -19,46 +19,45 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    try {
-      await fetch("http://localhost:8000/api/v1/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok")
-          }
-          return response.json()
-        })
-        .then((data) => {
-          console.log(data)
-            localStorage.setItem("token", data.token)
-    
-        })
-      toast({
-        title: "Login successful",
-        description: "Welcome back to the Player Management System",
-      })
+     try {
+    const response = await fetch(`${baseUrl}/api/v1/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
 
-      router.push("/dashboard")
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Login failed",
-        description: "Please check your credentials and try again",
-      })
-    } finally {
-      setIsLoading(false)
+    if (!response.ok) {
+      throw new Error("Network response was not ok")
     }
-  }
 
+    const data = await response.json()
+    console.log(data)
+    localStorage.setItem("token", data.token)
+
+    toast({
+      title: "Login successful!",
+      description: "Welcome back to your dashboard.",
+    })
+
+    router.push("/dashboard")
+  } catch (error) {
+    toast({
+      variant: "destructive",
+      title: "Login failed",
+      description: "Please check your credentials and try again",
+    })
+  } finally {
+    setIsLoading(false)
+  }
+}
+  
   return (
     <Card className="w-full">
       <CardHeader>

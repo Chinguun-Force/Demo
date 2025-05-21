@@ -50,6 +50,7 @@ export default function PlayerForm() {
   const [newSocialLink, setNewSocialLink] = useState("")
   const { toast } = useToast()
   const router = useRouter()
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
@@ -77,7 +78,7 @@ export default function PlayerForm() {
 
     // Simulate API call
     try {
-      await fetch("http://localhost:8000/api/v1/players",{
+      await fetch(`${baseUrl}/api/v1/players`,{
         
         method: "POST",
         headers: {
