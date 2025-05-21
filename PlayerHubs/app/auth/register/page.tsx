@@ -23,6 +23,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,8 +40,7 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
-      // Simulate authentication
-      await fetch("http://localhost:8000/api/v1/auth/sign-up", {
+      await fetch(`${baseUrl}/api/v1/auth/sign-up`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,17 +48,13 @@ export default function RegisterPage() {
         body: JSON.stringify({ email, password, role}),
       })
 
-
-      // In a real app, you would call your auth API here
-      // const response = await signIn(email, password)
-
       toast({
         title: "Login successful",
         description: "Welcome back to the Player Management System",
       })
 
       router.push("/auth/login")
-    } catch (error) {
+    } catch (error){
       toast({
         variant: "destructive",
         title: "Login failed",
