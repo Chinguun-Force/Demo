@@ -6,11 +6,11 @@ export const checkToken = async (req, res, next) => {
       res.status(401).json({ success: false, msg: "token is missing" });
       return;
     }
-    const [_, token] = req.headers["authorization"].split(" ");
+    const authHeader = req.headers["authorization"];
+    const token = authHeader.split(" ");
+    const decode = jwt.verify(token[1], process.env.ACCESS_TOKEN_SECRET_KEY);
 
-    const decode = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
-
-    if (typeof decode !== "object" || !("user" in decode) || decode.user.role != "ADMIN") {
+    if (typeof decode !== "object" || !("user" in decode) || decode.user.role === "FAN") {
       res.status(401).json({ success: false, error: "unauthorization" });
       return;
     }
@@ -18,5 +18,6 @@ export const checkToken = async (req, res, next) => {
     next();
   } catch (error) {
     res.status(401).json({ success: false, error: error.message });
+    console.log(req.headers["authorization"]);
   }
 };

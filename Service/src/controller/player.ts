@@ -5,8 +5,9 @@ import { Player } from '../schema/player';
 
 export const createPlayer = async (req, res) => {
     try {
-        const [_, token] = req.headers["authorization"].split(" ");
-        const decode = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
+        const authHeader = req.headers["authorization"];
+        const token = authHeader.split(" ");
+        const decode = jwt.verify(token[1], process.env.ACCESS_TOKEN_SECRET_KEY);
         const userId = (typeof decode === 'object' && decode !== null && 'user' in decode && typeof (decode as any).user === 'object')
             ? (decode as any).user._id
             : undefined;

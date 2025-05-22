@@ -20,6 +20,7 @@ export default function LoginPage() {
   const { toast } = useToast()
   const router = useRouter()
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
+  console.log(baseUrl)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
