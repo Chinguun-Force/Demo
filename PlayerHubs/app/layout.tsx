@@ -17,9 +17,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className='min-h-screen flex flex-col'>
         <Nav></Nav>
-        {children}
+        <main className='flex-grow'>
+          {children}
+        </main>
         <FooterSection/>
         </body>
     </html>
