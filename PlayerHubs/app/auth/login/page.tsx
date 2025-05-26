@@ -1,7 +1,5 @@
 "use client"
-
 import type React from "react"
-
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -11,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
+import { useAuthStore } from "@/store/authStore"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -20,11 +19,9 @@ export default function LoginPage() {
   const { toast } = useToast()
   const router = useRouter()
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
-  console.log(baseUrl)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-
      try {
     const response = await fetch(`${baseUrl}/api/v1/auth/login`, {
       method: "POST",
@@ -33,11 +30,9 @@ export default function LoginPage() {
       },
       body: JSON.stringify({ email, password }),
     })
-
     if (!response.ok) {
       throw new Error("Network response was not ok")
     }
-
     const data = await response.json()
     console.log(data)
     localStorage.setItem("token", data.token)
@@ -46,7 +41,8 @@ export default function LoginPage() {
       title: "Login successful!",
       description: "Welcome back to your dashboard.",
     })
-
+    console.log(data.token)
+    useAuthStore.getState().login({token : data.token})
     router.push("/dashboard")
   } catch (error) {
     toast({
@@ -58,7 +54,6 @@ export default function LoginPage() {
     setIsLoading(false)
   }
 }
-  
   return (
     <Card className="w-full">
       <CardHeader>
