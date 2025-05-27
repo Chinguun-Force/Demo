@@ -1,20 +1,18 @@
-"use client"
 import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuPortal, DropdownMenuSubContent } from '@radix-ui/react-dropdown-menu'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem} from '@radix-ui/react-dropdown-menu'
 import { Button } from './ui/button'
-import { DropdownMenuShortcut } from './ui/dropdown-menu'
 import { BarChart3, ChevronDown, ChevronUp, FileText, HelpCircle, LogOut, MessageSquare, Settings, User } from 'lucide-react'
+import { useAuthStore } from '@/store/authStore'
 
 const UserProfile = () => {
     const [open, setOpen] = useState(false)
+    useAuthStore((state) => state.user)
   return (
-
         <div className="flex items-center gap-2">
-     
       <Avatar>
         <AvatarImage
-          src="https://res.cloudinary.com/dl3wkodkk/image/upload/v1743047300/Food-Delivery%20Assets/55bc133b8044d28cf937929f2e9f99ce_cz68dq.png"
+          src="https://avatars.githubusercontent.com/u/123456789?v=4"
           alt="User"
         />
         <AvatarFallback>US</AvatarFallback>
@@ -29,6 +27,7 @@ const UserProfile = () => {
           <DropdownMenuItem className="flex items-center gap-2 py-2">
             <User className="h-4 w-4" />
             <span>My Account</span>
+            {/* <span>{user ? user.token : "No user"}</span> */}
           </DropdownMenuItem>
           <DropdownMenuItem className="flex items-center gap-2 py-2">
             <FileText className="h-4 w-4" />
@@ -52,7 +51,8 @@ const UserProfile = () => {
           </DropdownMenuItem>
           <DropdownMenuItem className="flex items-center gap-2 py-2">
             <LogOut className="h-4 w-4" />
-            <span>Гарах</span>
+            <Button variant="ghost" size="sm" onClick={() => useAuthStore.getState().logout()}>
+              Гарах </Button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

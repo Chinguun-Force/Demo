@@ -5,7 +5,7 @@ import { Facebook, Instagram, Twitter } from "lucide-react"
 
 export function FooterSection() {
   return (
-    <div className="w-screen flex justify-center border-t bg-muted/40 mt-20">
+    <div className="w-screen flex justify-center border-t bg-muted/40">
         <footer className="w-fit py-12 ">
 
             <div className="container grid gap-8 px-4 md:px-6 lg:grid-cols-4">
