@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Player } from '../schema/player';
 
-
-
 export const createPlayer = async (req, res) => {
     try {
         const authHeader = req.headers["authorization"];
@@ -88,7 +86,7 @@ export const updatePlayer = async (req, res) => {
             req.body,
             { new: true }
         );
-
+        
         if (!profile) {
             return res.status(404).json({ success: false, message: "Player not found" });
         }

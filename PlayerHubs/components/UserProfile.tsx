@@ -25,7 +25,7 @@ const UserProfile = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56 bg-gray-50 shadow-lg rounded-md p-2">
-          <DropdownMenuItem className="flex items-center gap-2 py-2">
+          <DropdownMenuItem className="flex items-center gap-2 py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer">
             <span>{useProfileStore.getState().profile?.name}</span>
           </DropdownMenuItem>
           <DropdownMenuItem className="flex items-center gap-2 py-2">

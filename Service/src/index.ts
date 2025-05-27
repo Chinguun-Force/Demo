@@ -4,6 +4,8 @@ import cors from 'cors'
 import { connection } from './utils/connection'
 import { authRouter } from './routes/auth'
 import { playerRouter } from './routes/player'
+import { ownerRouter } from './routes/owner'
+import { teamRouter } from './routes/team'
 
 dotenv.config()
 const port = 8000
@@ -23,6 +25,8 @@ app.get('/api', (req, res) => {
 })
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/players', playerRouter)
+app.use('/api/v1/owner', ownerRouter)
+app.use('/api/v1/teams', teamRouter)
 const connectDb = async () => {
       try{
         await connection()
