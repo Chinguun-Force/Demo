@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuIte
 import { Button } from './ui/button'
 import { BarChart3, ChevronDown, ChevronUp, FileText, HelpCircle, LogOut, MessageSquare, Settings, User } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
+import { useProfileStore } from '@/store/profileStore'
 
 const UserProfile = () => {
     const [open, setOpen] = useState(false)
@@ -12,7 +13,7 @@ const UserProfile = () => {
         <div className="flex items-center gap-2">
       <Avatar>
         <AvatarImage
-          src="https://avatars.githubusercontent.com/u/123456789?v=4"
+          src={useProfileStore.getState().profile?.profilePicture || 'github.com/PlayerHubs/player-hubs/assets/placeholder.png'}
           alt="User"
         />
         <AvatarFallback>US</AvatarFallback>
@@ -23,11 +24,13 @@ const UserProfile = () => {
             {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent align="end" className="w-56 bg-gray-50 shadow-lg rounded-md p-2">
+          <DropdownMenuItem className="flex items-center gap-2 py-2">
+            <span>{useProfileStore.getState().profile?.name}</span>
+          </DropdownMenuItem>
           <DropdownMenuItem className="flex items-center gap-2 py-2">
             <User className="h-4 w-4" />
             <span>My Account</span>
-            {/* <span>{user ? user.token : "No user"}</span> */}
           </DropdownMenuItem>
           <DropdownMenuItem className="flex items-center gap-2 py-2">
             <FileText className="h-4 w-4" />

@@ -1,6 +1,7 @@
 import React from "react"
 import HeroSection from "@/components/HeroSection"
 import { FeatureSection } from "@/components/FeatureSection"
+import Image from "next/image"
 
 
 export default function Main() {

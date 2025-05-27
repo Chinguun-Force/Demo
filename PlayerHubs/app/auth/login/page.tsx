@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from "@/hooks/use-toast"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { useAuthStore } from "@/store/authStore"
+import { useProfileStore } from "@/store/profileStore"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -43,6 +44,17 @@ export default function LoginPage() {
     })
     console.log(data.token)
     useAuthStore.getState().login({token : data.token})
+    const profile = await fetch(`${baseUrl}/api/v1/auth/profile`, {
+      headers: {
+        Authorization: `Bearer ${data.token}`,
+      },
+    })
+    if (!profile.ok) {
+      throw new Error("Failed to fetch profile")
+    }
+    const myProfile = await profile.json()
+    console.log(myProfile)
+    useProfileStore.getState().setProfile(myProfile.player)
     router.push("/dashboard")
   } catch (error) {
     toast({
