@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useProfileStore } from "@/store/profileStore"
 
 interface BasicInfoSectionProps {
   name: string
@@ -24,6 +25,8 @@ export function BasicInfoSection({
   weight,
   setWeight,
 }: BasicInfoSectionProps) {
+  // const profile = useProfileStore((state) => state.profile)
+  const setProfile = useProfileStore((state) => state.setProfile)
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -39,7 +42,7 @@ export function BasicInfoSection({
           <Input
             id="name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setProfile((prev) => ({ ...prev, name: e.target.value }))}
             placeholder="Enter player's full name"
             className="h-11"
             required
@@ -53,7 +56,7 @@ export function BasicInfoSection({
             id="age"
             type="number"
             value={age}
-            onChange={(e) => setAge(Number.parseInt(e.target.value))}
+            onChange={(e) => setProfile((prev) => ({ ...prev, age: Number.parseInt(e.target.value) }))}
             placeholder="Enter player's age"
             className="h-11"
             required
@@ -68,7 +71,7 @@ export function BasicInfoSection({
             type="number"
             step="0.1"
             value={height}
-            onChange={(e) => setHeight(Number.parseFloat(e.target.value))}
+            onChange={(e) => setProfile((prev) => ({ ...prev, height: Number.parseFloat(e.target.value) }))}
             placeholder="Enter player's height in cm"
             className="h-11"
             required
@@ -90,6 +93,19 @@ export function BasicInfoSection({
             required
           />
           <p className="text-xs text-muted-foreground mt-1">Example: 78.2</p>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="name" className="text-sm font-medium">
+            Profile Picture Url
+          </Label>
+          <Input
+            id="name"
+            value={name}
+            onChange={(e) => setProfile((prev) => ({ ...prev, profilePicture: e.target.value }))}
+            placeholder="Enter player's full name"
+            className="h-11"
+            required
+          />
         </div>
       </div>
     </div>

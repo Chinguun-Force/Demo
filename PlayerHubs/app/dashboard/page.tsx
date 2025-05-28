@@ -70,7 +70,7 @@ export default function Dashboard() {
         </div>
         <div className="flex gap-2">
           <Button asChild>
-            <Link href="/dashboard/players/new">
+            <Link href="/players/createPlayer">
               <Plus className="w-4 h-4 mr-2" />
               Add Player
             </Link>

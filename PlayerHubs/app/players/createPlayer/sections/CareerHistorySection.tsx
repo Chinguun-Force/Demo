@@ -5,6 +5,7 @@ import { Plus, Trash2, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
+import { useProfileStore } from "@/store/profileStore"
 
 interface CareerHistorySectionProps {
   careerHistory: string[]
@@ -16,14 +17,18 @@ export function CareerHistorySection({ careerHistory, setCareerHistory }: Career
 
   const addCareerTeam = () => {
     if (newTeam.trim()) {
-      setCareerHistory([...careerHistory, newTeam])
-      setNewTeam("")
+      setProfile((prev) => ({
+        ...prev,
+        careerHistory: [...(prev?.careerHistory || []), newTeam.trim()],
+      }))
+      setCareerHistory([...careerHistory, newTeam.trim()])
     }
   }
 
   const removeCareerTeam = (index: number) => {
     setCareerHistory(careerHistory.filter((_, i) => i !== index))
   }
+  const setProfile = useProfileStore((state) => state.setProfile)
 
   return (
     <div className="space-y-6">
@@ -39,7 +44,10 @@ export function CareerHistorySection({ careerHistory, setCareerHistory }: Career
           <Input
             placeholder="Add previous team"
             value={newTeam}
-            onChange={(e) => setNewTeam(e.target.value)}
+            onChange={(e) => setProfile((prev) => ({
+              ...prev,
+              careerHistory: [...(prev?.careerHistory || []), e.target.value],
+            }))}
             className="h-11"
             onKeyDown={(e) => {
               if (e.key === "Enter") {

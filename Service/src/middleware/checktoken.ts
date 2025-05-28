@@ -14,7 +14,6 @@ export const checkToken = async (req, res, next) => {
       res.status(401).json({ success: false, error: "unauthorization" });
       return;
     }
-
     next();
   } catch (error) {
     res.status(401).json({ success: false, error: error.message });
