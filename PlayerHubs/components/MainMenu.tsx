@@ -15,25 +15,25 @@ export function Menus() {
   const routes = [
     {
       href: "/",
-      label: "Home",
+      label: "Нүүр хуудас",
       active: pathname === "/",
       icon: <Home className="h-4 w-4 mr-2" />,
     },
     {
       href: "/players",
-      label: "Players",
+      label: "Тамирчид",
       active: pathname === "/players" || pathname?.startsWith("/players/"),
       icon: <Users className="h-4 w-4 mr-2" />,
     },
     {
       href: "/teams",
-      label: "Teams",
+      label: "Баг",
       active: pathname === "/teams" || pathname?.startsWith("/teams/"),
       icon: <Trophy className="h-4 w-4 mr-2" />,
     },
     {
       href: "/playoffs",
-      label: "Playoffs",
+      label: "Плэй-офф",
       active: pathname === "/playoffs",
       icon: <Award className="h-4 w-4 mr-2" />,
     },

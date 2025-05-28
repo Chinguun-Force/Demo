@@ -3,6 +3,7 @@ import './globals.css'
 import React from 'react'
 import Nav from '@/components/Nav'
 import { FooterSection } from '@/components/Footer'
+import { TeamStoreInitializer } from '@/components/utils/TeamInitiliazer'
 
 export const metadata: Metadata = {
   title: 'v0 App',
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className='min-h-screen flex flex-col'>
+        <TeamStoreInitializer/>
         <Nav></Nav>
         <main className='flex-grow'>
           {children}

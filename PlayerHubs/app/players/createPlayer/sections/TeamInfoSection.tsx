@@ -3,6 +3,7 @@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useTeamStore } from "@/store/teamStore"
 
 interface TeamInfoSectionProps {
   position: string
@@ -25,6 +26,7 @@ export function TeamInfoSection({
   status,
   setStatus,
 }: TeamInfoSectionProps) {
+  const teams = useTeamStore((state) => state.teams)
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -53,14 +55,23 @@ export function TeamInfoSection({
           <Label htmlFor="team" className="text-sm font-medium">
             Current Team
           </Label>
-          <Input
-            id="team"
-            value={team}
-            onChange={(e) => setTeam(e.target.value)}
-            placeholder="Enter current team name"
-            className="h-11"
-            required
-          />
+          <Select value={team} onValueChange={setTeam}>
+            <SelectTrigger className="h-11">
+              <SelectValue placeholder="Багаа сонгоно уу"/>
+            </SelectTrigger>
+            <SelectContent>
+              {
+                teams.map((team) => (
+                  <SelectItem key={team._id} value={team._id}>
+                    <div className="flex items-center">
+                      <img src={team.teamLogo || "/placeholder.svg"} alt={team.teamName} className="h-6 w-6 mr-2" />
+                      {team.teamName}
+                    </div>
+                  </SelectItem>
+                ))
+              }
+            </SelectContent>
+          </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="jerseyNumber" className="text-sm font-medium">

@@ -382,13 +382,13 @@ export default function PlayersPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Position</TableHead>
-                  <TableHead>Team</TableHead>
-                  <TableHead>Age</TableHead>
-                  <TableHead>Nationality</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Stats</TableHead>
+                  <TableHead>Нэр</TableHead>
+                  <TableHead>Байрлал</TableHead>
+                  <TableHead>Баг</TableHead>
+                  <TableHead>Нас</TableHead>
+                  <TableHead>Өмсгөлийн дугаар</TableHead>
+                  <TableHead>Төлөв</TableHead>
+                  <TableHead>Үзүүлэлт</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>

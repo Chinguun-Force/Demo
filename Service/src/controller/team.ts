@@ -3,16 +3,7 @@ import { Team } from "../schema/team";
 
 export const createTeam = async (req, res) => {
     try {
-        const authHeader = req.headers["authorization"];
-        const token = authHeader.split(" ");
-        const decode = jwt.verify(token[1], process.env.ACCESS_TOKEN_SECRET_KEY);
-        const userId = (typeof decode === 'object' && decode !== null && 'user' in decode && typeof (decode as any).user === 'object')
-            ? (decode as any).user._id
-            : undefined;
-        if (!userId) {
-            return res.status(401).json({ success: false, message: "Invalid token" });
-        }
-        const team = await Team.create({ ...req.body, userId });
+        const team = await Team.create(req.body);
         res.status(201).json({ success: true, team });
     } catch (error) {
         console.log(error);
@@ -21,5 +12,14 @@ export const createTeam = async (req, res) => {
         } else {
             res.status(500).json({ success: false, message: "Server error" });
         }
+    }
+};
+export const getAllTeams = async (req, res) => {
+    try {
+        const teams = await Team.find();
+        res.status(200).json({ success: true, teams });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: "Server error" });
     }
 };

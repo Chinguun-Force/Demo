@@ -7,18 +7,19 @@ import { Input } from "@/components/ui/input"
 import { teams } from "@/lib/data"
 import { Search, Trophy } from "lucide-react"
 import Image from "next/image"
+import { useTeamStore } from "@/store/teamStore"
 
 export default function TeamsPage() {
   const [searchTerm, setSearchTerm] = useState("")
-
-  const filteredTeams = teams.filter((team) => team.name.toLowerCase().includes(searchTerm.toLowerCase()))
-
+  const teams = useTeamStore((state) => state.teams)
+  // console.log(teamsData)
+  const filteredTeams = teams.filter((team) => team.teamNameEn.toLowerCase().includes(searchTerm.toLowerCase()))
   return (
     <div className="container py-8 mx-auto">
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Teams</h1>
-          <p className="text-muted-foreground">Browse all teams in the league</p>
+          <h1 className="text-3xl font-bold tracking-tight">Багууд</h1>
+          <p className="text-muted-foreground">Монголын дээд лигийн багууд</p>
         </div>
       </div>
 
@@ -36,35 +37,35 @@ export default function TeamsPage() {
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filteredTeams.map((team) => (
-          <Link key={team.id} href={`/teams/${team.id}`}>
+          <Link key={team._id} href={`/teams/${team._id}`}>
             <Card className="overflow-hidden transition-all hover:shadow-md">
               <div className="aspect-video w-full bg-muted/40 p-6 flex items-center justify-center">
                 <Image
-                  src={team.logo || "/placeholder.svg"}
-                  alt={team.name}
-                  width={100}
-                  height={100}
-                  className="h-20 w-20 object-contain"
+                  src={team.teamLogo || "/placeholder.svg"}
+                  alt={team.teamName}
+                  width={400}
+                  height={400}
+                  className="h-40 w-40 object-contain"
                 />
               </div>
               <CardHeader>
-                <CardTitle>{team.name}</CardTitle>
-                <CardDescription>Founded: {team.founded}</CardDescription>
+                <CardTitle>{team.teamName}</CardTitle>
+                {/* <CardDescription>Founded: {team.founded}</CardDescription> */}
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
                     <span className="text-muted-foreground">Coach:</span>
-                    <p>{team.coach}</p>
+                    {/* <p>{team.coach}</p> */}
                   </div>
                   <div>
                     <span className="text-muted-foreground">Home:</span>
-                    <p>{team.homeVenue}</p>
+                    {/* <p>{team.homeVenue}</p> */}
                   </div>
                 </div>
                 <div className="mt-4 flex items-center gap-2">
                   <Trophy className="h-4 w-4 text-primary" />
-                  <span className="text-sm">{team.achievements.length} achievements</span>
+                  {/* <span className="text-sm">{team.achievements.length} achievements</span> */}
                 </div>
               </CardContent>
             </Card>

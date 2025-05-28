@@ -2,6 +2,7 @@
 
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { useProfileStore } from "@/store/profileStore"
 
 interface BioSectionProps {
   bio: string
@@ -9,6 +10,8 @@ interface BioSectionProps {
 }
 
 export function BioSection({ bio, setBio }: BioSectionProps) {
+    const setProfile = useProfileStore((state) => state.setProfile)
+  
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -25,7 +28,7 @@ export function BioSection({ bio, setBio }: BioSectionProps) {
         <Textarea
           id="bio"
           value={bio}
-          onChange={(e) => setBio(e.target.value)}
+          onChange={(e) => setProfile((prev) => ({ ...prev, bio: e.target.value }))}
           placeholder="Enter player's biography, background, and notable career moments..."
           className="min-h-[200px] resize-y"
           rows={8}
