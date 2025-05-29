@@ -64,10 +64,11 @@ export interface Player {
   
   export interface PlayerStats {
     games_played: number
-    goals: number
-    assists: number
     points: number
+    assists: number
+    rebound: number
     rating: number
+    stell: number
   }
   
   // Mock database functions (replace with actual database calls)
@@ -82,7 +83,18 @@ export interface Player {
           position: "Forward",
           age: 20,
           team_id: "1",
-          stats: { games_played: 15, goals: 8, assists: 5, points: 13, rating: 8.5 },
+          stats: { games_played: 15, points: 7878, assists: 89, rebound: 13, rating: 9.0, stell: 8.5 },
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        {
+          id: "2",
+          name: "Chingune",
+          email: "chingune@example.com",
+          position: "Forward",
+          age: 81,
+          team_id: "1",
+          stats: { games_played: 1999, points: 9, assists: 0, rebound: 13, rating: 7.0, stell: 8.5 },
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         },

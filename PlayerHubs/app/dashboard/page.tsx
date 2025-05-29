@@ -163,7 +163,7 @@ export default function Dashboard() {
                     </div>
                     <div>
                       <div className="font-medium">Goals</div>
-                      <div>{player.stats.goals}</div>
+                      <div>{player.stats.points}</div>
                     </div>
                     <div>
                       <div className="font-medium">Assists</div>
