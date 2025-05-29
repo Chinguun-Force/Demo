@@ -1,8 +1,7 @@
-export default function Loading() {
+export default function BatmanLoader() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-gray-900 mb-4"></div>
-      <p className="text-gray-600 text-sm">Loading, please wait...</p>
+    <div className="w-16 h-16 relative animate-pulse">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,black_20%,transparent_20%),radial-gradient(circle_at_30%_55%,black_15%,transparent_15%),radial-gradient(circle_at_70%_55%,black_15%,transparent_15%),radial-gradient(circle_at_30%_30%,black_10%,transparent_10%),radial-gradient(circle_at_70%_30%,black_10%,transparent_10%)] bg-no-repeat bg-[length:100%_100%] rounded-full opacity-80"></div>
     </div>
   );
 }

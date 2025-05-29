@@ -16,6 +16,8 @@ export default function TeamOwnerDashboard() {
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([])
   const [loading, setLoading] = useState(true)
 
+  
+
   // Mock current owner ID - in real app, get from auth
   const currentOwnerId = "1"
 
@@ -275,7 +277,7 @@ export default function TeamOwnerDashboard() {
                     </div>
                     <div>
                       <div className="font-medium">Goals</div>
-                      <div>{player.stats.goals}</div>
+                      <div>{player.stats.rebound}</div>
                     </div>
                     <div>
                       <div className="font-medium">Assists</div>
