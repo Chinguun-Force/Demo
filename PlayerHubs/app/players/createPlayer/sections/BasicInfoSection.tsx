@@ -4,29 +4,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useProfileStore } from "@/store/profileStore"
 
-interface BasicInfoSectionProps {
-  name: string
-  setName: (value: string) => void
-  age: number
-  setAge: (value: number) => void
-  height: number
-  setHeight: (value: number) => void
-  weight: number
-  setWeight: (value: number) => void
-}
-
-export function BasicInfoSection({
-  name,
-  setName,
-  age,
-  setAge,
-  height,
-  setHeight,
-  weight,
-  setWeight,
-}: BasicInfoSectionProps) {
-  // const profile = useProfileStore((state) => state.profile)
+export function BasicInfoSection() {
+  const profile = useProfileStore((state) => state.profile)
   const setProfile = useProfileStore((state) => state.setProfile)
+
+  const updateField = (field: string, value: string | number) => {
+    setProfile((prev) => ({ ...prev, [field]: value }))
+  }
+  // console.log("BasicInfoSection profile", profile)
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -41,8 +26,8 @@ export function BasicInfoSection({
           </Label>
           <Input
             id="name"
-            value={name}
-            onChange={(e) => setProfile((prev) => ({ ...prev, name: e.target.value }))}
+            value={profile?.name || ""}
+            onChange={(e) => updateField("name", e.target.value)}
             placeholder="Enter player's full name"
             className="h-11"
             required
@@ -55,8 +40,8 @@ export function BasicInfoSection({
           <Input
             id="age"
             type="number"
-            value={age}
-            onChange={(e) => setProfile((prev) => ({ ...prev, age: Number.parseInt(e.target.value) }))}
+            value={profile?.age || ""}
+            onChange={(e) => updateField("age", Number.parseInt(e.target.value) || 0)}
             placeholder="Enter player's age"
             className="h-11"
             required
@@ -70,8 +55,8 @@ export function BasicInfoSection({
             id="height"
             type="number"
             step="0.1"
-            value={height}
-            onChange={(e) => setProfile((prev) => ({ ...prev, height: Number.parseFloat(e.target.value) }))}
+            value={profile?.height || ""}
+            onChange={(e) => updateField("height", Number.parseFloat(e.target.value) || 0)}
             placeholder="Enter player's height in cm"
             className="h-11"
             required
@@ -86,8 +71,8 @@ export function BasicInfoSection({
             id="weight"
             type="number"
             step="0.1"
-            value={weight}
-            onChange={(e) => setWeight(Number.parseFloat(e.target.value))}
+            value={profile?.weight || ""}
+            onChange={(e) => updateField("weight", Number.parseFloat(e.target.value) || 0)}
             placeholder="Enter player's weight in kg"
             className="h-11"
             required
@@ -95,16 +80,15 @@ export function BasicInfoSection({
           <p className="text-xs text-muted-foreground mt-1">Example: 78.2</p>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="name" className="text-sm font-medium">
-            Profile Picture Url
+          <Label htmlFor="profilePicture" className="text-sm font-medium">
+            Profile Picture URL
           </Label>
           <Input
-            id="name"
-            value={name}
-            onChange={(e) => setProfile((prev) => ({ ...prev, profilePicture: e.target.value }))}
-            placeholder="Enter player's full name"
+            id="profilePicture"
+            value={profile?.profilePicture || ""}
+            onChange={(e) => updateField("profilePicture", e.target.value)}
+            placeholder="Enter profile picture URL"
             className="h-11"
-            required
           />
         </div>
       </div>

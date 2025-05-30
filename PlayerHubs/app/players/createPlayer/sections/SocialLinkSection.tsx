@@ -5,24 +5,35 @@ import { Plus, Trash2, LinkIcon, Instagram, Twitter, Facebook, Youtube } from "l
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
+import { useProfileStore } from "@/store/profileStore"
 
-interface SocialLinksSectionProps {
-  socialLinks: string[]
-  setSocialLinks: (value: string[]) => void
+type Profile = {
+  socialLinks?: string[]
+  // add other profile fields if needed
 }
 
-export function SocialLinksSection({ socialLinks, setSocialLinks }: SocialLinksSectionProps) {
+export function SocialLinksSection() {
+  const profile = (useProfileStore((state) => state.profile) as Profile) || {}
+  const socialLinks = profile.socialLinks || []
+  const setProfile = useProfileStore((state) => state.setProfile)
+
   const [newSocialLink, setNewSocialLink] = useState("")
 
+  const updateField = (field: string, value: any) =>
+    setProfile((prev) => ({ ...prev, [field]: value }))
+
   const addSocialLink = () => {
-    if (newSocialLink.trim()) {
-      setSocialLinks([...socialLinks, newSocialLink])
-      setNewSocialLink("")
-    }
+    const link = newSocialLink.trim()
+    if (!link) return
+    updateField("socialLinks", [...socialLinks, link])
+    setNewSocialLink("")
   }
 
   const removeSocialLink = (index: number) => {
-    setSocialLinks(socialLinks.filter((_, i) => i !== index))
+    updateField(
+      "socialLinks",
+      socialLinks.filter((_, i) => i !== index)
+    )
   }
 
   const getSocialIcon = (url: string) => {
@@ -36,7 +47,8 @@ export function SocialLinksSection({ socialLinks, setSocialLinks }: SocialLinksS
   const getSocialName = (url: string) => {
     try {
       const domain = new URL(url).hostname.replace("www.", "")
-      return domain.split(".")[0].charAt(0).toUpperCase() + domain.split(".")[0].slice(1)
+      const base = domain.split(".")[0]
+      return base.charAt(0).toUpperCase() + base.slice(1)
     } catch {
       return "Website"
     }
@@ -54,7 +66,9 @@ export function SocialLinksSection({ socialLinks, setSocialLinks }: SocialLinksS
     <div className="space-y-6">
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold tracking-tight">Social Media Links</h2>
-        <p className="text-sm text-muted-foreground">Add the player's social media profiles and online presence.</p>
+        <p className="text-sm text-muted-foreground">
+          Add the player's social media profiles and online presence.
+        </p>
       </div>
 
       <div className="space-y-4">
@@ -77,60 +91,58 @@ export function SocialLinksSection({ socialLinks, setSocialLinks }: SocialLinksS
           </Button>
         </div>
 
-        <div className="space-y-3 mt-4">
-          {socialLinks.length === 0 ? (
-            <div className="text-center py-8 border border-dashed rounded-lg">
-              <LinkIcon className="h-10 w-10 mx-auto text-gray-400 mb-2" />
-              <p className="text-sm text-muted-foreground">No social links added yet</p>
-              <p className="text-xs text-muted-foreground">Add social media profiles and websites</p>
-            </div>
-          ) : (
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="text-sm font-medium mb-3">Social Media Profiles</h3>
-                <div className="space-y-3">
-                  {socialLinks.map((link, index) => (
+        {socialLinks.length === 0 ? (
+          <div className="text-center py-8 border border-dashed rounded-lg">
+            <LinkIcon className="h-10 w-10 mx-auto text-gray-400 mb-2" />
+            <p className="text-sm text-muted-foreground">No social links added yet</p>
+            <p className="text-xs text-muted-foreground">Add social media profiles and websites</p>
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="text-sm font-medium mb-3">Social Media Profiles</h3>
+              <div className="space-y-3">
+                {socialLinks.map((link, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
                     <div
-                      key={index}
-                      className="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      className={`h-8 w-8 rounded-full flex items-center justify-center mr-3 ${getSocialColor(link)}`}
                     >
-                      <div
-                        className={`h-8 w-8 rounded-full flex items-center justify-center mr-3 ${getSocialColor(link)}`}
-                      >
-                        {getSocialIcon(link)}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-medium">{getSocialName(link)}</div>
-                        <div className="text-xs text-muted-foreground truncate max-w-[200px] md:max-w-[300px]">
-                          {link}
-                        </div>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="h-8 mr-2"
-                        onClick={() => window.open(link, "_blank")}
-                      >
-                        Visit
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeSocialLink(index)}
-                        className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">Remove link</span>
-                      </Button>
+                      {getSocialIcon(link)}
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+                    <div className="flex-1">
+                      <div className="font-medium">{getSocialName(link)}</div>
+                      <div className="text-xs text-muted-foreground truncate max-w-[200px] md:max-w-[300px]">
+                        {link}
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="h-8 mr-2"
+                      onClick={() => window.open(link, "_blank")}
+                    >
+                      Visit
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeSocialLink(index)}
+                      className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">Remove link</span>
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   )

@@ -3,6 +3,7 @@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useProfileStore } from "@/store/profileStore"
 import { useTeamStore } from "@/store/teamStore"
 
 interface TeamInfoSectionProps {
@@ -16,17 +17,22 @@ interface TeamInfoSectionProps {
   setStatus: (value: string) => void
 }
 
-export function TeamInfoSection({
-  position,
-  setPosition,
-  team,
-  setTeam,
-  jerseyNumber,
-  setJerseyNumber,
-  status,
-  setStatus,
-}: TeamInfoSectionProps) {
+export function TeamInfoSection() {
   const teams = useTeamStore((state) => state.teams)
+  const profile = useProfileStore((state) => state.profile) || {};
+  const { position, team, jerseyNumber, status } = profile as {
+    position?: string;
+    team?: string;
+    jerseyNumber?: number;
+    status?: string;
+  };
+const setProfile = useProfileStore((state) => state.setProfile)
+   const updateField = (field: string, value: string | number) => {
+    setProfile((prev) => ({ ...prev, [field]: value }))
+  }
+  console.log("TeamInfoSection data", {
+    position, team, jerseyNumber, status
+  })
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -39,7 +45,7 @@ export function TeamInfoSection({
           <Label htmlFor="position" className="text-sm font-medium">
             Position
           </Label>
-          <Select value={position} onValueChange={setPosition}>
+          <Select value={position} onValueChange={(value) => updateField("position", value)}>
             <SelectTrigger className="h-11">
               <SelectValue placeholder="Select position" />
             </SelectTrigger>
@@ -55,7 +61,7 @@ export function TeamInfoSection({
           <Label htmlFor="team" className="text-sm font-medium">
             Current Team
           </Label>
-          <Select value={team} onValueChange={setTeam}>
+          <Select value={team} onValueChange={(value) => updateField("team", value)}>
             <SelectTrigger className="h-11">
               <SelectValue placeholder="Багаа сонгоно уу"/>
             </SelectTrigger>
@@ -81,7 +87,7 @@ export function TeamInfoSection({
             id="jerseyNumber"
             type="number"
             value={jerseyNumber}
-            onChange={(e) => setJerseyNumber(Number.parseInt(e.target.value))}
+            onChange={(e) => updateField("jerseyNumber", Number.parseInt(e.target.value))}
             placeholder="Enter jersey number"
             className="h-11"
             required
@@ -91,7 +97,7 @@ export function TeamInfoSection({
           <Label htmlFor="status" className="text-sm font-medium">
             Player Status
           </Label>
-          <Select value={status} onValueChange={setStatus}>
+          <Select value={status} onValueChange={(value) => updateField("status", value)}>
             <SelectTrigger className="h-11">
               <SelectValue placeholder="Select status" />
             </SelectTrigger>

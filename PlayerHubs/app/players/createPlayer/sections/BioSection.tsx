@@ -4,13 +4,16 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useProfileStore } from "@/store/profileStore"
 
-interface BioSectionProps {
-  bio: string
-  setBio: (value: string) => void
-}
-
-export function BioSection({ bio, setBio }: BioSectionProps) {
-    const setProfile = useProfileStore((state) => state.setProfile)
+export function BioSection() {
+  const profile = useProfileStore((state) => state.profile) || {};
+  const {bio} = profile as { bio?: string };
+  const setProfile = useProfileStore((state) => state.setProfile)
+   const updateField = (field: string, value: string | number) => {
+    setProfile((prev) => ({ ...prev, [field]: value }))
+  }
+  console.log("BioSection data", {
+    bio
+  })
   
   return (
     <div className="space-y-6">

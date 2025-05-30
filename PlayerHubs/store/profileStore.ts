@@ -8,7 +8,7 @@ interface Profile {
     age: number;
     height: number;
     weight: number;
-    position?: string;
+    position: string;
     team?: string;
     jerseyNumber?: number;
     status?: string;

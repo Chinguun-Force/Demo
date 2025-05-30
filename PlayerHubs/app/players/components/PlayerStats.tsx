@@ -29,27 +29,27 @@ export function PlayerStats({ player }: PlayerStatsProps) {
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Games</span>
-              <span className="text-2xl font-bold">{player.stats.gamesPlayed}</span>
+              {/* <span className="text-2xl font-bold">{player.stats.gamesPlayed}</span> */}
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Goals</span>
-              <span className="text-2xl font-bold">{player.stats.goalsScored}</span>
+              {/* <span className="text-2xl font-bold">{player.stats.goalsScored}</span> */}
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Assists</span>
-              <span className="text-2xl font-bold">{player.stats.assists}</span>
+              {/* <span className="text-2xl font-bold">{player.stats.assists}</span> */}
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Yellow Cards</span>
-              <span className="text-2xl font-bold">{player.stats.yellowCards}</span>
+              {/* <span className="text-2xl font-bold">{player.stats.yellowCards}</span> */}
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Red Cards</span>
-              <span className="text-2xl font-bold">{player.stats.redCards}</span>
+              {/* <span className="text-2xl font-bold">{player.stats.redCards}</span> */}
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Win Rate</span>
-              <span className="text-2xl font-bold">{Math.round(player.stats.winRate * 100)}%</span>
+              {/* <span className="text-2xl font-bold">{Math.round(player.stats.winRate * 100)}%</span> */}
             </div>
           </div>
         </CardContent>
