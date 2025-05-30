@@ -17,10 +17,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Filter, Search, AlertCircle, Plus, MoreHorizontal } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { Filter, Search, AlertCircle, Plus, MoreHorizontal, ChevronRight } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { useProfileStore } from "@/store/profileStore"
 
 interface Player {
   _id: string
@@ -105,8 +103,7 @@ export default function PlayersPage() {
   const filteredPlayers = data.filter((player) => {
     const matchesSearch =
       player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      player.team.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      player.nationality.toLowerCase().includes(searchTerm.toLowerCase())
+      player.team.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesPosition = positionFilter === "all" || player.position === positionFilter
     const matchesStatus = statusFilter === "all" || player.status === statusFilter
@@ -230,14 +227,14 @@ export default function PlayersPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Position</TableHead>
-                  <TableHead>Team</TableHead>
-                  <TableHead>Age</TableHead>
-                  <TableHead>Jersey #</TableHead>
-                  <TableHead>Nationality</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead></TableHead>
+                  <TableHead>Нэр</TableHead>
+                  <TableHead>Байрлал</TableHead>
+                  <TableHead>Баг</TableHead>
+                  <TableHead>Нас</TableHead>
+                  <TableHead>Дугаар</TableHead>
+                  <TableHead>Төлөв</TableHead>
+                  <TableHead className="text-right">Дэлгэрэнгүй</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -272,7 +269,9 @@ export default function PlayersPage() {
                   ))
                 ) : filteredPlayers.length > 0 ? (
                   filteredPlayers.map((player) => (
-                    <TableRow key={player._id}>
+                    <TableRow key={player._id}
+                      className="hover:bg-muted/50 transition-colors cursor-pointer px-10"
+                    >
                       <TableCell className="font-medium">
                       <Avatar>
                         <AvatarImage
@@ -292,8 +291,8 @@ export default function PlayersPage() {
                           {player.status}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
+                      <TableCell className="text-center">
+                        {/* <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="sm">
                               <span className="sr-only">Open menu</span>
@@ -313,7 +312,9 @@ export default function PlayersPage() {
                               Delete player
                             </DropdownMenuItem>
                           </DropdownMenuContent>
-                        </DropdownMenu>
+                        </DropdownMenu> */}
+                        <ChevronRight className="h-5 w-5 text-muted-foreground ml-auto" />
+                        <Link href={`/players/${player._id}`} className="sr-only"></Link>
                       </TableCell>
                     </TableRow>
                   ))

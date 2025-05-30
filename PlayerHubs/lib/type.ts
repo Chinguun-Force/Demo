@@ -1,14 +1,15 @@
 export type UserRole = "fan" | "player" | "team-owner"
 
 export type Player = {
-  id: string
+  _id: string
+  userId: string
+  profilePicture: string
   name: string
-  position: string
-  team: string
   age: number
   height: string
   weight: string
-  nationality: string
+  position: string
+  team: string
   jerseyNumber: number
   status: "Active" | "Injured" | "Suspended" | "Inactive"
   bio: string

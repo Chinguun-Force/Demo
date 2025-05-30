@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { players } from "@/lib/data"
 import { ArrowLeft, DollarSign, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -14,13 +13,39 @@ import { PlayerStats } from "../components/PlayerStats"
 import { PlayerCareerHistory } from "../components/PlayerCareer"
 import { PlayerAchievements } from "../components/PlayerAchievement"
 import { PlayerDonation } from "../components/PlayerDonation"
-
+import { useEffect, useState } from "react"
+import { Player } from "@/lib/type"
 export default function PlayerDetailsPage() {
   const params = useParams()
   const router = useRouter()
   const playerId = params.id as string
-
-  const player = players.find((p) => p.id === playerId)
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL
+  const [players, setData] = useState<Player[]>([])
+  useEffect(() => {
+      const getData = async () => {
+        try {
+          const res = await fetch(`${baseUrl}/api/v1/players`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+  
+          if (!res.ok) {
+            throw new Error(`Failed to fetch players: ${res.status} ${res.statusText}`)
+          }
+  
+          type PlayersApiResponse = { players: Player[] }
+          const result: PlayersApiResponse = await res.json()
+          setData(result.players || [])
+        } catch (error) {
+          console.error("Error fetching players:", error)
+        }
+      }
+  
+      getData()
+    }, [])
+  const player = players.find((p) => p._id === playerId)
 
   if (!player) {
     return (
@@ -65,10 +90,11 @@ export default function PlayerDetailsPage() {
         <Card className="md:col-span-1">
           <CardContent className="p-6">
             <div className="flex flex-col items-center text-center">
-              <Avatar className="h-32 w-32">
+              <Avatar className="h-40 w-40">
                 <AvatarImage
-                  src={`/placeholder.svg?height=128&width=128&text=${player.name.charAt(0)}`}
+                  src={player.profilePicture}
                   alt={player.name}
+                  className="object-cover"
                 />
                 <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
               </Avatar>
@@ -101,10 +127,10 @@ export default function PlayerDetailsPage() {
                   <span className="text-muted-foreground">Weight</span>
                   <span className="font-medium">{player.weight}</span>
                 </div>
-                <div className="col-span-2 flex flex-col items-center">
+                {/* <div className="col-span-2 flex flex-col items-center">
                   <span className="text-muted-foreground">Nationality</span>
                   <span className="font-medium">{player.nationality}</span>
-                </div>
+                </div> */}
               </div>
               <Separator className="my-6" />
               <div className="flex w-full flex-col gap-4">

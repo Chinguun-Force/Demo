@@ -1,42 +1,54 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import React, { useState } from "react"
 import { Plus, Trash2, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
+import { useProfileStore } from "@/store/profileStore"
 
-interface AchievementsSectionProps {
-  achievements: string[]
-  setAchievements: (value: string[]) => void
+type Profile = {
+  achievements?: string[]
+  // add other profile properties if needed
 }
 
-export function AchievementsSection({ achievements, setAchievements }: AchievementsSectionProps) {
+export function AchievementsSection() {
+  const profile = (useProfileStore((state) => state.profile) as Profile) || {}
+  const achievements = profile.achievements || []
+  const setProfile = useProfileStore((state) => state.setProfile)
+
   const [newAchievement, setNewAchievement] = useState("")
 
+  const updateField = (field: string, value: any) =>
+    setProfile((prev) => ({ ...prev, [field]: value }))
+
   const addAchievement = () => {
-    if (newAchievement.trim()) {
-      setAchievements([...achievements, newAchievement])
-      setNewAchievement("")
-    }
+    const entry = newAchievement.trim()
+    if (!entry) return
+    updateField("achievements", [...achievements, entry])
+    setNewAchievement("")
   }
 
   const removeAchievement = (index: number) => {
-    setAchievements(achievements.filter((_, i) => i !== index))
+    updateField(
+      "achievements",
+      achievements.filter((_, i) => i !== index)
+    )
   }
 
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold tracking-tight">Achievements & Awards</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">
+          Achievements & Awards
+        </h2>
         <p className="text-sm text-muted-foreground">
           Add the player's notable achievements, awards, and recognitions.
         </p>
       </div>
 
       <div className="space-y-4">
+        {/* Input + Add button */}
         <div className="flex gap-3">
           <Input
             placeholder="Add achievement or award"
@@ -56,49 +68,55 @@ export function AchievementsSection({ achievements, setAchievements }: Achieveme
           </Button>
         </div>
 
-        <div className="space-y-3 mt-4">
-          {achievements.length === 0 ? (
-            <div className="text-center py-8 border border-dashed rounded-lg">
-              <Award className="h-10 w-10 mx-auto text-gray-400 mb-2" />
-              <p className="text-sm text-muted-foreground">No achievements added yet</p>
-              <p className="text-xs text-muted-foreground">Add awards and achievements the player has earned</p>
-            </div>
-          ) : (
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="text-sm font-medium mb-3">Awards & Achievements</h3>
-                <div className="space-y-3">
-                  {achievements.map((achievement, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <div className="h-8 w-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center mr-3">
-                        <Trophy className="h-4 w-4" />
-                      </div>
-                      <div className="flex-1">{achievement}</div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeAchievement(index)}
-                        className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50 ml-2"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">Remove achievement</span>
-                      </Button>
+        {/* No achievements placeholder or list */}
+        {achievements.length === 0 ? (
+          <div className="text-center py-8 border border-dashed rounded-lg">
+            <Award className="h-10 w-10 mx-auto text-gray-400 mb-2" />
+            <p className="text-sm text-muted-foreground">
+              No achievements added yet
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Add awards and achievements the player has earned
+            </p>
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="text-sm font-medium mb-3">
+                Awards & Achievements
+              </h3>
+              <div className="space-y-3">
+                {achievements.map((ach, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="h-8 w-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center mr-3">
+                      <Trophy className="h-4 w-4" />
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+                    <div className="flex-1">{ach}</div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeAchievement(idx)}
+                      className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50 ml-2"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">Remove achievement</span>
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   )
 }
 
+/** SVG Trophy icon */
 function Trophy(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
