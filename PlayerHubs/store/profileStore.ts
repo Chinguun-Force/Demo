@@ -1,27 +1,66 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-interface Profile {
-    _id?: string;
-    userId?: string;
-    profilePicture: string;
-    name: string;
-    age: number;
-    height: number;
-    weight: number;
-    position: string;
-    team?: string;
-    jerseyNumber?: number;
-    status?: string;
-    bio?: string;
-    stats?: Record<string, any>;
-    careerHistory?: string[];
-    achievements?: string[];
-    socialLinks?: string[]; // assuming it's meant to be an array of URLs
-  }
+
+interface PlayerStats {
+  gamesPlayed: number;
+  minutes: number;
+  fieldGoals: {
+    made: number;
+    attempted: number;
+    percentage: number;
+  };
+  threePoints: {
+    made: number;
+    attempted: number;
+    percentage: number;
+  };
+  freeThrows: {
+    made: number;
+    attempted: number;
+    percentage: number;
+  };
+  rebounds: {
+    offensive: number;
+    defensive: number;
+    total: number;
+  };
+  assists: number;
+  personalFouls: number;
+  steals: number;
+  blocks: number;
+  turnovers: number;
+  points: number;
+  rank: number;
+}
+
+interface PlayerProfile {
+  id: string;
+  name: string;
+  profilePicture: string;
+  position: string;
+  team: string;
+  age: number;
+  height: string;
+  weight: string;
+  nationality: string;
+  jerseyNumber: number;
+  status: string;
+  bio: string;
+  careerHistory: Array<any>;
+  achievements: Array<any>;
+  stats?: PlayerStats;
+  socialLinks: {
+    twitter?: string;
+    instagram?: string;
+    facebook?: string;
+  };
+  donationEnabled: boolean;
+}
+
 interface ProfileState {
-    profile: Profile | null;
+    profile: PlayerProfile | null;
     // setProfile: (profile: Profile) => void;
-    setProfile: (profile: Profile | ((prev: Profile) => Profile)) => void;
+    setProfile: (profile: PlayerProfile | ((prev: PlayerProfile) => PlayerProfile)) => void;
     clearProfile: () => void;
 }
 export const useProfileStore = create<ProfileState>()(
@@ -29,7 +68,7 @@ export const useProfileStore = create<ProfileState>()(
         (set) => ({
             profile: null,
             setProfile: (profile) => set((state) => ({
-                profile: typeof profile === 'function' ? profile(state.profile as Profile) : profile,
+                profile: typeof profile === 'function' ? profile(state.profile as PlayerProfile) : profile,
             })),
             clearProfile: () => set({ profile: null }),
         }),

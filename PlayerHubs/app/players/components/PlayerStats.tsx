@@ -28,28 +28,28 @@ export function PlayerStats({ player }: PlayerStatsProps) {
         <CardContent>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
-              <span className="text-sm text-muted-foreground">Games</span>
-              {/* <span className="text-2xl font-bold">{player.stats.gamesPlayed}</span> */}
+              <span className="text-sm text-muted-foreground">Тоглолт</span>
+              <span className="text-2xl font-bold">{player.stats.gamesPlayed}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
-              <span className="text-sm text-muted-foreground">Goals</span>
-              {/* <span className="text-2xl font-bold">{player.stats.goalsScored}</span> */}
+              <span className="text-sm text-muted-foreground">Оноо</span>
+              <span className="text-2xl font-bold">{player.stats.fieldGoals.percentage}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
-              <span className="text-sm text-muted-foreground">Assists</span>
-              {/* <span className="text-2xl font-bold">{player.stats.assists}</span> */}
+              <span className="text-sm text-muted-foreground">Оновчтой дамжуулалт</span>
+              <span className="text-2xl font-bold">{player.stats.assists}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
-              <span className="text-sm text-muted-foreground">Yellow Cards</span>
-              {/* <span className="text-2xl font-bold">{player.stats.yellowCards}</span> */}
+              <span className="text-sm text-muted-foreground">Алсын зайн шидэлт</span>
+              <span className="text-2xl font-bold">{player.stats.threePoints.percentage}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
-              <span className="text-sm text-muted-foreground">Red Cards</span>
-              {/* <span className="text-2xl font-bold">{player.stats.redCards}</span> */}
+              <span className="text-sm text-muted-foreground">Чөлөөт шидэлт</span>
+              <span className="text-2xl font-bold">{player.stats.freeThrows.percentage}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
-              <span className="text-sm text-muted-foreground">Win Rate</span>
-              {/* <span className="text-2xl font-bold">{Math.round(player.stats.winRate * 100)}%</span> */}
+              <span className="text-sm text-muted-foreground">Самбараас бөмбөг авалт</span>
+              <span className="text-2xl font-bold">{player.stats.rebounds.total}</span>
             </div>
           </div>
         </CardContent>

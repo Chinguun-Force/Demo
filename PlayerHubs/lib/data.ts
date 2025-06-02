@@ -1,8 +1,81 @@
-
-
 // Sample data
 
-import { Player, PlayoffMatch, Team } from "./type"
+// import { Player, PlayoffMatch, Team } from "./type"
+
+// Re-import necessary types
+import { Team, PlayoffMatch } from "./type";
+
+interface Player {
+  id: string;
+  number: number;
+  name: string;
+  height: string;
+  position: string;
+  age: number;
+  nationality: string;
+  fromYear: number;
+  toYear: number;
+  formerTeam: string;
+  agent: string;
+  profileUrl: string;
+  stats: PlayerStats;
+}
+
+interface PlayerStats {
+  gamesPlayed: number;
+  minutesPlayed: number;
+  fieldGoalsMadeAttempted: string;
+  fieldGoalPercentage: number;
+  threePointsMadeAttempted: string;
+  threePointPercentage: number;
+  freeThrowsMadeAttempted: string;
+  freeThrowPercentage: number;
+  offensiveRebounds: number;
+  defensiveRebounds: number;
+  totalRebounds: number;
+  assists: number;
+  personalFouls: number;
+  steals: number;
+  blocks: number;
+  turnovers: number;
+  points: number;
+  rank: number;
+}
+
+const player: Player = {
+  id: "unique-id", // You can generate or assign a unique ID
+  number: 11,
+  name: "Pendarvis Williams",
+  height: "198 cm",
+  position: "G",
+  age: 33,
+  nationality: "USA",
+  fromYear: 2024,
+  toYear: 2025,
+  formerTeam: "Miners",
+  agent: "A.Liatsos",
+  profileUrl: "https://basketball.asia-basket.comjavascript:aFP('209706','Williams Pendarvis');",
+  stats: {
+    gamesPlayed: 30,
+    minutesPlayed: 0, // Assuming this is the total minutes played
+    fieldGoalsMadeAttempted: "135-253",
+    fieldGoalPercentage: 53.4,
+    threePointsMadeAttempted: "43-120",
+    threePointPercentage: 35.8,
+    freeThrowsMadeAttempted: "77-85",
+    freeThrowPercentage: 90.6,
+    offensiveRebounds: 1.4,
+    defensiveRebounds: 6,
+    totalRebounds: 7.4,
+    assists: 4.6,
+    personalFouls: 2.1,
+    steals: 2.2,
+    blocks: 1.4,
+    turnovers: 1.8,
+    points: 15.9,
+    rank: 20.7,
+  },
+};
 
 export const players: Player[] = [
     {
@@ -53,10 +126,10 @@ export const players: Player[] = [
       ],
       stats: {
         gamesPlayed: 128,
-        goalsScored: 75,
+        points: 75,
         assists: 32,
-        yellowCards: 15,
-        redCards: 2,
+        // yellowCards: 15,
+        // redCards: 2,
         minutesPlayed: 10240,
         winRate: 0.65,
       },
@@ -114,7 +187,7 @@ export const players: Player[] = [
       ],
       stats: {
         gamesPlayed: 180,
-        goalsScored: 35,
+        points: 35,
         assists: 82,
         yellowCards: 24,
         redCards: 1,

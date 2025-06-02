@@ -6,7 +6,8 @@ import { authRouter } from './routes/auth'
 import { playerRouter } from './routes/player'
 import { ownerRouter } from './routes/owner'
 import { teamRouter } from './routes/team'
-
+import statsRouter from './routes/stats'
+import leagueSummaryRouter from './routes/leagueSummary'
 dotenv.config()
 const port = 8000
 const app = express()
@@ -27,6 +28,8 @@ app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/players', playerRouter)
 app.use('/api/v1/owner', ownerRouter)
 app.use('/api/v1/teams', teamRouter)
+app.use('/api/v1/stats', statsRouter)
+app.use('/api/v1/league-summary', leagueSummaryRouter)
 const connectDb = async () => {
       try{
         await connection()
