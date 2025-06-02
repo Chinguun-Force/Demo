@@ -31,14 +31,12 @@ export function PlayerHeader({stats }: PlayerHeaderProps) {
           <div className="flex-1">
             <h1 className="text-3xl font-bold">{useProfileStore.getState().profile?.name || useProfileStore.getState().profile?.name}</h1>
             <div className="flex items-center gap-2 mt-2">
-              <Badge variant="secondary">{useProfileStore.getState().profile?.team || useProfileStore.getState().profile?.team}</Badge>
-              <Badge variant="outline">{useProfileStore.getState().profile?.position || useProfileStore.getState().profile?.position}</Badge>
               {useProfileStore.getState().profile?.jerseyNumber && <Badge variant="outline">{useProfileStore.getState().profile?.jerseyNumber}</Badge>}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-green-600">{stats.rank}</div>
-            <p className="text-sm text-muted-foreground">Current Rank</p>
+            <div className="text-2xl font-bold text-green-600">{useProfileStore.getState().profile?.team || useProfileStore.getState().profile?.team}</div>
+            <p className="text-sm text-muted-foreground">{useProfileStore.getState().profile?.position || useProfileStore.getState().profile?.position}</p>
           </div>
         </div>
       </CardContent>
