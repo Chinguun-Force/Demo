@@ -18,6 +18,10 @@ const cors_1 = __importDefault(require("cors"));
 const connection_1 = require("./utils/connection");
 const auth_1 = require("./routes/auth");
 const player_1 = require("./routes/player");
+const owner_1 = require("./routes/owner");
+const team_1 = require("./routes/team");
+const stats_1 = __importDefault(require("./routes/stats"));
+const leagueSummary_1 = __importDefault(require("./routes/leagueSummary"));
 dotenv_1.default.config();
 const port = 8000;
 const app = (0, express_1.default)();
@@ -34,6 +38,10 @@ app.get('/api', (req, res) => {
 });
 app.use('/api/v1/auth', auth_1.authRouter);
 app.use('/api/v1/players', player_1.playerRouter);
+app.use('/api/v1/owner', owner_1.ownerRouter);
+app.use('/api/v1/teams', team_1.teamRouter);
+app.use('/api/v1/stats', stats_1.default);
+app.use('/api/v1/league-summary', leagueSummary_1.default);
 const connectDb = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, connection_1.connection)();

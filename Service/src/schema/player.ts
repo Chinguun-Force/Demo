@@ -44,10 +44,6 @@ const playerSchema = new mongoose.Schema({
     bio: {
         type : String,
     },
-    stats:{
-        type : Object,
-        default : {},
-    },
     careerHistory: {
         type : [String],
         default : [],

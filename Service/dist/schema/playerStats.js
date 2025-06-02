@@ -1,8 +1,12 @@
-import mongoose from 'mongoose';
-
-const PlayerStatsSchema = new mongoose.Schema({
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = __importDefault(require("mongoose"));
+const PlayerStatsSchema = new mongoose_1.default.Schema({
     playerId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose_1.default.Schema.Types.ObjectId,
         ref: 'Player',
         required: true
     },
@@ -14,7 +18,6 @@ const PlayerStatsSchema = new mongoose.Schema({
         type: Number,
         required: true
     }, // "MIN"
-
     fieldGoals: {
         made: {
             type: Number,
@@ -29,7 +32,6 @@ const PlayerStatsSchema = new mongoose.Schema({
             required: true
         } // "FG%"
     },
-
     threePoints: {
         made: {
             type: Number,
@@ -44,7 +46,6 @@ const PlayerStatsSchema = new mongoose.Schema({
             required: true
         } // "3P%"
     },
-
     freeThrows: {
         made: {
             type: Number,
@@ -59,7 +60,6 @@ const PlayerStatsSchema = new mongoose.Schema({
             required: true
         } // "FT%"
     },
-
     rebounds: {
         offensive: {
             type: Number,
@@ -74,7 +74,6 @@ const PlayerStatsSchema = new mongoose.Schema({
             required: true
         } // "REB"
     },
-
     assists: {
         type: Number,
         required: true
@@ -104,7 +103,6 @@ const PlayerStatsSchema = new mongoose.Schema({
         required: true
     } // "RNK"
 });
-
-const PlayerStats = mongoose.model('PlayerStats', PlayerStatsSchema);
-
-export default PlayerStats;
+const PlayerStats = mongoose_1.default.model('PlayerStats', PlayerStatsSchema);
+exports.default = PlayerStats;
+//# sourceMappingURL=playerStats.js.map

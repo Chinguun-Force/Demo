@@ -313,8 +313,8 @@ export default function PlayersPage() {
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu> */}
-                        <ChevronRight className="h-5 w-5 text-muted-foreground ml-auto" />
-                        <Link href={`/players/${player._id}`} className="sr-only"></Link>
+                       
+                        <Link href={`/players/${player._id}`} className=""><ChevronRight className="h-5 w-5 text-muted-foreground ml-auto" /></Link>
                       </TableCell>
                     </TableRow>
                   ))

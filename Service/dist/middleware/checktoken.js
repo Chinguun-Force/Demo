@@ -20,9 +20,10 @@ const checkToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             res.status(401).json({ success: false, msg: "token is missing" });
             return;
         }
-        const [_, token] = req.headers["authorization"].split(" ");
-        const decode = jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
-        if (typeof decode !== "object" || !("user" in decode) || decode.user.role != "ADMIN") {
+        const authHeader = req.headers["authorization"];
+        const token = authHeader.split(" ");
+        const decode = jsonwebtoken_1.default.verify(token[1], process.env.ACCESS_TOKEN_SECRET_KEY);
+        if (typeof decode !== "object" || !("user" in decode) || decode.user.role === "FAN") {
             res.status(401).json({ success: false, error: "unauthorization" });
             return;
         }
@@ -30,6 +31,7 @@ const checkToken = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (error) {
         res.status(401).json({ success: false, error: error.message });
+        console.log(req.headers["authorization"]);
     }
 });
 exports.checkToken = checkToken;

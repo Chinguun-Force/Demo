@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Player } from '../schema/player';
+import mongoose from 'mongoose';
 
 export const createPlayer = async (req, res) => {
     try {
@@ -23,18 +24,48 @@ export const createPlayer = async (req, res) => {
         }
     }
 }
-export const getProfileById = async (req, res) =>{
+export const getProfileById = async (req, res) => {
     try {
-        const player = await Player.findById(req.params.id);
-        if (!player) {
-            return res.status(404).json({ success: false, message: "Player not found" });
+      const playerId = req.params.id;
+  
+      console.log("Received playerId:", playerId);
+  
+      if (!mongoose.Types.ObjectId.isValid(playerId)) {
+        return res.status(400).json({ error: "Invalid playerId format" });
+      }
+  
+      const playerProfile = await Player.aggregate([
+        {
+          $match: {
+            _id: new mongoose.Types.ObjectId(playerId)
+          }
+        },
+        {
+          $lookup: {
+            from: 'playerstats',
+            localField: '_id',
+            foreignField: 'playerId',
+            as: 'stats'
+          }
+        },
+        {
+          $unwind: {
+            path: '$stats',
+            preserveNullAndEmptyArrays: true
+          }
         }
-        res.status(200).json({ success: true, player });
+      ]);
+  
+      if (!playerProfile.length) {
+        return res.status(404).json({ error: "Player not found" });
+      }
+  
+      res.json(playerProfile[0]);
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: "Server error" });
+      console.error('Error fetching player profile:', error);
+      res.status(500).json({ error: 'Server error' });
     }
-}
+  };
 export const getUserProfile = async (req, res) => {
     try {
         const [_, token] = req.headers["authorization"].split(" ");
@@ -55,6 +86,7 @@ export const getUserProfile = async (req, res) => {
         
     }
 }
+
 export const getAllPlayers = async (req, res) => {
     try {
         const players = await Player.find();
@@ -64,6 +96,7 @@ export const getAllPlayers = async (req, res) => {
         res.status(500).json({ success: false, message: "Server error" });
     }
 }
+
 export const updatePlayer = async (req, res) => {
     try {
         const authHeader = req.headers["authorization"];

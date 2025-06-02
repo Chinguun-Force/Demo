@@ -15,10 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.updatePlayer = exports.getAllPlayers = exports.getUserProfile = exports.getProfileById = exports.createPlayer = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const player_1 = require("../schema/player");
+const mongoose_1 = __importDefault(require("mongoose"));
 const createPlayer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const [_, token] = req.headers["authorization"].split(" ");
-        const decode = jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
+        const authHeader = req.headers["authorization"];
+        const token = authHeader.split(" ");
+        const decode = jsonwebtoken_1.default.verify(token[1], process.env.ACCESS_TOKEN_SECRET_KEY);
         const userId = (typeof decode === 'object' && decode !== null && 'user' in decode && typeof decode.user === 'object')
             ? decode.user._id
             : undefined;
@@ -41,15 +43,40 @@ const createPlayer = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.createPlayer = createPlayer;
 const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const player = yield player_1.Player.findById(req.params.id);
-        if (!player) {
-            return res.status(404).json({ success: false, message: "Player not found" });
+        const playerId = req.params.id;
+        console.log("Received playerId:", playerId);
+        if (!mongoose_1.default.Types.ObjectId.isValid(playerId)) {
+            return res.status(400).json({ error: "Invalid playerId format" });
         }
-        res.status(200).json({ success: true, player });
+        const playerProfile = yield player_1.Player.aggregate([
+            {
+                $match: {
+                    _id: new mongoose_1.default.Types.ObjectId(playerId)
+                }
+            },
+            {
+                $lookup: {
+                    from: 'playerstats',
+                    localField: '_id',
+                    foreignField: 'playerId',
+                    as: 'stats'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$stats',
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ]);
+        if (!playerProfile.length) {
+            return res.status(404).json({ error: "Player not found" });
+        }
+        res.json(playerProfile[0]);
     }
     catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: "Server error" });
+        console.error('Error fetching player profile:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 });
 exports.getProfileById = getProfileById;

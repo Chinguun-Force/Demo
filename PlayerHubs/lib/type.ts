@@ -18,6 +18,7 @@ export type Player = {
   stats: PlayerStats
   socialLinks: SocialLinks
   donationEnabled: boolean
+  teamId: string
 }
 
 export type CareerEntry = {
@@ -38,13 +39,35 @@ export type Achievement = {
 }
 
 export type PlayerStats = {
-  gamesPlayed: number
-  goalsScored: number
-  assists: number
-  yellowCards: number
-  redCards: number
-  minutesPlayed: number
-  winRate: number
+  gamesPlayed: number;
+    minutes: number;
+    fieldGoals: {
+        made: number;
+        attempted: number;
+        percentage: number;
+    };
+    threePoints: {
+        made: number;
+        attempted: number;
+        percentage: number;
+    };
+    freeThrows: {
+        made: number;
+        attempted: number;
+        percentage: number;
+    };
+    rebounds: {
+        offensive: number;
+        defensive: number;
+        total: number;
+    };
+    assists: number;
+    personalFouls: number;
+    steals: number;
+    blocks: number;
+    turnovers: number;
+    points: number;
+    rank: number;
 }
 
 export type SocialLinks = {

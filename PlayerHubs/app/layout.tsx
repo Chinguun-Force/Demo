@@ -6,9 +6,9 @@ import { FooterSection } from '@/components/Footer'
 import { TeamStoreInitializer } from '@/components/utils/TeamInitiliazer'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
-  description: 'Created with v0',
-  generator: 'v0.dev',
+  title: 'PlayerHubs',
+  description: 'Demo',
+  generator: 'PlayerHubs',
 }
 
 export default function RootLayout({

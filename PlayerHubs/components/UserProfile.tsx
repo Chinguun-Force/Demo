@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem} from '@radix-ui/react-dropdown-menu'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator} from '@radix-ui/react-dropdown-menu'
 import { Button } from './ui/button'
-import { BarChart3, ChevronDown, ChevronUp, FileText, HelpCircle, LogOut, MessageSquare, Settings, User } from 'lucide-react'
+import { BarChart3, ChevronDown, ChevronUp, FileText, HelpCircle, LogOut, MessageSquare, Settings, Trophy, User } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { useProfileStore } from '@/store/profileStore'
+import Link from 'next/link'
 
 const UserProfile = () => {
     const [open, setOpen] = useState(false)
@@ -25,38 +26,35 @@ const UserProfile = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56 bg-gray-50 shadow-lg rounded-md p-2">
-          <DropdownMenuItem className="flex items-center gap-2 py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer">
-            <span>{useProfileStore.getState().profile?.name}</span>
-          </DropdownMenuItem>
+          <Link href="/players/myprofile">
+            <DropdownMenuItem className="flex items-center gap-2 py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer">
+              <span>{useProfileStore.getState().profile?.name}</span>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/players/myprofile">
           <DropdownMenuItem className="flex items-center gap-2 py-2">
             <User className="h-4 w-4" />
             <span>My Account</span>
           </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-2 py-2">
-            <FileText className="h-4 w-4" />
-            <span>Tech Assessment</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-2 py-2">
-            <BarChart3 className="h-4 w-4" />
-            <span>Leaderboard</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-2 py-2">
-            <Settings className="h-4 w-4" />
-            <span>Тохиргоо</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-2 py-2">
-            <MessageSquare className="h-4 w-4" />
-            <span>Санал хүсэлт</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-2 py-2">
-            <HelpCircle className="h-4 w-4" />
-            <span>Тусламж</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-2 py-2">
-            <LogOut className="h-4 w-4" />
-            <Button variant="ghost" size="sm" onClick={() => useAuthStore.getState().logout()}>
-              Гарах </Button>
-          </DropdownMenuItem>
+          </Link>
+
+          <DropdownMenuItem>
+          <Trophy className="mr-2 h-4 w-4" />
+          <span>My Teams</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <BarChart3 className="mr-2 h-4 w-4" />
+          <span>Statistics</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Settings className="mr-2 h-4 w-4" />
+          <span>Settings</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="text-red-600">
+          <LogOut className="mr-2 h-4 w-4" />
+          <span>Log out</span>
+        </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
