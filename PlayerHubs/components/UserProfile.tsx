@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator} from '@radix-ui/react-dropdown-menu'
@@ -8,8 +9,8 @@ import { useProfileStore } from '@/store/profileStore'
 import Link from 'next/link'
 
 const UserProfile = () => {
-    const [open, setOpen] = useState(false)
-    useAuthStore((state) => state.user)
+  const [open, setOpen] = useState(false);
+
   return (
         <div className="flex items-center gap-2">
       <Avatar>
@@ -32,29 +33,39 @@ const UserProfile = () => {
             </DropdownMenuItem>
           </Link>
           <Link href="/players/myprofile">
-          <DropdownMenuItem className="flex items-center gap-2 py-2">
+          <DropdownMenuItem className="flex items-center gap-2 py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer">
             <User className="h-4 w-4" />
             <span>My Account</span>
           </DropdownMenuItem>
           </Link>
-
-          <DropdownMenuItem>
-          <Trophy className="mr-2 h-4 w-4" />
-          <span>My Teams</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <BarChart3 className="mr-2 h-4 w-4" />
-          <span>Statistics</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Settings className="mr-2 h-4 w-4" />
-          <span>Settings</span>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-red-600">
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
-        </DropdownMenuItem>
+          <Link href="/players/myprofile">
+            <DropdownMenuItem className="flex items-center gap-2 py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer">
+              <Trophy className="mr-2 h-4 w-4" />
+              <span>My Teams</span>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/players/myprofile">
+            <DropdownMenuItem className="flex items-center gap-2 py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer">
+              <BarChart3 className="mr-2 h-4 w-4" />
+              <span>Statistics</span>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/players/myprofile">
+            <DropdownMenuItem className="flex items-center gap-2 py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer">
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </DropdownMenuItem>
+          </Link>
+          <Button variant="ghost" className=" hover:bg-gray-200 duration-300 rounded-xl cursor-pointer text-red-600 w-full flex justify-start m-0 p-0"
+            onClick={() => {
+            useAuthStore.getState().logout()
+          }}
+          >
+            <DropdownMenuItem className="flex items-center py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer text-red-600">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </Button>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
