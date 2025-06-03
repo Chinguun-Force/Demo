@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Users, Trophy, FileText, Heart, Plus, Upload } from "lucide-react"
 import Link from "next/link"
 import type { Player, Team, Contract, Donation } from "@/lib/database"
+import Loader from '@/components/Loader'
 
 export default function Dashboard() {
   const [players, setPlayers] = useState<Player[]>([])
@@ -18,6 +19,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true)
       try {
         const [playersRes, teamsRes, contractsRes, donationsRes] = await Promise.all([
           fetch("/api/players"),
@@ -52,11 +54,7 @@ export default function Dashboard() {
   }, [])
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg">Loading sda min hvlee...</div>
-      </div>
-    )
+    return <Loader />
   }
 
   const totalDonations = donations.reduce((sum, donation) => sum + donation.amount, 0)
