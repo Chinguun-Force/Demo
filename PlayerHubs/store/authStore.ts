@@ -26,11 +26,22 @@ interface AuthState {
   isAuthenticated: boolean;
   login: (payload: { token: string }) => void;
   logout: () => void;
+  checkAuth: () => void;
 }
+
+const isTokenExpired = (token: string): boolean => {
+  try {
+    const decoded = jwtDecode<DecodedToken>(token);
+    const currentTime = Date.now() / 1000;
+    return decoded.exp < currentTime;
+  } catch {
+    return true;
+  }
+};
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       isAuthenticated: false,
       login: ({ token }) => {
@@ -43,11 +54,27 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: true,
         });
       },
-      logout: () => set({ user: null, isAuthenticated: false }),
+      logout: () => {
+        localStorage.removeItem('auth-storage');
+        set({ user: null, isAuthenticated: false });
+      },
+      checkAuth: () => {
+        const state = get();
+        if (state.user?.token && isTokenExpired(state.user.token)) {
+          get().logout();
+        }
+      },
     }),
     {
       name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),
+      version: 1,
+      onRehydrateStorage: () => (state) => {
+        // Check token expiration when rehydrating from storage
+        if (state?.user?.token && isTokenExpired(state.user.token)) {
+          state.logout();
+        }
+      },
     }
   )
 );

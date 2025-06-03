@@ -5,11 +5,20 @@ import { Button } from './ui/button'
 import { BarChart3, ChevronDown, ChevronUp, FileText, HelpCircle, LogOut, MessageSquare, Settings, User } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { useProfileStore } from '@/store/profileStore'
+import { useRouter } from 'next/navigation'
 
 const UserProfile = () => {
     const [open, setOpen] = useState(false)
+    const router = useRouter()
     useAuthStore((state) => state.user)
-  return (
+
+    const handleLogout = () => {
+      useAuthStore.getState().logout()
+      useProfileStore.getState().clearProfile()
+      router.push('/auth/login')
+    }
+
+    return (
         <div className="flex items-center gap-2">
       <Avatar>
         <AvatarImage
@@ -54,8 +63,9 @@ const UserProfile = () => {
           </DropdownMenuItem>
           <DropdownMenuItem className="flex items-center gap-2 py-2">
             <LogOut className="h-4 w-4" />
-            <Button variant="ghost" size="sm" onClick={() => useAuthStore.getState().logout()}>
-              Гарах </Button>
+            <Button variant="ghost" size="sm" onClick={handleLogout}>
+              Гарах
+            </Button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
