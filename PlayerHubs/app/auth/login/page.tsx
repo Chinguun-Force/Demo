@@ -1,6 +1,6 @@
 "use client"
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -77,6 +77,14 @@ export default function LoginPage() {
     setIsLoading(false)
   }
 }
+
+  const checkAuth = useAuthStore(state => state.checkAuth)
+
+  useEffect(() => {
+    // Check token expiration when component mounts
+    checkAuth();
+  }, [checkAuth]);
+
   return (
     <>
       {isLoading && <Loader />}
