@@ -3,15 +3,23 @@ import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator} from '@radix-ui/react-dropdown-menu'
 import { Button } from './ui/button'
-import { BarChart3, ChevronDown, ChevronUp, FileText, HelpCircle, LogOut, MessageSquare, Settings, Trophy, User } from 'lucide-react'
+import { BarChart3, ChevronDown, ChevronUp, FileText, HelpCircle, Link, LogOut, MessageSquare, Settings, Trophy, User } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { useProfileStore } from '@/store/profileStore'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const UserProfile = () => {
-  const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false)
+    const router = useRouter()
+    useAuthStore((state) => state.user)
 
-  return (
+    const handleLogout = () => {
+      useAuthStore.getState().logout()
+      useProfileStore.getState().clearProfile()
+      router.push('/auth/login')
+    }
+
+    return (
         <div className="flex items-center gap-2">
       <Avatar>
         <AvatarImage
@@ -37,35 +45,32 @@ const UserProfile = () => {
             <User className="h-4 w-4" />
             <span>My Account</span>
           </DropdownMenuItem>
-          </Link>
-          <Link href="/players/myprofile">
-            <DropdownMenuItem className="flex items-center gap-2 py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer">
-              <Trophy className="mr-2 h-4 w-4" />
-              <span>My Teams</span>
-            </DropdownMenuItem>
-          </Link>
-          <Link href="/players/myprofile">
-            <DropdownMenuItem className="flex items-center gap-2 py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer">
-              <BarChart3 className="mr-2 h-4 w-4" />
-              <span>Statistics</span>
-            </DropdownMenuItem>
-          </Link>
-          <Link href="/players/myprofile">
-            <DropdownMenuItem className="flex items-center gap-2 py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer">
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
-          </Link>
-          <Button variant="ghost" className=" hover:bg-gray-200 duration-300 rounded-xl cursor-pointer text-red-600 w-full flex justify-start m-0 p-0"
-            onClick={() => {
-            useAuthStore.getState().logout()
-          }}
-          >
-            <DropdownMenuItem className="flex items-center py-2 hover:bg-gray-200 duration-300 rounded-xl cursor-pointer text-red-600">
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
-            </DropdownMenuItem>
-          </Button>
+          <DropdownMenuItem className="flex items-center gap-2 py-2">
+            <FileText className="h-4 w-4" />
+            <span>Tech Assessment</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-2 py-2">
+            <BarChart3 className="h-4 w-4" />
+            <span>Leaderboard</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-2 py-2">
+            <Settings className="h-4 w-4" />
+            <span>Тохиргоо</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-2 py-2">
+            <MessageSquare className="h-4 w-4" />
+            <span>Санал хүсэлт</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-2 py-2">
+            <HelpCircle className="h-4 w-4" />
+            <span>Тусламж</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-2 py-2">
+            <LogOut className="h-4 w-4" />
+            <Button variant="ghost" size="sm" onClick={handleLogout}>
+              Гарах
+            </Button>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
