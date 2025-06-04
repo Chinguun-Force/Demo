@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,9 +11,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { Progress } from "@/components/ui/progress"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ArrowLeft, Upload, FileText, CheckCircle, AlertCircle, X } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { ArrowLeft, Upload, FileText, CheckCircle, AlertCircle, X, Send } from "lucide-react"
 import Link from "next/link"
-import type { Player, Team } from "@/lib/database"
+import type { Player, Team, Contract } from "@/lib/database"
 
 interface UploadedFile {
   name: string
@@ -23,8 +24,9 @@ interface UploadedFile {
   uploadedAt: string
 }
 
-export default function ContractUpload() {
+export default function TeamOwnerContractUpload() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -32,34 +34,63 @@ export default function ContractUpload() {
   const [teams, setTeams] = useState<Team[]>([])
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [dragActive, setDragActive] = useState(false)
+  const [existingContract, setExistingContract] = useState<Contract | null>(null)
+
+  const preselectedContract = searchParams.get("contract")
 
   const [formData, setFormData] = useState({
+    contract_id: preselectedContract || "",
     player_id: "",
     team_id: "",
     owner_id: "1", // Mock owner ID
-    salary: "",
-    duration_months: "",
-    start_date: "",
     contract_title: "",
-    contract_description: "",
+    contract_status: "pending" as "pending" | "sent_for_signature" | "signed" | "active",
     contract_files: [] as string[],
+    notes: "",
+    send_to_player: false,
   })
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [playersRes, teamsRes] = await Promise.all([fetch("/api/players"), fetch("/api/teams")])
-        const [playersData, teamsData] = await Promise.all([playersRes.json(), teamsRes.json()])
+        const [playersRes, teamsRes, contractsRes] = await Promise.all([
+          fetch("/api/players"),
+          fetch("/api/teams"),
+          fetch("/api/contracts"),
+        ])
+        const [playersData, teamsData, contractsData] = await Promise.all([
+          playersRes.json(),
+          teamsRes.json(),
+          contractsRes.json(),
+        ])
+
+        // Filter teams owned by current user
+        const myTeams = teamsData.filter((team: Team) => team.owner_id === "1")
         setPlayers(playersData)
-        setTeams(teamsData)
+        setTeams(myTeams)
+
+        // If there's a preselected contract, load its details
+        if (preselectedContract) {
+          const contract = contractsData.find((c: Contract) => c.id === preselectedContract)
+          if (contract) {
+            setExistingContract(contract)
+            setFormData((prev) => ({
+              ...prev,
+              contract_id: contract.id,
+              player_id: contract.player_id,
+              team_id: contract.team_id,
+              contract_title: `Contract for Player ${contract.player_id}`,
+            }))
+          }
+        }
       } catch (error) {
         console.error("Failed to fetch data:", error)
       }
     }
     fetchData()
-  }, [])
+  }, [preselectedContract])
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: string | boolean | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -187,10 +218,14 @@ export default function ContractUpload() {
         ...formData,
         contract_file_url: formData.contract_files[0], // Primary contract file
         additional_files: formData.contract_files.slice(1), // Additional files
+        status: formData.send_to_player ? "sent_for_signature" : "pending",
       }
 
-      const response = await fetch("/api/contracts", {
-        method: "POST",
+      const endpoint = existingContract ? "/api/team-owner/contracts/upload" : "/api/team-owner/contracts"
+      const method = existingContract ? "PATCH" : "POST"
+
+      const response = await fetch(endpoint, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -198,39 +233,54 @@ export default function ContractUpload() {
       })
 
       if (response.ok) {
-        alert("Contract uploaded successfully!")
-        router.push("/dashboard")
+        const message = formData.send_to_player
+          ? "Contract uploaded and sent to player for signature!"
+          : "Contract uploaded successfully!"
+        alert(message)
+        router.push("/dashboard/team-owner")
       } else {
         const error = await response.json()
-        alert(error.error || "Failed to create contract")
+        alert(error.error || "Failed to upload contract")
       }
     } catch (error) {
       console.error("Submit error:", error)
-      alert("Failed to create contract")
+      alert("Failed to upload contract")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
+    <div className="container mx-auto p-6 max-w-6xl">
       <div className="mb-6">
         <Button variant="ghost" asChild className="mb-4">
-          <Link href="/dashboard">
+          <Link href="/dashboard/team-owner">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
+            Back to Team Owner Dashboard
           </Link>
         </Button>
-        <h1 className="text-3xl font-bold">Upload Contract</h1>
-        <p className="text-muted-foreground">Upload and manage player-team contracts</p>
+        <h1 className="text-3xl font-bold">Upload Contract Documents</h1>
+        <p className="text-muted-foreground">
+          {existingContract ? "Upload files for existing contract" : "Upload signed contract documents"}
+        </p>
       </div>
+
+      {existingContract && (
+        <Alert className="mb-6">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            <strong>Existing Contract:</strong> You're uploading files for Contract #{existingContract.id} (Player ID:{" "}
+            {existingContract.player_id})
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Contract Details */}
         <Card>
           <CardHeader>
             <CardTitle>Contract Information</CardTitle>
-            <CardDescription>Enter the contract details</CardDescription>
+            <CardDescription>Specify contract details and upload options</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -245,96 +295,98 @@ export default function ContractUpload() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="player_id">Player</Label>
-                  <Select onValueChange={(value) => handleInputChange("player_id", value)} required>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select player" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {players.map((player) => (
-                        <SelectItem key={player.id} value={player.id}>
-                          {player.name} - {player.position}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+              {!existingContract && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="player_id">Player</Label>
+                    <Select
+                      value={formData.player_id}
+                      onValueChange={(value) => handleInputChange("player_id", value)}
+                      required
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select player" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {players.map((player) => (
+                          <SelectItem key={player.id} value={player.id}>
+                            {player.name} - {player.position}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="team_id">Team</Label>
+                    <Select
+                      value={formData.team_id}
+                      onValueChange={(value) => handleInputChange("team_id", value)}
+                      required
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select team" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {teams.map((team) => (
+                          <SelectItem key={team.id} value={team.id}>
+                            {team.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="team_id">Team</Label>
-                  <Select onValueChange={(value) => handleInputChange("team_id", value)} required>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select team" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {teams.map((team) => (
-                        <SelectItem key={team.id} value={team.id}>
-                          {team.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+              )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="salary">Annual Salary ($)</Label>
-                  <Input
-                    id="salary"
-                    type="number"
-                    min="0"
-                    value={formData.salary}
-                    onChange={(e) => handleInputChange("salary", e.target.value)}
-                    placeholder="50000"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="duration_months">Duration (months)</Label>
-                  <Select onValueChange={(value) => handleInputChange("duration_months", value)} required>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select duration" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="6">6 months</SelectItem>
-                      <SelectItem value="12">1 year</SelectItem>
-                      <SelectItem value="24">2 years</SelectItem>
-                      <SelectItem value="36">3 years</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="contract_status">Contract Status</Label>
+                <Select
+                  value={formData.contract_status}
+                  onValueChange={(value) => handleInputChange("contract_status", value as any)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">Pending Review</SelectItem>
+                    <SelectItem value="sent_for_signature">Sent for Signature</SelectItem>
+                    <SelectItem value="signed">Signed</SelectItem>
+                    <SelectItem value="active">Active</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="start_date">Start Date</Label>
-                <Input
-                  id="start_date"
-                  type="date"
-                  value={formData.start_date}
-                  onChange={(e) => handleInputChange("start_date", e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="contract_description">Description</Label>
+                <Label htmlFor="notes">Notes (Optional)</Label>
                 <Textarea
-                  id="contract_description"
-                  value={formData.contract_description}
-                  onChange={(e) => handleInputChange("contract_description", e.target.value)}
-                  placeholder="Additional contract details..."
+                  id="notes"
+                  value={formData.notes}
+                  onChange={(e) => handleInputChange("notes", e.target.value)}
+                  placeholder="Additional notes about this contract upload..."
                   rows={3}
                 />
               </div>
 
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="send_to_player"
+                  checked={formData.send_to_player}
+                  onChange={(e) => handleInputChange("send_to_player", e.target.checked)}
+                  className="rounded"
+                />
+                <Label htmlFor="send_to_player" className="text-sm">
+                  Send contract to player for signature after upload
+                </Label>
+              </div>
+
               <div className="flex gap-4 pt-4">
                 <Button type="submit" disabled={loading || uploadedFiles.length === 0} className="flex-1">
-                  {loading ? "Creating Contract..." : "Create Contract"}
+                  {loading ? "Uploading..." : formData.send_to_player ? "Upload & Send" : "Upload Contract"}
+                  {formData.send_to_player && <Send className="w-4 h-4 ml-2" />}
                 </Button>
                 <Button type="button" variant="outline" asChild>
-                  <Link href="/dashboard">Cancel</Link>
+                  <Link href="/dashboard/team-owner">Cancel</Link>
                 </Button>
               </div>
             </form>
@@ -346,7 +398,7 @@ export default function ContractUpload() {
           <Card>
             <CardHeader>
               <CardTitle>Upload Contract Files</CardTitle>
-              <CardDescription>Upload PDF contracts and supporting documents</CardDescription>
+              <CardDescription>Upload signed contracts and supporting documents</CardDescription>
             </CardHeader>
             <CardContent>
               <div
@@ -437,19 +489,33 @@ export default function ContractUpload() {
             </Card>
           )}
 
-          {/* Upload Guidelines */}
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              <strong>Upload Guidelines:</strong>
-              <ul className="mt-2 space-y-1 text-sm">
-                <li>• PDF files for official contracts</li>
-                <li>• Images for signed documents or amendments</li>
-                <li>• Maximum file size: 10MB per file</li>
-                <li>• Multiple files supported</li>
-              </ul>
-            </AlertDescription>
-          </Alert>
+          {/* Status Guide */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Contract Status Guide</CardTitle>
+              <CardDescription>Understanding contract statuses</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Pending Review</span>
+                  <Badge variant="secondary">Pending</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Sent for Signature</span>
+                  <Badge variant="outline">Sent</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Signed by Player</span>
+                  <Badge variant="default">Signed</Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Active Contract</span>
+                  <Badge variant="default">Active</Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

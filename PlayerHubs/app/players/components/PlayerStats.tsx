@@ -7,6 +7,17 @@ interface PlayerStatsProps {
   player: Player
 }
 
+interface PlayerStats {
+  stats: {
+    gamesPlayed: number;
+    fieldGoals: { percentage: number };
+    assists: number;
+    threePoints: { percentage: number };
+    freeThrows: { percentage: number };
+    rebounds: { total: number };
+  };
+}
+
 export function PlayerStats({ player }: PlayerStatsProps) {
   // Create some sample performance data for visualization
   const performanceData = [
@@ -29,27 +40,27 @@ export function PlayerStats({ player }: PlayerStatsProps) {
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Тоглолт</span>
-              <span className="text-2xl font-bold">{player.stats.gamesPlayed}</span>
+              <span className="text-2xl font-bold">{player?.stats?.gamesPlayed || 0}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Оноо</span>
-              <span className="text-2xl font-bold">{player.stats.fieldGoals.percentage}</span>
+              <span className="text-2xl font-bold">{player?.stats?.fieldGoals.percentage || 0}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Оновчтой дамжуулалт</span>
-              <span className="text-2xl font-bold">{player.stats.assists}</span>
+              <span className="text-2xl font-bold">{player?.stats?.assists || 0}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Алсын зайн шидэлт</span>
-              <span className="text-2xl font-bold">{player.stats.threePoints.percentage}</span>
+              <span className="text-2xl font-bold">{player?.stats?.threePoints?.percentage || 0}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Чөлөөт шидэлт</span>
-              <span className="text-2xl font-bold">{player.stats.freeThrows.percentage}</span>
+              <span className="text-2xl font-bold">{player?.stats?.freeThrows?.percentage || 0}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Самбараас бөмбөг авалт</span>
-              <span className="text-2xl font-bold">{player.stats.rebounds.total}</span>
+              <span className="text-2xl font-bold">{player?.stats?.rebounds?.total || 0}</span>
             </div>
           </div>
         </CardContent>

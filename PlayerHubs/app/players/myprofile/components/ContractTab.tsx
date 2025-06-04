@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator"
 import { FileText } from "lucide-react"
 import { useProfileStore } from "@/store/profileStore"
 
+
 interface ContractData {
   team: string
   salary: string

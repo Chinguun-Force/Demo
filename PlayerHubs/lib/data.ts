@@ -40,6 +40,8 @@ interface PlayerStats {
   turnovers: number;
   points: number;
   rank: number;
+  yellowCards?: number; // Added yellowCards property
+  winRate?: number; // Added winRate property
 }
 
 const player: Player = {
