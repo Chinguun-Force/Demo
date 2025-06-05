@@ -1,9 +1,12 @@
+"use client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { FileText } from "lucide-react"
 import { useProfileStore } from "@/store/profileStore"
+import { useState } from "react"
+import Spinner from "@/components/ui/spinner"
  
  
 interface ContractData {
@@ -24,8 +27,15 @@ interface ContractTabProps {
  
 export function ContractTab({ contractData }: ContractTabProps) {
   const profile = useProfileStore.getState().profile
- 
+  const [loading, setLoading] = useState(true)
+  if(!profile?.teamId) {
+    setLoading(false)}
   return (
+    // loading ? (
+    //   <div className="flex items-center justify-center h-screen">
+    //       <Spinner/>
+    //   </div>
+    // ) : (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -80,4 +90,5 @@ export function ContractTab({ contractData }: ContractTabProps) {
       </CardContent>
     </Card>
   )
+// )
 }

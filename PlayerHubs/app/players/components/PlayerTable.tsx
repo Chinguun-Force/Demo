@@ -9,11 +9,11 @@ const PlayerTable = () => {
     <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Position</TableHead>
-                  <TableHead>Team</TableHead>
-                  <TableHead>Age</TableHead>
-                  <TableHead>Nationality</TableHead>
+                  <TableHead>Нэр</TableHead>
+                  <TableHead>Байрлал</TableHead>
+                  <TableHead>Баг</TableHead>
+                  <TableHead>Нас</TableHead>
+                  <TableHead>Улс</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Stats</TableHead>
                   <TableHead className="text-right">Actions</TableHead>

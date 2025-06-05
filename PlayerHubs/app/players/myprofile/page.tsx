@@ -6,6 +6,8 @@ import { DonationsTab } from "./components/DonationTab"
 import { EditProfileTab } from "./components/EditProfileTab"
 import { PlayerHeader } from "./components/PlayerHeader"
 import { StatsTab } from "./components/StatsTab"
+import Spinner from "@/components/ui/spinner"
+import { useState } from "react"
 
 
 export default function MyProfile() {
@@ -39,47 +41,53 @@ export default function MyProfile() {
     earnings: "$45,200",
     rank: "Global Elite",
   }
-
+  const [loading, setLoading] = useState(true);
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <PlayerHeader stats={stats} />
-
-      <Tabs defaultValue="contract" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="contract" className="flex items-center gap-2">
-            <FileText className="h-4 w-4" />
-            Contract
-          </TabsTrigger>
-          <TabsTrigger value="donations" className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4" />
-            Donations
-          </TabsTrigger>
-          <TabsTrigger value="profile" className="flex items-center gap-2">
-            <Edit className="h-4 w-4" />
-            Edit Profile
-          </TabsTrigger>
-          <TabsTrigger value="stats" className="flex items-center gap-2">
-            <Trophy className="h-4 w-4" />
-            Stats
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="contract">
-          <ContractTab contractData={contractData} />
-        </TabsContent>
-
-        <TabsContent value="donations">
-          <DonationsTab donations={donations} />
-        </TabsContent>
-
-        <TabsContent value="profile">
-          <EditProfileTab />
-        </TabsContent>
-
-        <TabsContent value="stats">
-          <StatsTab stats={stats} />
-        </TabsContent>
-      </Tabs>
-    </div>
-  )
+    // loading ? (
+    //   <div className="flex items-center justify-center h-screen">
+    //       <Spinner/>
+    //   </div>
+    // ) : (
+      <div className="max-w-4xl mx-auto p-6 space-y-6">
+        <PlayerHeader stats={stats} />
+  
+        <Tabs defaultValue="contract" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="contract" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Contract
+            </TabsTrigger>
+            <TabsTrigger value="donations" className="flex items-center gap-2">
+              <DollarSign className="h-4 w-4" />
+              Donations
+            </TabsTrigger>
+            <TabsTrigger value="profile" className="flex items-center gap-2">
+              <Edit className="h-4 w-4" />
+              Edit Profile
+            </TabsTrigger>
+            <TabsTrigger value="stats" className="flex items-center gap-2">
+              <Trophy className="h-4 w-4" />
+              Stats
+            </TabsTrigger>
+          </TabsList>
+  
+          <TabsContent value="contract">
+            <ContractTab contractData={contractData} />
+          </TabsContent>
+  
+          <TabsContent value="donations">
+            <DonationsTab donations={donations} />
+          </TabsContent>
+  
+          <TabsContent value="profile">
+            <EditProfileTab />
+          </TabsContent>
+  
+          <TabsContent value="stats">
+            <StatsTab stats={stats} />
+          </TabsContent>
+        </Tabs>
+      </div>
+    )
+  // )
 }

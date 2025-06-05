@@ -3,6 +3,7 @@
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useProfileStore } from "@/store/profileStore"
+import PlayerPhotoSection from "./PhotoSection"
 
 export function BasicInfoSection() {
   const profile = useProfileStore((state) => state.profile) || {};
@@ -26,10 +27,12 @@ export function BasicInfoSection() {
         <p className="text-sm text-muted-foreground">Enter the player's personal details and physical attributes.</p>
       </div>
 
+      {/* Photo Section */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <Label htmlFor="name" className="text-sm font-medium">
-            Full Name
+            Нэр
           </Label>
           <Input
             id="name"
@@ -42,7 +45,7 @@ export function BasicInfoSection() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="age" className="text-sm font-medium">
-            Age
+            Нас
           </Label>
           <Input
             id="age"
@@ -72,7 +75,7 @@ export function BasicInfoSection() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="weight" className="text-sm font-medium">
-            Weight (kg)
+            Жин (kg)
           </Label>
           <Input
             id="weight"
@@ -85,18 +88,6 @@ export function BasicInfoSection() {
             required
           />
           <p className="text-xs text-muted-foreground mt-1">Example: 78.2</p>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="profilePicture" className="text-sm font-medium">
-            Profile Picture URL
-          </Label>
-          <Input
-            id="profilePicture"
-            value={profilePicture}
-            onChange={(e) => updateField("profilePicture", e.target.value)}
-            placeholder="Enter profile picture URL"
-            className="h-11"
-          />
         </div>
       </div>
     </div>
