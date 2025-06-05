@@ -6,15 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { useProfileStore } from "@/store/profileStore"
-
-type Profile = {
-  socialLinks?: string[]
-  // add other profile fields if needed
-}
+import { PlayerProfile } from '@/types/player'
 
 export function SocialLinksSection() {
-  const profile = (useProfileStore((state) => state.profile) as Profile) || {}
-  const socialLinks = profile.socialLinks || []
+  const profile = (useProfileStore((state) => state.profile) as PlayerProfile) || {}
+  const socialLinks = profile.socialLinks || {}
   const setProfile = useProfileStore((state) => state.setProfile)
 
   const [newSocialLink, setNewSocialLink] = useState("")
@@ -25,14 +21,14 @@ export function SocialLinksSection() {
   const addSocialLink = () => {
     const link = newSocialLink.trim()
     if (!link) return
-    updateField("socialLinks", [...socialLinks, link])
+    updateField("socialLinks", { ...socialLinks, [link]: link })
     setNewSocialLink("")
   }
 
-  const removeSocialLink = (index: number) => {
+  const removeSocialLink = (platform: string) => {
     updateField(
       "socialLinks",
-      socialLinks.filter((_, i) => i !== index)
+      Object.fromEntries(Object.entries(socialLinks).filter(([key]) => key !== platform))
     )
   }
 
@@ -61,6 +57,8 @@ export function SocialLinksSection() {
     if (url.includes("youtube")) return "bg-red-100 text-red-600"
     return "bg-gray-100 text-gray-600"
   }
+
+  const socialLinkEntries = Object.entries(socialLinks).filter(([_, value]) => value)
 
   return (
     <div className="space-y-6">
@@ -91,7 +89,7 @@ export function SocialLinksSection() {
           </Button>
         </div>
 
-        {socialLinks.length === 0 ? (
+        {socialLinkEntries.length === 0 ? (
           <div className="text-center py-8 border border-dashed rounded-lg">
             <LinkIcon className="h-10 w-10 mx-auto text-gray-400 mb-2" />
             <p className="text-sm text-muted-foreground">No social links added yet</p>
@@ -102,7 +100,7 @@ export function SocialLinksSection() {
             <CardContent className="p-4">
               <h3 className="text-sm font-medium mb-3">Social Media Profiles</h3>
               <div className="space-y-3">
-                {socialLinks.map((link, index) => (
+                {socialLinkEntries.map(([platform, link], index) => (
                   <div
                     key={index}
                     className="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -131,7 +129,7 @@ export function SocialLinksSection() {
                       type="button"
                       variant="ghost"
                       size="icon"
-                      onClick={() => removeSocialLink(index)}
+                      onClick={() => removeSocialLink(platform)}
                       className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
                     >
                       <Trash2 className="h-4 w-4" />

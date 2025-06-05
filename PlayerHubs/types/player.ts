@@ -1,7 +1,4 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-
-interface PlayerStats {
+export interface PlayerStats {
   gamesPlayed: number;
   minutes: number;
   fieldGoals: {
@@ -33,7 +30,7 @@ interface PlayerStats {
   rank: number;
 }
 
-interface PlayerProfile {
+export interface PlayerProfile {
   id: string;
   name: string;
   profilePicture: string;
@@ -49,32 +46,10 @@ interface PlayerProfile {
   careerHistory: Array<any>;
   achievements: Array<any>;
   stats?: PlayerStats;
-  socialLinks: string[];
+  socialLinks: {
+    twitter?: string;
+    instagram?: string;
+    facebook?: string;
+  };
   donationEnabled: boolean;
-}
-
-interface ProfileState {
-  profile: PlayerProfile | null;
-  setProfile: (profile: PlayerProfile | ((prev: PlayerProfile) => PlayerProfile)) => void;
-  clearProfile: () => void;
-}
-
-export const useProfileStore = create<ProfileState>()(
-  persist(
-    (set) => ({
-      profile: null,
-      setProfile: (profile) =>
-        set((state) => ({
-          profile:
-            typeof profile === 'function'
-              ? profile(state.profile as PlayerProfile)
-              : profile,
-        })),
-      clearProfile: () => set({ profile: null }),
-    }),
-    {
-      name: 'profile-storage',
-      storage: createJSONStorage(() => localStorage),
-    }
-  )
-);
+} 

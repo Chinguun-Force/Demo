@@ -29,8 +29,9 @@ const playerSchema = new mongoose.Schema({
         type : String,
         
     },
-    team: {
-        type : String,
+    teamId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Team",
     },
     jerseyNumber: {
         type : Number,
@@ -53,8 +54,8 @@ const playerSchema = new mongoose.Schema({
         default : [],
     },
     socialLinks: {
-        type : [String],
-        default : {},
+        type: [String],
+        default: [],
     }
 })
 export const Player = mongoose.model("Player", playerSchema);

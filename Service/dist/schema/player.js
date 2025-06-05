@@ -33,8 +33,9 @@ const playerSchema = new mongoose_1.default.Schema({
     position: {
         type: String,
     },
-    team: {
-        type: String,
+    teamId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Team",
     },
     jerseyNumber: {
         type: Number,
@@ -57,7 +58,7 @@ const playerSchema = new mongoose_1.default.Schema({
     },
     socialLinks: {
         type: [String],
-        default: {},
+        default: [],
     }
 });
 exports.Player = mongoose_1.default.model("Player", playerSchema);

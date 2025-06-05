@@ -20,9 +20,9 @@ interface TeamInfoSectionProps {
 export function TeamInfoSection() {
   const teams = useTeamStore((state) => state.teams)
   const profile = useProfileStore((state) => state.profile) || {};
-  const { position, team, jerseyNumber, status } = profile as {
+  const { position = "", teamId = "", jerseyNumber = 0, status = "" } = profile as {
     position?: string;
-    team?: string;
+    teamId?: string;
     jerseyNumber?: number;
     status?: string;
   };
@@ -31,7 +31,7 @@ const setProfile = useProfileStore((state) => state.setProfile)
     setProfile((prev) => ({ ...prev, [field]: value }))
   }
   console.log("TeamInfoSection data", {
-    position, team, jerseyNumber, status
+    position, teamId, jerseyNumber, status
   })
   return (
     <div className="space-y-6">
@@ -61,7 +61,7 @@ const setProfile = useProfileStore((state) => state.setProfile)
           <Label htmlFor="team" className="text-sm font-medium">
             Current Team
           </Label>
-          <Select value={team} onValueChange={(value) => updateField("team", value)}>
+          <Select value={teamId} onValueChange={(value) => updateField("teamId", value)}>
             <SelectTrigger className="h-11">
               <SelectValue placeholder="Багаа сонгоно уу"/>
             </SelectTrigger>
