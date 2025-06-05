@@ -70,7 +70,8 @@ const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 .status(400)
                 .json({ error: "Invalid playerId format" });
         }
-        const playerProfile = yield player_1.Player.aggregate([
+        const fullPlayerProfile = yield player_1.Player.aggregate([
+            { $match: { _id: new mongoose_1.default.Types.ObjectId(playerId) } },
             {
                 $lookup: {
                     from: 'playerstats',
@@ -87,12 +88,12 @@ const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 }
             }
         ]);
-        if (!playerProfile.length) {
+        if (!fullPlayerProfile.length) {
             return res
                 .status(404)
                 .json({ error: "Player not found" });
         }
-        res.json(playerProfile[0]);
+        res.json(fullPlayerProfile[0]);
     }
     catch (error) {
         console.error('Error fetching player profile:', error);

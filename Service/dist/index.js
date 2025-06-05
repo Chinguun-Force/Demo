@@ -23,7 +23,7 @@ const team_1 = require("./routes/team");
 const stats_1 = __importDefault(require("./routes/stats"));
 const leagueSummary_1 = __importDefault(require("./routes/leagueSummary"));
 dotenv_1.default.config();
-const port = 8000;
+const port = 8080;
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
