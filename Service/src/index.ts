@@ -9,7 +9,7 @@ import { teamRouter } from './routes/team'
 import statsRouter from './routes/stats'
 import leagueSummaryRouter from './routes/leagueSummary'
 dotenv.config()
-const port = 8000
+const port = 8080
 const app = express()
 app.use(cors())
 
