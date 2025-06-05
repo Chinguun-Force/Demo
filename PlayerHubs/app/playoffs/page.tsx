@@ -57,7 +57,7 @@ export default function PlayoffsPage() {
           <TabsContent key={stage} value={stage}>
             <div className="grid gap-6">
               {matchesByStage[stage].map((match) => (
-                <Card key={match.id}>
+                <Card key={match.id+1}>
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg">

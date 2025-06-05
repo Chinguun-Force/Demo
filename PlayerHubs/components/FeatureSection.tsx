@@ -2,36 +2,39 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Award, BarChart3, Users } from "lucide-react"
 const data = [
     {
-        title: "For Team Owners",
-        description: "Manage your team and analyze performance",
+        title: "Багуудын удирдлагад зориулсан",
+        description: "Багийн мэдээлэл, тоглогчдын статистик",
         icon: <Users className="h-6 w-6 text-primary" />,
         features: [
-            "Team roster management",
-            "Performance analytics",
-            "Player statistics tracking",
-            "Team history and achievements",
+            "Өөрийн багийн мэдээлэл",
+            "Тоглогчдын бүртгэл",
+            "Тоглолтын статистик",
+            "Багийн түүх",
         ],
     },
     {
-        title: "For Players",
-        description: "Track your career and achievements",
+        title: "Тоглогчдын хувьд",
+        description: "Өөрийн карьерын түүхийг хуваалцах",
         icon: <Award className="h-6 w-6 text-primary" />,
         features: [
-            "Career history timeline",
-            "Performance statistics",
-            "Achievement showcase",
-            "Fan engagement tools",
+            "Өөрийн профайл үүсгэх",
+            "Карьерын түүхийг хуваалцах",
+            "Нийгмийн сүлжээнд холбогдох",
+            "Хувийн статистик",
+            "Хэрэглэгчийн дэмжлэг авах",
         ],
     },
     {
-        title: "For Fans",
-        description: "Follow and support your favorite players",
+        title: "Хөгжөөн дэмжигчдийн хувьд",
+        description: "Тоглогчид, багуудын мэдээлэлд хандах",
         icon: <BarChart3 className="h-6 w-6 text-primary" />,
         features: [
-            "Browse player profiles",
-            "View team rosters and stats",
-            "Follow playoff statistics",
-            "Donate to support players",
+            "Багуудын мэдээлэл",
+            "Тоглогчдын статистик",
+            "Хөгжөөн дэмжигчдийн форум",
+            "Тоглолтын дүнгийн мэдээ",
+            "Тоглогчдын шагнал, амжилт",
+            "Багийн амжилт",
         ],
     }
 ]
@@ -41,12 +44,14 @@ export function FeatureSection() {
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
-            <div className="inline-block rounded-lg bg-primary px-3 py-1 text-sm text-primary-foreground">Features</div>
             <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
-              Everything You Need in One Platform
+              Бидний платформын онцлог
             </h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Our platform serves team owners, players, and fans with specialized features for each user type.
+              PlayerHubs нь тоглогчид, багууд болон хөгжөөн дэмжигчдийг нэгтгэн, 
+              тэдний мэдээллийг хуваалцах, харилцах, хамтран ажиллахад зориулагдсан платформ юм. 
+              Бидний зорилго бол тоглогчдын мэдээллийг төвлөрсөн байдлаар хадгалах, 
+              тэдний карьерийг дэмжих, хөгжөөн дэмжигчдийн хамтын ажиллагааг сайжруулах явдал юм.
             </p>
           </div>
         </div>
@@ -77,3 +82,5 @@ export function FeatureSection() {
     </section>
   )
 }
+
+ 
