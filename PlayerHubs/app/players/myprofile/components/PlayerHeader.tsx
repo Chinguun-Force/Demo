@@ -24,17 +24,20 @@ export function PlayerHeader({stats }: PlayerHeaderProps) {
 
   useEffect(() => {
     const fetchTeam = async () => {
-      setLoading(true);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/teams/${profile?.teamId}`);
-      const data = await response.json();
-      setTeam(data.team);
-      setLoading(false);
+      if (profile?.teamId) {
+        setLoading(true);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/teams/${profile.teamId}`);
+        const data = await response.json();
+        setTeam(data.team);
+        setLoading(false);
+      } else {
+        setLoading(false); // No teamId, so we're done loading
+      }
     };
 
-    if (profile?.teamId) {
-      fetchTeam();
-    }
-  }, []);
+    fetchTeam();
+  }, [profile]); // Rerun effect if profile changes
+
   console.log(team?.teamName)
   return (
     <Card>

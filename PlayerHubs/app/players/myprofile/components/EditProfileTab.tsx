@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,17 +13,35 @@ export function EditProfileTab() {
   const { profile, setProfile } = useProfileStore()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
-    name: profile?.name || "",
-    age: profile?.age || 0,
-    height: profile?.height || 0,
-    weight: profile?.weight || 0,
-    position: profile?.position || "",
-    team: profile?.teamId || "",
-    jerseyNumber: profile?.jerseyNumber || 0,
-    status: profile?.status || "",
-    bio: profile?.bio || "",
-    profilePicture: profile?.profilePicture || "",
+    name: "",
+    age: 0,
+    height: 0,
+    weight: 0,
+    position: "",
+    team: "",
+    jerseyNumber: 0,
+    status: "",
+    bio: "",
+    profilePicture: "",
   })
+
+  // Use useEffect to sync formData with the profile from the store
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        name: profile.name || "",
+        age: profile.age || 0,
+        height: Number(profile.height) || 0,
+        weight: Number(profile.weight) || 0,
+        position: profile.position || "",
+        team: profile.teamId || "",
+        jerseyNumber: profile.jerseyNumber || 0,
+        status: profile.status || "",
+        bio: profile.bio || "",
+        profilePicture: profile.profilePicture || "",
+      })
+    }
+  }, [profile]) // This effect runs only when the profile object changes
 
   const handleSaveProfile = () => {
     if (!profile) {
@@ -57,18 +75,20 @@ export function EditProfileTab() {
 
   const handleCancel = () => {
     // Reset form data to original profile values
-    setFormData({
-      name: profile?.name || "",
-      age: profile?.age || 0,
-      height: profile?.height || 0,
-      weight: profile?.weight || 0,
-      position: profile?.position || "",
-      team: profile?.teamId || "",
-      jerseyNumber: profile?.jerseyNumber || 0,
-      status: profile?.status || "",
-      bio: profile?.bio || "",
-      profilePicture: profile?.profilePicture || "",
-    })
+    if (profile) {
+      setFormData({
+        name: profile.name || "",
+        age: profile.age || 0,
+        height: Number(profile.height) || 0,
+        weight: Number(profile.weight) || 0,
+        position: profile.position || "",
+        team: profile.teamId || "",
+        jerseyNumber: profile.jerseyNumber || 0,
+        status: profile.status || "",
+        bio: profile.bio || "",
+        profilePicture: profile.profilePicture || "",
+      })
+    }
     setIsEditing(false)
   }
 
