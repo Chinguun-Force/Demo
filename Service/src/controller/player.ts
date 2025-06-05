@@ -60,8 +60,8 @@ export const getProfileById = async (req, res) => {
                 .status(400)
                 .json({error: "Invalid playerId format"});
         }
-
-        const playerProfile = await Player.aggregate([
+        const fullPlayerProfile = await Player.aggregate([
+            { $match: { _id: new mongoose.Types.ObjectId(playerId) } },
             {
                 $lookup: {
                     from: 'playerstats',
@@ -78,14 +78,12 @@ export const getProfileById = async (req, res) => {
                 }
             }
         ]);
-
-        if (!playerProfile.length) {
+        if (!fullPlayerProfile.length) {
             return res
                 .status(404)
                 .json({error: "Player not found"});
         }
-
-        res.json(playerProfile[0]);
+        res.json(fullPlayerProfile[0]);
     } catch (error) {
         console.error('Error fetching player profile:', error);
         res
