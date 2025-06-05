@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTeams = exports.createTeam = void 0;
+exports.updateTeam = exports.getTeamByIdWithPlayersAndOwner = exports.getAllTeams = exports.createTeam = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
 const team_1 = require("../schema/team");
 const createTeam = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -38,4 +42,49 @@ const getAllTeams = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getAllTeams = getAllTeams;
+const getTeamByIdWithPlayersAndOwner = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { teamId } = req.params;
+    try {
+        if (!mongoose_1.default.Types.ObjectId.isValid(teamId)) {
+            return res.status(400).json({ success: false, message: "Invalid team ID" });
+        }
+        const team = yield team_1.Team.aggregate([
+            {
+                $match: { _id: new mongoose_1.default.Types.ObjectId(teamId) }
+            },
+            {
+                $lookup: {
+                    from: "players",
+                    localField: "teamMembers",
+                    foreignField: "_id",
+                    as: "teamMembersDetails"
+                }
+            },
+            {
+                $lookup: {
+                    from: "owners",
+                    localField: "teamOwner",
+                    foreignField: "_id",
+                    as: "ownerDetails"
+                }
+            }
+        ]);
+        if (team.length === 0) {
+            return res.status(404).json({ success: false, message: "Team not found" });
+        }
+        res.status(200).json({ success: true, team: team[0] });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+exports.getTeamByIdWithPlayersAndOwner = getTeamByIdWithPlayersAndOwner;
+const updateTeam = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { teamId } = req.params;
+    const updateData = Object.assign({}, req.body);
+    const team = yield team_1.Team.findByIdAndUpdate(teamId, updateData, { new: true });
+    res.status(200).json({ success: true, team });
+});
+exports.updateTeam = updateTeam;
 //# sourceMappingURL=team.js.map

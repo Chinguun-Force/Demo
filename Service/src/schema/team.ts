@@ -19,7 +19,7 @@ const teamSchema = new mongoose.Schema({
     },
     teamMembers: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Player",
+        ref: "Player",  
     }],
     // teamOwner: {
     //     type: mongoose.Schema.Types.ObjectId,
@@ -31,8 +31,20 @@ const teamSchema = new mongoose.Schema({
         default: [],
     },
     teamStats: {
-        type: Object,
-        default: {},
+        pointsPerGame: { type: String, default: "0" },
+        twoFGP: { type: String, default: "0%" },
+        threeFGP: { type: String, default: "0%" },
+        freeThrowPercentage: { type: String, default: "0%" },
+        offRebounds: { type: String, default: "0" },
+        defRebounds: { type: String, default: "0" },
+        totalRebounds: { type: String, default: "0" },
+        assistsPerGame: { type: String, default: "0" },
+        turnoversPerGame: { type: String, default: "0" },
+        stealsPerGame: { type: String, default: "0" },
+        blocksPerGame: { type: String, default: "0" },
+        pointsPerGameOfOpponent: { type: String, default: "0" },
+        opponentTwoFGP: { type: String, default: "0%" },
+        opponentThreeFGP: { type: String, default: "0%" },
     },
     teamSocialLinks: {
         type: [String],
@@ -49,6 +61,13 @@ const teamSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true,
-    }
+    },
+    games: [{
+        date: { type: String, required: true },
+        league: { type: String, enum:["Play-Off","Semi-Final","Final"] },
+        round: { type: Number, required: true },
+        opponent: { type: String, required: true },
+        result: { type: String, required: true },
+    }],
 });
 export const Team = mongoose.model("Team", teamSchema);
