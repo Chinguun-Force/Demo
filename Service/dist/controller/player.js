@@ -82,7 +82,7 @@ const getProfileById = (req, res) => __awaiter(void 0, void 0, void 0, function*
             }, {
                 $lookup: {
                     from: 'teams',
-                    localField: 'team',
+                    localField: 'teamId',
                     foreignField: '_id',
                     as: 'teamInfo'
                 }
