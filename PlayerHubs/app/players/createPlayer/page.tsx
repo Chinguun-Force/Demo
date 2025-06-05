@@ -86,13 +86,24 @@ export default function PlayerForm() {
       
       if (profileState.teamId && newPlayerId) {
         try {
+          // First, fetch the current team data to get existing members
+          const getTeamResponse = await fetch(`${baseUrl}/api/v1/teams/${profileState.teamId}`);
+          if (!getTeamResponse.ok) {
+            throw new Error("Failed to fetch team details before updating.");
+          }
+          const teamData = await getTeamResponse.json();
+          const existingTeamMembers = teamData.team.teamMembers || [];
+
+          // Add the new player to the existing list
+          const updatedTeamMembers = [...existingTeamMembers, newPlayerId];
+
           const teamUpdateResponse = await fetch(`${baseUrl}/api/v1/teams/${profileState.teamId}`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-            body: JSON.stringify({ teamMembers: [newPlayerId] }),
+            body: JSON.stringify({ teamMembers: updatedTeamMembers }),
           });
 
           if (!teamUpdateResponse.ok) {

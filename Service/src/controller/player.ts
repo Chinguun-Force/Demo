@@ -72,7 +72,7 @@ export const getProfileById = async (req, res) => {
             }, {
                 $lookup: {
                     from: 'teams',
-                    localField: 'team',
+                    localField: 'teamId',
                     foreignField: '_id',
                     as: 'teamInfo'
                 }

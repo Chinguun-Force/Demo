@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-interface Team {
+export interface Team {
   _id: string;
   teamName: string;
   teamNameEn: string;

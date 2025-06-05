@@ -145,15 +145,12 @@ export default function TeamDetails() {
                             championships={team.teamAchievements.length}
                         />
                         <TeamStats stats={transformedStats} />
-                        <RecentResults results={team.games.map(game => {
-                            const [opponentScore, teamScore] = game.result.split('-').map(score => parseInt(score));
-                            const outcome = teamScore > opponentScore ? "Ялалт" : "Ялагдал";
-                            return {
-                                opponent: game.opponent,
-                                result: outcome,
-                                score: game.result
-                            };
-                        })} />
+                        <RecentResults 
+                          teamName={team.teamName} 
+                          teamNameEn={team.teamNameEn} 
+                          teamLogo={team.teamLogo}
+                          results={team.games} 
+                        />
           </div>
 
           {/* Right Column */}
