@@ -30,19 +30,19 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({ player, getStatusC
     </div>
     <div className="mt-6 grid w-full grid-cols-2 gap-4 text-sm">
       <div className="flex flex-col items-center">
-        <span className="text-muted-foreground">Team</span>
+        <span className="text-muted-foreground">Баг</span>
         <span className="font-medium">{player.team}</span>
       </div>
       <div className="flex flex-col items-center">
-        <span className="text-muted-foreground">Age</span>
+        <span className="text-muted-foreground">Нас</span>
         <span className="font-medium">{player.age}</span>
       </div>
       <div className="flex flex-col items-center">
-        <span className="text-muted-foreground">Height</span>
+        <span className="text-muted-foreground">Өндөр</span>
         <span className="font-medium">{player.height}</span>
       </div>
       <div className="flex flex-col items-center">
-        <span className="text-muted-foreground">Weight</span>
+        <span className="text-muted-foreground">Жин</span>
         <span className="font-medium">{player.weight}</span>
       </div>
     </div>

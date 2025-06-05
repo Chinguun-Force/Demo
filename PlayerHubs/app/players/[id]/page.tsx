@@ -55,7 +55,7 @@ export default function PlayerDetailsPage() {
     return (
       <div className="container py-8">
         <div className="flex flex-col items-center justify-center space-y-4">
-          <h1 className="text-2xl font-bold">Player Not Found</h1>
+          <h1 className="text-2xl font-bold">Тоглогч олдохгүй байна</h1>
           <p>The player you are looking for does not exist.</p>
           <Button onClick={() => router.push("/players")}>
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -117,19 +117,19 @@ export default function PlayerDetailsPage() {
               </div>
               <div className="mt-6 grid w-full grid-cols-2 gap-4 text-sm">
                 <div className="flex flex-col items-center">
-                  <span className="text-muted-foreground">Team</span>
+                  <span className="text-muted-foreground">Баг</span>
                   <span className="font-medium">{player?.team}</span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="text-muted-foreground">Age</span>
+                  <span className="text-muted-foreground">Нас</span>
                   <span className="font-medium">{player?.age}</span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="text-muted-foreground">Height</span>
+                  <span className="text-muted-foreground">Өндөр</span>
                   <span className="font-medium">{player?.height}</span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="text-muted-foreground">Weight</span>
+                  <span className="text-muted-foreground">Жин</span>
                     <span className="font-medium">{player?.weight}</span>
                 </div>
                 <div className="col-span-2 flex flex-col items-center">

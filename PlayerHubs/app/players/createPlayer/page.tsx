@@ -34,6 +34,7 @@ import { CareerHistorySection } from "./sections/CareerHistorySection"
 import { useProfileStore } from "@/store/profileStore"
 import { AchievementsSection } from "./sections/AchievementSection"
 import { SocialLinksSection } from "./sections/SocialLinkSection"
+import PlayerPhotoSection from "./sections/PhotoSection"
 
 export default function PlayerForm() {
   const [activeTab, setActiveTab] = useState("basic-info")
@@ -43,10 +44,8 @@ export default function PlayerForm() {
   const { toast } = useToast()
   const router = useRouter()
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
-
   // Pull entire profile object from the store
   const profile = useProfileStore((state) => state.profile) || {}
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
@@ -88,6 +87,7 @@ export default function PlayerForm() {
   }
 
   const tabOrder = [
+    "profile-picture",
     "basic-info",
     "team-info",
     "bio",
@@ -130,7 +130,16 @@ export default function PlayerForm() {
             onValueChange={handleTabChange}
             className="mt-6"
           >
-            <TabsList className="grid grid-cols-6 mb-8">
+            <TabsList className="grid grid-cols-7 mb-8">
+            <TabsTrigger
+                value="profile-picture"
+                className="flex flex-col items-center gap-1 py-3"
+              >
+                <UserCircle className="h-5 w-5" />
+                <span className="hidden md:inline text-xs">
+                  Profile Picture
+                </span>
+              </TabsTrigger>
               <TabsTrigger
                 value="basic-info"
                 className="flex flex-col items-center gap-1 py-3"
@@ -213,6 +222,9 @@ export default function PlayerForm() {
             </TabsList>
 
             <Card className="border rounded-lg shadow-sm">
+              <TabsContent value="profile-picture" className="p-6">
+                <PlayerPhotoSection />
+              </TabsContent>
               <TabsContent value="basic-info" className="p-6">
                 <BasicInfoSection />
               </TabsContent>

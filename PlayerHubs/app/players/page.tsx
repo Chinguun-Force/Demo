@@ -190,11 +190,12 @@ export default function PlayersPage() {
                     </div>
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Positions</SelectItem>
-                    <SelectItem value="Forward">Forward</SelectItem>
-                    <SelectItem value="Midfielder">Midfielder</SelectItem>
-                    <SelectItem value="Defender">Defender</SelectItem>
-                    <SelectItem value="Goalkeeper">Goalkeeper</SelectItem>
+                    <SelectItem value="all">Бүх байрлал</SelectItem>
+                    <SelectItem value="Goalkeeper">Point guard</SelectItem>
+                    <SelectItem value="Forward">Shooting guard</SelectItem>
+                    <SelectItem value="Midfielder">Small forward</SelectItem>
+                    <SelectItem value="Defender">Power forward</SelectItem>
+                    <SelectItem value="Goalkeeper">Center</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

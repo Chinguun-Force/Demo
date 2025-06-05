@@ -18,7 +18,7 @@ export function BioSection() {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold tracking-tight">Player Biography</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">Тоглогчийн намтар</h2>
         <p className="text-sm text-muted-foreground">
           Write a detailed biography about the player's background and career.
         </p>
@@ -37,7 +37,7 @@ export function BioSection() {
           rows={8}
         />
         <p className="text-xs text-muted-foreground mt-1">
-          Include relevant information about the player's background, playing style, and career highlights.
+           Тоглогчийн түүх, тоглох арга барил, карьерын онцлох үйл явдлуудын талаар холбогдох мэдээллийг оруулна уу.
         </p>
       </div>
     </div>
