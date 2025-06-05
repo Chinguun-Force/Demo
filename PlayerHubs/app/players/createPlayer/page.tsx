@@ -31,13 +31,13 @@ import { CareerHistorySection } from "./sections/CareerHistorySection"
 // import { AchievementsSection } from "./sections/AchievementsSection"
 // import { SocialLinksSection } from "./sections/SocialLinksSection"
 
-import { useProfileStore } from "@/store/profileStore"
+import { useProfileStore, PlayerProfile } from "@/store/profileStore"
 import { AchievementsSection } from "./sections/AchievementSection"
 import { SocialLinksSection } from "./sections/SocialLinkSection"
 import PlayerPhotoSection from "./sections/PhotoSection"
 
 export default function PlayerForm() {
-  const [activeTab, setActiveTab] = useState("basic-info")
+  const [activeTab, setActiveTab] = useState("profile-picture")
   const [isLoading, setIsLoading] = useState(false)
   const [formProgress, setFormProgress] = useState(0)
 
@@ -45,24 +45,77 @@ export default function PlayerForm() {
   const router = useRouter()
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
   // Pull entire profile object from the store
-  const profile = useProfileStore((state) => state.profile) || {}
+  const profileState = useProfileStore((state) => state.profile)
+  const setProfile = useProfileStore((state) => state.setProfile)
+  // console.log("profileState", profileState)
+  // console.log("formData", )
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
+    // Ensure profileState is not null before proceeding
+    if (!profileState) {
+      toast({
+        title: "Error",
+        description: "Profile data is not available. Please fill the form.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch(`${baseUrl}/api/v1/players`, {
+      const playerCreateResponse = await fetch(`${baseUrl}/api/v1/players`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify(profile),
-      })
+        body: JSON.stringify(profileState), // Use profileState directly
+        })
 
-      const data = await response.json()
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to create player profile")
+      const playerData = await playerCreateResponse.json()
+      if (!playerCreateResponse.ok) {
+        throw new Error(playerData.message || "Failed to create player profile")
+      }
+      console.log("playerData", playerData)
+      const newPlayerId = playerData.player._id;
+
+      // Check if a team was selected (profileState.teamId exists)
+      // and player creation was successful (newPlayerId exists)
+      
+      if (profileState.teamId && newPlayerId) {
+        try {
+          const teamUpdateResponse = await fetch(`${baseUrl}/api/v1/teams/${profileState.teamId}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({ teamMembers: [newPlayerId] }),
+          });
+
+          if (!teamUpdateResponse.ok) {
+            const teamUpdateErrorData = await teamUpdateResponse.json();
+            console.error("Failed to update team:", teamUpdateErrorData.message || "Unknown error updating team");
+            toast({
+              title: "Profile Created, Team Update Issue",
+              description: `Player profile created, but failed to add player to team: ${teamUpdateErrorData.message || "Unknown error"}`,
+              // Using "default" or "destructive" if "warning" is not available
+              // For now, let's use default and rely on the title/description for context
+              variant: "default",
+            });
+          } else {
+            console.log(`Team ${profileState.teamId} updated successfully with player ${newPlayerId}`);
+          }
+        } catch (teamUpdateErr) {
+          console.error("Error during team update API call:", teamUpdateErr);
+          toast({
+            title: "Profile Created, Team Update Exception",
+            description: `Player profile created, but an error occurred while updating the team. ${teamUpdateErr instanceof Error ? teamUpdateErr.message : "Network error"}`,
+            variant: "default", // Changed from warning
+          });
+        }
       }
 
       toast({
@@ -83,6 +136,33 @@ export default function PlayerForm() {
       })
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const updateField = async (field: string, value: string | number) => {
+    setProfile((prev) => ({ ...prev, [field]: value }))
+
+    if (field === "teamId") {
+      try {
+        const teamResponse = await fetch(`${baseUrl}/api/v1/teams/${value}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          // Only attempt to update team if playerId exists in profile and playerId is defined
+          body: profileState && (profileState as any).playerId
+            ? JSON.stringify({ $push: { teamMembers: (profileState as any).playerId } })
+            : undefined,
+        })
+
+        if (!teamResponse.ok) {
+          const teamData = await teamResponse.json()
+          throw new Error(teamData.message || "Failed to update team")
+        }
+      } catch (err) {
+        console.error("Failed to update team:", err)
+      }
     }
   }
 

@@ -39,7 +39,8 @@ export function PlayerHeader({stats }: PlayerHeaderProps) {
   return (
     <Card>
       <CardContent className="pt-6">
-        {loading ? (
+        {
+        loading ? (
           <div className="flex justify-center items-center h-20">
             <Spinner />
           </div>

@@ -38,7 +38,7 @@ export type Achievement = {
   type: "Award" | "Trophy" | "Record" | "Milestone"
 }
 
-export type PlayerStats = {
+export type PlayerStats = [{
   gamesPlayed: number;
     minutes: number;
     fieldGoals: {
@@ -68,7 +68,7 @@ export type PlayerStats = {
     turnovers: number;
     points: number;
     rank: number;
-}
+}]
 
 export type SocialLinks = {
   twitter?: string

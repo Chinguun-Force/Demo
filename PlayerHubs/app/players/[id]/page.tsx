@@ -13,6 +13,7 @@ import { Player } from "@/lib/type"
 import { PlayerTabs } from "./PlayerTabs"
 import { useLoaderStore } from '@/store/loaderStore';
 import Loader from "@/components/Loader";
+import { useTeamStore } from "@/store/teamStore"
 
 export default function PlayerDetailsPage() {
   const params = useParams()
@@ -21,7 +22,6 @@ export default function PlayerDetailsPage() {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
   const [players, setData] = useState<Player>()
   const setLoading = useLoaderStore((state) => state.setLoading);
-
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
@@ -118,7 +118,7 @@ export default function PlayerDetailsPage() {
               <div className="mt-6 grid w-full grid-cols-2 gap-4 text-sm">
                 <div className="flex flex-col items-center">
                   <span className="text-muted-foreground">Баг</span>
-                  <span className="font-medium">{player?.team}</span>
+                  <span className="font-medium">{useTeamStore.getState().teams.find((team) => team._id === player?.teamId)?.teamName}</span>
                 </div>
                 <div className="flex flex-col items-center">
                   <span className="text-muted-foreground">Нас</span>

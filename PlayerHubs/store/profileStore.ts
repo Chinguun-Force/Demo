@@ -33,7 +33,7 @@ interface PlayerStats {
   rank: number;
 }
 
-interface PlayerProfile {
+export interface PlayerProfile {
   id: string;
   name: string;
   profilePicture: string;

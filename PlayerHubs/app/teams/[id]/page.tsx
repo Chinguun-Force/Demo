@@ -121,17 +121,17 @@ export default function TeamDetails() {
         value
     }));
     console.log(team.teamMembersDetails)
-    return (
+  return (
         <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
-            {/* Header */}
-            <header className="border-b">
+      {/* Header */}
+      <header className="border-b">
                 <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-                    <Link href="/teams" className="flex items-center text-gray-600 hover:text-gray-900">
-                        <ChevronLeft className="h-5 w-5 mr-1" />
-                        <span>Багууд</span>
-                    </Link>
-                </div>
-            </header>
+          <Link href="/teams" className="flex items-center text-gray-600 hover:text-gray-900">
+            <ChevronLeft className="h-5 w-5 mr-1" />
+            <span>Багууд</span>
+          </Link>
+        </div>
+      </header>
 
             <TeamHeader
                 name={team.teamName}
@@ -139,10 +139,10 @@ export default function TeamDetails() {
                 logo={team.teamLogo}
                 currentRank={parseFloat(team.teamStats.pointsPerGame)}
             />
-            <div className="container mx-auto px-4 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Left Column */}
-                    <div className="lg:col-span-2">
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column */}
+          <div className="lg:col-span-2">
                         <TeamInfo
                             founded={parseInt(team.createdAt)}
                             homeArena={team.teamDescription}
@@ -159,9 +159,9 @@ export default function TeamDetails() {
                                 score: game.result
                             };
                         })} />
-                    </div>
+          </div>
 
-                    {/* Right Column */}
+          {/* Right Column */}
                     <div>
                         <TopPlayers players={team.teamMembersDetails.map(member => ({
                             profilePicture: member.profilePicture,
@@ -178,9 +178,9 @@ export default function TeamDetails() {
                         }))} />
                         <TeamRankings />
                         <TeamAchievements achievements={team.teamAchievements} />
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
         </div>
     );
 }

@@ -19,6 +19,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Filter, Search, AlertCircle, Plus, MoreHorizontal, ChevronRight } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useTeamStore } from "@/store/teamStore"
+import Image from "next/image"
 
 interface Player {
   _id: string
@@ -102,13 +104,13 @@ export default function PlayersPage() {
 
   const filteredPlayers = data.filter((player) => {
     const matchesSearch =
-      player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      player.teamId.toLowerCase().includes(searchTerm.toLowerCase())
+      (player.name?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
+      (player.teamId?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
 
-    const matchesPosition = positionFilter === "all" || player.position === positionFilter
-    const matchesStatus = statusFilter === "all" || player.status === statusFilter
+    const matchesPosition = positionFilter === "all" || player.position === positionFilter;
+    const matchesStatus = statusFilter === "all" || player.status === statusFilter;
 
-    return matchesSearch && matchesPosition && matchesStatus
+    return matchesSearch && matchesPosition && matchesStatus;
   })
 
   const getStatusColor = (status: Player["status"]) => {
@@ -191,11 +193,10 @@ export default function PlayersPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Бүх байрлал</SelectItem>
-                    <SelectItem value="Goalkeeper">Point guard</SelectItem>
-                    <SelectItem value="Forward">Shooting guard</SelectItem>
-                    <SelectItem value="Midfielder">Small forward</SelectItem>
-                    <SelectItem value="Defender">Power forward</SelectItem>
-                    <SelectItem value="Goalkeeper">Center</SelectItem>
+                    <SelectItem value="Goalkeeper">Goalkeeper</SelectItem>
+                    <SelectItem value="Forward">Forward</SelectItem>
+                    <SelectItem value="Midfielder">Midfielder</SelectItem>
+                    <SelectItem value="Defender">Defender</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -284,7 +285,15 @@ export default function PlayersPage() {
                       </TableCell>
                       <TableCell className="font-medium">{player.name}</TableCell>
                       <TableCell>{player.position}</TableCell>
-                      <TableCell>{player.teamId}</TableCell>
+                      <TableCell>
+                        <Image
+                          src={useTeamStore.getState().teams.find((team) => team._id === player.teamId)?.teamLogo || 'github.com/PlayerHubs/player-hubs/assets/placeholder.png'}
+                          alt="User"
+                          width={20}
+                          height={20}
+                          className="h-16 w-16 object-contain"
+                        />
+                      </TableCell>
                       <TableCell>{player.age}</TableCell>
                       <TableCell>#{player.jerseyNumber}</TableCell>
                       <TableCell>

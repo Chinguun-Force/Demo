@@ -34,13 +34,15 @@ const UserProfile = () => {
 
     return (
         <div className="flex items-center gap-2">
-            <Avatar>
+            <Avatar className='bg-contain bg-center'>
                 <AvatarImage
                     src={useProfileStore
                         .getState()
                         .profile
                             ?.profilePicture || 'github.com/PlayerHubs/player-hubs/assets/placeholder.png'}
-                    alt="User"/>
+                    alt="User"
+                    className='bg-contain bg-center'
+                    />
                 <AvatarFallback>US</AvatarFallback>
             </Avatar>
             <DropdownMenu open={open} onOpenChange={setOpen}>

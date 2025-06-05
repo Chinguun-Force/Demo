@@ -13,15 +13,10 @@ const Nav = () => {
   const darkMode = useThemeStore((state) => state.darkMode);
   const toggleDarkMode = useThemeStore((state) => state.toggleDarkMode);
 
-  React.useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove(darkMode ? 'light' : 'dark');
-    root.classList.add(darkMode ? 'dark' : 'light');
-  }, [darkMode]);
 
   return (
     <div>
-      <header className='sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-screen flex justify-center'>
+      <header className='sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-screen flex justify-center dark:bg-dark-800'>
         <div className='container w-full flex h-16 items-center justify-between py-4'>
             <Menus/>
             <DarkModeToggle />

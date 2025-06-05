@@ -7,6 +7,7 @@ teamRouter
     .post('/', createTeam)
     .get('/', getAllTeams)
     .get("/:teamId", getTeamByIdWithPlayersAndOwner)
-    .put("/:teamId", updateTeam);
+    .put("/:teamId", updateTeam)
+    .patch("/:teamId", updateTeam);
 
 export { teamRouter};

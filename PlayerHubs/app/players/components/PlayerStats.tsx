@@ -17,7 +17,7 @@ export function PlayerStats({ player }: PlayerStatsProps) {
     { month: "May", goals: 50, assists: 20, minutesPlayed: 450 },
     { month: "Jun", goals: 22, assists: 30, minutesPlayed: 270 },
   ]
-  console.log(player.stats)
+  console.log(player.stats[0])
   return (
     <div className="space-y-6">
       <Card>
@@ -26,30 +26,30 @@ export function PlayerStats({ player }: PlayerStatsProps) {
           <CardDescription>Performance metrics for the current season</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-            <div className="flex flex-col items-center justify-center rounded-lg border p-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3">
+            <div className="grid items-center justify-center text-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Тоглолт</span>
-              <span className="text-2xl font-bold">{player.stats.gamesPlayed}</span>
+              <span className="text-2xl font-bold">{player.stats[0]?.gamesPlayed}</span>
             </div>
-            <div className="flex flex-col items-center justify-center rounded-lg border p-4">
+            <div className="grid items-center justify-center text-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Оноо</span>
-              <span className="text-2xl font-bold">{player.stats.fieldGoals?.percentage}</span>
+              <span className="text-2xl font-bold">{player.stats[0]?.fieldGoals?.percentage}</span>
             </div>
-            <div className="flex flex-col items-center justify-center rounded-lg border p-4">
+            <div className="grid items-center justify-center text-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Оновчтой дамжуулалт</span>
-              <span className="text-2xl font-bold">{player.stats.assists}</span>
+              <span className="text-2xl font-bold">{player.stats[0]?.assists}</span>
             </div>
-            <div className="flex flex-col items-center justify-center rounded-lg border p-4">
+            <div className="grid items-center justify-center text-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Алсын зайн шидэлт</span>
-              <span className="text-2xl font-bold">{player.stats.threePoints?.percentage}</span>
+              <span className="text-2xl font-bold">{player.stats[0]?.threePoints?.percentage}</span>
             </div>
-            <div className="flex flex-col items-center justify-center rounded-lg border p-4">
+            <div className="grid items-center justify-center text-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Чөлөөт шидэлт</span>
-              <span className="text-2xl font-bold">{player.stats.freeThrows?.percentage}</span>
+              <span className="text-2xl font-bold">{player.stats[0]?.freeThrows?.percentage}</span>
             </div>
-            <div className="flex flex-col items-center justify-center rounded-lg border p-4">
+            <div className="grid items-center justify-center text-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Самбараас бөмбөг авалт</span>
-              <span className="text-2xl font-bold">{player.stats.rebounds?.total}</span>
+              <span className="text-2xl font-bold">{player.stats[0]?.rebounds?.total}</span>
             </div>
           </div>
         </CardContent>

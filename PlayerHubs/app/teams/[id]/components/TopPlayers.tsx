@@ -35,14 +35,15 @@ const TopPlayers: React.FC<TopPlayersProps> = ({ players }) => {
                     className='w-10 h-10 rounded-full'/>
                 <AvatarFallback>US</AvatarFallback>
             </Avatar>
-            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="font-semibold text-gray-700">#{player.number}</span>
-            </div>
+            
             <div className="flex-1 min-w-0">
               <p className="font-medium truncate">{player.name}</p>
               <p className="text-sm text-gray-500">
                 {player.position} • {player.height}
               </p>
+            </div>
+            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="font-semibold text-gray-700">#{player.number}</span>
             </div>
             <div className="flex gap-3 text-sm">
               <div className="text-center">
@@ -62,7 +63,7 @@ const TopPlayers: React.FC<TopPlayersProps> = ({ players }) => {
         ))}
         <div className="mt-4 px-3">
           <Link
-            href="/team/roster"
+            href="/players"
             className="text-sm text-blue-600 hover:text-blue-800 flex items-center justify-center w-full py-2 border border-gray-200 rounded-lg"
           >
             Бүх тоглогчдыг харах

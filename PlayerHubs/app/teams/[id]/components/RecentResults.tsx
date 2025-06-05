@@ -29,7 +29,7 @@ const RecentResults: React.FC<RecentResultsProps> = ({ results }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {results.map((game, index) => (
+            {[...results].reverse().slice(0, 5).map((game, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 whitespace-nowrap">{game.opponent}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">
