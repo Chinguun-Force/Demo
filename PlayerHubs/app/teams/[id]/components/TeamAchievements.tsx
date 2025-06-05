@@ -7,8 +7,8 @@ interface TeamAchievementsProps {
 
 const TeamAchievements: React.FC<TeamAchievementsProps> = ({ achievements }) => {
   return (
-    <div className="bg-white border rounded-lg overflow-hidden">
-      <div className="px-6 py-4 border-b">
+    <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg overflow-hidden">
+      <div className="px-6 py-4 border-b dark:border-gray-700">
         <h2 className="text-xl font-semibold">Амжилтууд</h2>
       </div>
       <div className="p-6">

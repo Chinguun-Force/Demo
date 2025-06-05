@@ -10,8 +10,6 @@ import TopPlayers from './components/TopPlayers';
 import TeamRankings from './components/TeamRankings';
 import TeamAchievements from './components/TeamAchievements';
 import Spinner from '@/components/ui/spinner';
-import { useThemeStore } from '@/store/themeStore';
-import DarkModeToggle from '@/components/DarkModeToggle';
 
 interface Team {
     teamNameEn: string;
@@ -77,11 +75,9 @@ interface Team {
 
 export default function TeamDetails() {
     const [team, setTeam] = useState<Team | null>(null);
-    const darkMode = useThemeStore((state) => state.darkMode);
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
     useEffect(() => {
-        // Fetch data from API
         const fetchData = async () => {
             try {
                 const pathSegments = window.location.pathname.split('/');
@@ -95,7 +91,7 @@ export default function TeamDetails() {
         };
 
         fetchData();
-    }, []);
+    }, [baseUrl]);
 
     if (!team) return <Spinner />;
 
@@ -120,13 +116,12 @@ export default function TeamDetails() {
         name: statsMapping[key] || key,
         value
     }));
-    console.log(team.teamMembersDetails)
   return (
-        <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-black dark:text-white">
       {/* Header */}
-      <header className="border-b">
+      <header className="sticky top-0 z-10 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
                 <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/teams" className="flex items-center text-gray-600 hover:text-gray-900">
+          <Link href="/teams" className="flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
             <ChevronLeft className="h-5 w-5 mr-1" />
             <span>Багууд</span>
           </Link>
@@ -142,7 +137,7 @@ export default function TeamDetails() {
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-8">
                         <TeamInfo
                             founded={parseInt(team.createdAt)}
                             homeArena={team.teamDescription}
@@ -162,7 +157,7 @@ export default function TeamDetails() {
           </div>
 
           {/* Right Column */}
-                    <div>
+                    <div className="space-y-8">
                         <TopPlayers players={team.teamMembersDetails.map(member => ({
                             profilePicture: member.profilePicture,
                             number: member.jerseyNumber,
