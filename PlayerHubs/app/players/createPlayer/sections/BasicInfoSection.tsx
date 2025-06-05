@@ -5,7 +5,14 @@ import { Label } from "@/components/ui/label"
 import { useProfileStore } from "@/store/profileStore"
 
 export function BasicInfoSection() {
-  const profile = useProfileStore((state) => state.profile)
+  const profile = useProfileStore((state) => state.profile) || {};
+  const { name = "", age = 0, height = 0, weight = 0, profilePicture = "" } = profile as {
+    name?: string;
+    age?: number;
+    height?: number;
+    weight?: number;
+    profilePicture?: string;
+  };
   const setProfile = useProfileStore((state) => state.setProfile)
 
   const updateField = (field: string, value: string | number) => {
@@ -26,7 +33,7 @@ export function BasicInfoSection() {
           </Label>
           <Input
             id="name"
-            value={profile?.name || ""}
+            value={name}
             onChange={(e) => updateField("name", e.target.value)}
             placeholder="Enter player's full name"
             className="h-11"
@@ -40,7 +47,7 @@ export function BasicInfoSection() {
           <Input
             id="age"
             type="number"
-            value={profile?.age || ""}
+            value={age}
             onChange={(e) => updateField("age", Number.parseInt(e.target.value) || 0)}
             placeholder="Enter player's age"
             className="h-11"
@@ -55,7 +62,7 @@ export function BasicInfoSection() {
             id="height"
             type="number"
             step="0.1"
-            value={profile?.height || ""}
+            value={height}
             onChange={(e) => updateField("height", Number.parseFloat(e.target.value) || 0)}
             placeholder="Enter player's height in cm"
             className="h-11"
@@ -71,7 +78,7 @@ export function BasicInfoSection() {
             id="weight"
             type="number"
             step="0.1"
-            value={profile?.weight || ""}
+            value={weight}
             onChange={(e) => updateField("weight", Number.parseFloat(e.target.value) || 0)}
             placeholder="Enter player's weight in kg"
             className="h-11"
@@ -85,7 +92,7 @@ export function BasicInfoSection() {
           </Label>
           <Input
             id="profilePicture"
-            value={profile?.profilePicture || ""}
+            value={profilePicture}
             onChange={(e) => updateField("profilePicture", e.target.value)}
             placeholder="Enter profile picture URL"
             className="h-11"

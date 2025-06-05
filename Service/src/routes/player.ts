@@ -5,7 +5,9 @@ import { checkToken } from '../middleware/checktoken';
 const playerRouter = Router();
 
 playerRouter
-.post('/',checkToken, createPlayer)
+.post('/',
+    // checkToken, 
+    createPlayer)
 .get('/', getAllPlayers)
 .get('/:id', getProfileById)
 .put('/', updatePlayer)

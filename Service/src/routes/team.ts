@@ -1,11 +1,12 @@
 import { Router } from "express";
-import { createTeam, getAllTeams, getTeamByIdWithPlayersAndOwner } from "../controller/team";
+import { createTeam, getAllTeams, getTeamByIdWithPlayersAndOwner, updateTeam } from "../controller/team";
 
 const teamRouter = Router();
 
 teamRouter
     .post('/', createTeam)
     .get('/', getAllTeams)
-    .get("/:teamId", getTeamByIdWithPlayersAndOwner);
+    .get("/:teamId", getTeamByIdWithPlayersAndOwner)
+    .put("/:teamId", updateTeam);
 
 export { teamRouter};

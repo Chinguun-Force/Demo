@@ -25,7 +25,7 @@ interface Player {
   profilePicture : string
   name: string
   position: string
-  team: string
+  teamId: string
   nationality: string
   age: number
   jerseyNumber: number
@@ -103,7 +103,7 @@ export default function PlayersPage() {
   const filteredPlayers = data.filter((player) => {
     const matchesSearch =
       player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      player.team.toLowerCase().includes(searchTerm.toLowerCase())
+      player.teamId.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesPosition = positionFilter === "all" || player.position === positionFilter
     const matchesStatus = statusFilter === "all" || player.status === statusFilter
@@ -283,7 +283,7 @@ export default function PlayersPage() {
                       </TableCell>
                       <TableCell className="font-medium">{player.name}</TableCell>
                       <TableCell>{player.position}</TableCell>
-                      <TableCell>{player.team}</TableCell>
+                      <TableCell>{player.teamId}</TableCell>
                       <TableCell>{player.age}</TableCell>
                       <TableCell>#{player.jerseyNumber}</TableCell>
                       <TableCell>

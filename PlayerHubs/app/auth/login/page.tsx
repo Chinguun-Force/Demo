@@ -52,21 +52,34 @@ export default function LoginPage() {
       }
     }
     const decodedToken = jwtDecode<DecodedToken>(data.token)
-    if(decodedToken.user.role !== "FAN") {
-      const profile = await fetch(`${baseUrl}/api/v1/auth/profile`, {
+    if (decodedToken.user.role === "FAN") {
+      router.push("/home")
+    } else if (decodedToken.user.role === "PLAYER") {
+      const profileResponse = await fetch(`${baseUrl}/api/v1/auth/profile`, {
         headers: {
           Authorization: `Bearer ${data.token}`,
         },
       })
-      if (!profile.ok) {
+      if (!profileResponse.ok) {
+        const profileError = await profileResponse.json()
+        if (profileError.message === "Player not found") {
+          toast({
+            variant: "destructive",
+            title: "Profile not found",
+            description: "Please create a player profile.",
+          })
+          router.push("/players/createPlayer")
+          return
+        }
         throw new Error("Failed to fetch profile")
       }
-      const myProfile = await profile.json()
+      const myProfile = await profileResponse.json()
       console.log(myProfile)
       useProfileStore.getState().setProfile(myProfile.player)
-      // end player profile heseg ruu push hiih hregteim bna
+      if (myProfile.player) {
+        router.push("/home")
+      }
     }
-    router.push("/dashboard")
   } catch (error) {
     toast({
       variant: "destructive",

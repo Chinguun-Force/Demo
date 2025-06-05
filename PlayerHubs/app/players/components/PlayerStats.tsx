@@ -17,7 +17,7 @@ export function PlayerStats({ player }: PlayerStatsProps) {
     { month: "May", goals: 50, assists: 20, minutesPlayed: 450 },
     { month: "Jun", goals: 22, assists: 30, minutesPlayed: 270 },
   ]
-
+  console.log(player.stats)
   return (
     <div className="space-y-6">
       <Card>
@@ -33,7 +33,7 @@ export function PlayerStats({ player }: PlayerStatsProps) {
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Оноо</span>
-              <span className="text-2xl font-bold">{player.stats.fieldGoals.percentage}</span>
+              <span className="text-2xl font-bold">{player.stats.fieldGoals?.percentage}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Оновчтой дамжуулалт</span>
@@ -41,15 +41,15 @@ export function PlayerStats({ player }: PlayerStatsProps) {
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Алсын зайн шидэлт</span>
-              <span className="text-2xl font-bold">{player.stats.threePoints.percentage}</span>
+              <span className="text-2xl font-bold">{player.stats.threePoints?.percentage}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Чөлөөт шидэлт</span>
-              <span className="text-2xl font-bold">{player.stats.freeThrows.percentage}</span>
+              <span className="text-2xl font-bold">{player.stats.freeThrows?.percentage}</span>
             </div>
             <div className="flex flex-col items-center justify-center rounded-lg border p-4">
               <span className="text-sm text-muted-foreground">Самбараас бөмбөг авалт</span>
-              <span className="text-2xl font-bold">{player.stats.rebounds.total}</span>
+              <span className="text-2xl font-bold">{player.stats.rebounds?.total}</span>
             </div>
           </div>
         </CardContent>

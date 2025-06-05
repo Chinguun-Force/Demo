@@ -7,5 +7,7 @@ const teamRouter = (0, express_1.Router)();
 exports.teamRouter = teamRouter;
 teamRouter
     .post('/', team_1.createTeam)
-    .get('/', team_1.getAllTeams);
+    .get('/', team_1.getAllTeams)
+    .get("/:teamId", team_1.getTeamByIdWithPlayersAndOwner)
+    .put("/:teamId", team_1.updateTeam);
 //# sourceMappingURL=team.js.map

@@ -51,28 +51,6 @@ export const getTeamByIdWithPlayersAndOwner = async (req, res) => {
                     foreignField: "_id",
                     as: "ownerDetails"
                 }
-            },
-            {
-                $unwind: {
-                    path: "$ownerDetails",
-                    preserveNullAndEmptyArrays: true
-                }
-            },
-            {
-                $project: {
-                    teamName: 1,
-                    teamNameEn: 1,
-                    teamLogo: 1,
-                    teamDescription: 1,
-                    teamAchievements: 1,
-                    teamStats: 1,
-                    teamSocialLinks: 1,
-                    createdAt: 1,
-                    updatedAt: 1,
-                    isActive: 1,
-                    teamMembers: "$teamMembersDetails",
-                    teamOwner: "$ownerDetails"
-                }
             }
         ]);
 
@@ -85,4 +63,10 @@ export const getTeamByIdWithPlayersAndOwner = async (req, res) => {
         console.error(error);
         res.status(500).json({ success: false, message: "Server error" });
     }
+};
+export const updateTeam = async (req, res) => {
+    const { teamId } = req.params;
+    const updateData = { ...req.body };
+    const team = await Team.findByIdAndUpdate(teamId, updateData, { new: true });
+    res.status(200).json({ success: true, team });
 };
