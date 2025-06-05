@@ -19,7 +19,7 @@ const teamSchema = new mongoose.Schema({
     },
     teamMembers: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Player",
+        ref: "Player",  
     }],
     // teamOwner: {
     //     type: mongoose.Schema.Types.ObjectId,
