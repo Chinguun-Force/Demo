@@ -77,7 +77,7 @@ export default function LoginPage() {
       console.log(myProfile)
       useProfileStore.getState().setProfile(myProfile.player)
       if (myProfile.player) {
-        router.push("/home")
+        router.push("/players")
       }
     }
   } catch (error) {

@@ -17,7 +17,7 @@ export function PlayerStats({ player }: PlayerStatsProps) {
     { month: "May", goals: 50, assists: 20, minutesPlayed: 450 },
     { month: "Jun", goals: 22, assists: 30, minutesPlayed: 270 },
   ]
-  console.log(player.stats[0])
+  console.log(player.stats)
   return (
     <div className="space-y-6">
       <Card>

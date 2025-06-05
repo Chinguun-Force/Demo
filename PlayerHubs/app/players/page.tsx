@@ -17,10 +17,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Filter, Search, AlertCircle, Plus, MoreHorizontal, ChevronRight } from "lucide-react"
+import { Filter, Search, AlertCircle, Plus, MoreHorizontal, ChevronRight, Grid, List, Users } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useTeamStore } from "@/store/teamStore"
 import Image from "next/image"
+import { useLoaderStore } from "@/store/loaderStore"
 
 interface Player {
   _id: string
@@ -44,12 +45,12 @@ interface ApiResponse {
 
 export default function PlayersPage() {
   const [data, setData] = useState<Player[]>([])
-  const [loading, setLoading] = useState(true)
+  const { isLoading, setLoading } = useLoaderStore();
   const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [positionFilter, setPositionFilter] = useState<string>("all")
   const [statusFilter, setStatusFilter] = useState<string>("all")
-  // const router = useRouter()
+  const [viewMode, setViewMode] = useState<"list" | "gallery">("list");
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 
@@ -81,7 +82,7 @@ export default function PlayersPage() {
     }
 
     getData()
-  }, [])
+  }, [setLoading])
 
   const handleDeletePlayer = async (playerId: string) => {
     if (!confirm("Are you sure you want to delete this player?")) return
@@ -155,7 +156,7 @@ export default function PlayersPage() {
           <p className="text-muted-foreground">Manage your team's player roster</p>
         </div>
         <Button asChild>
-          <Link href="/players/new">
+          <Link href="/players/createPlayer">
             <Plus className="mr-2 h-4 w-4" />
             Add Player
           </Link>
@@ -167,7 +168,7 @@ export default function PlayersPage() {
           <CardTitle>Player Catalog</CardTitle>
           <CardDescription>
             View and manage all players in the system
-            {!loading && ` (${filteredPlayers.length} of ${data.length} players)`}
+            {!isLoading && ` (${filteredPlayers.length} of ${data.length} players)`}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -179,12 +180,12 @@ export default function PlayersPage() {
                 className="pl-8"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                disabled={loading}
+                disabled={isLoading}
               />
             </div>
             <div className="flex gap-2">
               <div className="w-[180px]">
-                <Select value={positionFilter} onValueChange={setPositionFilter} disabled={loading}>
+                <Select value={positionFilter} onValueChange={setPositionFilter} disabled={isLoading}>
                   <SelectTrigger>
                     <div className="flex items-center gap-2">
                       <Filter className="h-4 w-4" />
@@ -201,7 +202,7 @@ export default function PlayersPage() {
                 </Select>
               </div>
               <div className="w-[180px]">
-                <Select value={statusFilter} onValueChange={setStatusFilter} disabled={loading}>
+                <Select value={statusFilter} onValueChange={setStatusFilter} disabled={isLoading}>
                   <SelectTrigger>
                     <div className="flex items-center gap-2">
                       <Filter className="h-4 w-4" />
@@ -218,135 +219,170 @@ export default function PlayersPage() {
                 </Select>
               </div>
               {hasActiveFilters && (
-                <Button variant="outline" onClick={clearFilters} disabled={loading}>
+                <Button variant="outline" onClick={clearFilters} disabled={isLoading}>
                   Clear Filters
                 </Button>
               )}
+               <div className="flex items-center rounded-md bg-muted p-1">
+                <Button variant={viewMode === 'list' ? 'secondary' : 'ghost'} size="sm" className="rounded-sm px-2" onClick={() => setViewMode('list')}>
+                    <List className="h-4 w-4" />
+                </Button>
+                <Button variant={viewMode === 'gallery' ? 'secondary' : 'ghost'} size="sm" className="rounded-sm px-2" onClick={() => setViewMode('gallery')}>
+                    <Grid className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
 
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead></TableHead>
-                  <TableHead>Нэр</TableHead>
-                  <TableHead>Байрлал</TableHead>
-                  <TableHead>Баг</TableHead>
-                  <TableHead>Нас</TableHead>
-                  <TableHead>Дугаар</TableHead>
-                  <TableHead>Төлөв</TableHead>
-                  <TableHead className="text-right">Дэлгэрэнгүй</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  Array.from({ length: 5 }).map((_, index) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        <Skeleton className="h-4 w-4" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-24" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-24" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-28" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-12" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-12" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-6 w-16" />
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Skeleton className="h-8 w-8 ml-auto" />
-                      </TableCell>
+          {isLoading ? (
+            viewMode === 'list' ? (
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead></TableHead>
+                      <TableHead>Нэр</TableHead>
+                      <TableHead>Байрлал</TableHead>
+                      <TableHead>Баг</TableHead>
+                      <TableHead>Нас</TableHead>
+                      <TableHead>Дугаар</TableHead>
+                      <TableHead>Төлөв</TableHead>
+                      <TableHead className="text-right">Дэлгэрэнгүй</TableHead>
                     </TableRow>
-                  ))
-                ) : filteredPlayers.length > 0 ? (
-                  filteredPlayers.map((player) => (
-                    <TableRow key={player._id}
-                      className="hover:bg-muted/50 transition-colors cursor-pointer px-10"
-                    >
-                      <TableCell className="font-medium">
-                      <Avatar>
-                        <AvatarImage
-                          src={player.profilePicture || 'github.com/PlayerHubs/player-hubs/assets/placeholder.png'}
-                          alt="User"
-                        />
-                        <AvatarFallback>US</AvatarFallback>
-                      </Avatar>
-                      </TableCell>
-                      <TableCell className="font-medium">{player.name}</TableCell>
-                      <TableCell>{player.position}</TableCell>
-                      <TableCell>
-                        <Image
-                          src={useTeamStore.getState().teams.find((team) => team._id === player.teamId)?.teamLogo || 'github.com/PlayerHubs/player-hubs/assets/placeholder.png'}
-                          alt="User"
-                          width={20}
-                          height={20}
-                          className="h-16 w-16 object-contain"
-                        />
-                      </TableCell>
-                      <TableCell>{player.age}</TableCell>
-                      <TableCell>#{player.jerseyNumber}</TableCell>
-                      <TableCell>
-                        <Badge className={getStatusColor(player.status)} variant="outline">
-                          {player.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {/* <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <span className="sr-only">Open menu</span>
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/players/${player._id}`}>View details</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/players/${player._id}/edit`}>Edit player</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600" onClick={() => handleDeletePlayer(player._id)}>
-                              Delete player
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu> */}
-                       
-                        <Link href={`/players/${player._id}`} className=""><ChevronRight className="h-5 w-5 text-muted-foreground ml-auto" /></Link>
-                      </TableCell>
+                  </TableHeader>
+                  <TableBody>
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <TableRow key={index}>
+                        <TableCell><Skeleton className="h-10 w-10 rounded-full" /></TableCell>
+                        <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                        <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                        <TableCell><Skeleton className="h-10 w-10" /></TableCell>
+                        <TableCell><Skeleton className="h-4 w-12" /></TableCell>
+                        <TableCell><Skeleton className="h-4 w-12" /></TableCell>
+                        <TableCell><Skeleton className="h-6 w-16" /></TableCell>
+                        <TableCell className="text-right"><Skeleton className="h-5 w-5 ml-auto" /></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                 {Array.from({ length: 8 }).map((_, index) => (
+                    <Card key={index}><CardContent className="p-4"><div className="flex items-center gap-4"><Skeleton className="h-40 w-full" /></div></CardContent></Card>
+                 ))}
+              </div>
+            )
+          ) : filteredPlayers.length > 0 ? (
+            viewMode === 'list' ? (
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                     <TableRow>
+                      <TableHead className="pl-28">Зураг</TableHead>
+                      <TableHead>Нэр</TableHead>
+                      <TableHead>Байрлал</TableHead>
+                      <TableHead>Баг</TableHead>
+                      <TableHead>Нас</TableHead>
+                      <TableHead>Дугаар</TableHead>
+                      <TableHead>Төлөв</TableHead>
+                      <TableHead>Дэлгэрэнгүй</TableHead>
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={8} className="h-24 text-center">
-                      {hasActiveFilters ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <p>No players match your current filters.</p>
-                          <Button variant="outline" size="sm" onClick={clearFilters}>
-                            Clear filters
-                          </Button>
-                        </div>
-                      ) : (
-                        "No players found."
-                      )}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredPlayers.map((player) => (
+                      <TableRow key={player._id} className="hover:bg-muted/50">
+                        <TableCell className="font-medium">
+                          <Avatar className="w-16 h-16 ml-20">
+                            <AvatarImage src={player.profilePicture || undefined} alt={player.name} className="w-16 h-16 object-cover" /><AvatarFallback>{player.name?.slice(0,2)}</AvatarFallback></Avatar>
+                        </TableCell>
+                        <TableCell className="font-medium">{player.name}</TableCell>
+                        <TableCell>{player.position}</TableCell>
+                        <TableCell><Image src={useTeamStore.getState().teams.find((team) => team._id === player.teamId)?.teamLogo || 'https://placehold.co/40x40/png'} alt="Team Logo" width={40} height={40} className="h-16 w-16 object-contain rounded-full" /></TableCell>
+                        <TableCell>{player.age}</TableCell>
+                        <TableCell>#{player.jerseyNumber}</TableCell>
+                        <TableCell><Badge className={getStatusColor(player.status)} variant="outline">{player.status}</Badge></TableCell>
+                        <TableCell className="text-right"><Link href={`/players/${player._id}`}><ChevronRight className="h-5 w-5 text-muted-foreground" /></Link></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                    {filteredPlayers.map((player) => (
+                        <Card key={player._id} className="group relative overflow-hidden hover:shadow-xl transition-all duration-500 ease-in-out hover:-translate-y-1">
+                            <div className="relative">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-90" />
+                                <div className="h-40 bg-muted relative overflow-hidden">
+                                {player.profilePicture ? (
+                                    <img src={player.profilePicture} alt={player.name} className="w-full h-full object-cover transform transition-transform duration-700 ease-in-out group-hover:scale-105" />
+                                ) : (
+                                    <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center transition-all duration-500 group-hover:brightness-110">
+                                        <Users className="w-16 h-16 text-white/30 transition-transform duration-500 group-hover:scale-110" />
+                                    </div>
+                                )}
+                                </div>
+                                <div className="absolute bottom-0 left-0 right-0 p-4 z-20 transform transition-transform duration-500 group-hover:translate-y-[-4px]">
+                                    <div className="flex items-center justify-between">
+                                        <div className="transform transition-all duration-500 group-hover:translate-x-1">
+                                        <h3 className="text-lg font-bold text-white tracking-tight transition-all duration-500 group-hover:text-white/90">{player.name}</h3>
+                                        <p className="text-white/90 text-xs mt-0.5 transition-all duration-500 group-hover:text-white/80">{player.position}</p>
+                                        </div>
+                                        <Badge className={`${getStatusColor(player.status)} backdrop-blur-sm transition-all duration-500 group-hover:scale-105 text-xs`} variant="outline">{player.status}</Badge>
+                                    </div>
+                                </div>
+                            </div>
+                            <CardContent className="p-4">
+                                <div className="grid grid-cols-2 gap-2 text-xs">
+                                <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg transition-all duration-500 ease-in-out group-hover:bg-black/10 dark:group-hover:bg-white/10 group-hover:translate-y-[-2px]">
+                                    <div className="font-medium text-muted-foreground mb-0.5 transition-colors duration-500">Team</div>
+                                    <div className="font-semibold text-sm transition-colors duration-500">{useTeamStore.getState().teams.find(t=>t._id === player.teamId)?.teamName || 'Free Agent'}</div>
+                                </div>
+                                <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg transition-all duration-500 ease-in-out group-hover:bg-black/10 dark:group-hover:bg-white/10 group-hover:translate-y-[-2px]">
+                                    <div className="font-medium text-muted-foreground mb-0.5 transition-colors duration-500">Age</div>
+                                    <div className="font-semibold text-sm transition-colors duration-500">{player.age}</div>
+                                </div>
+                                <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg transition-all duration-500 ease-in-out group-hover:bg-black/10 dark:group-hover:bg-white/10 group-hover:translate-y-[-2px]">
+                                    <div className="font-medium text-muted-foreground mb-0.5 transition-colors duration-500">Jersey</div>
+                                    <div className="font-semibold text-sm transition-colors duration-500">#{player.jerseyNumber}</div>
+                                </div>
+                                <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg transition-all duration-500 ease-in-out group-hover:bg-black/10 dark:group-hover:bg-white/10 group-hover:translate-y-[-2px]">
+                                    <div className="font-medium text-muted-foreground mb-0.5 transition-colors duration-500">Nationality</div>
+                                    <div className="font-semibold text-sm transition-colors duration-500">{player.nationality}</div>
+                                </div>
+                                </div>
+                                <div className="mt-3 flex justify-end">
+                                <Button variant="ghost" size="sm" asChild className="transition-all duration-500 ease-in-out group-hover:bg-primary/10 hover:bg-primary/20 h-7 text-xs">
+                                    <Link href={`/players/${player._id}`} className="flex items-center gap-1">
+                                    <span className="transition-transform duration-500 group-hover:translate-x-1">View Profile</span>
+                                    <ChevronRight className="h-3 w-3 transition-transform duration-500 group-hover:translate-x-1" />
+                                    </Link>
+                                </Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+            )
+          ) : (
+            <div className="text-center py-20">
+              {hasActiveFilters ? (
+                <div className="flex flex-col items-center gap-2">
+                  <p className="text-muted-foreground">No players match your current filters.</p>
+                  <Button variant="outline" size="sm" onClick={clearFilters} className="mt-2">
+                    Clear filters
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-4">
+                  <Users className="h-16 w-16 text-muted-foreground" />
+                  <h3 className="text-xl font-semibold">No Players Found</h3>
+                  <p className="text-muted-foreground">Get started by adding a new player.</p>
+                </div>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

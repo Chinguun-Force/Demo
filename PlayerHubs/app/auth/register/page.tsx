@@ -49,15 +49,15 @@ export default function RegisterPage() {
       })
 
       toast({
-        title: "Login successful",
-        description: "Welcome back to the Player Management System",
+        title: "Registration successful",
+        description: "Welcome to the Player Management System",
       })
 
       router.push("/auth/login")
     } catch (error){
       toast({
         variant: "destructive",
-        title: "Login failed",
+        title: "Registration failed",
         description: "Please check your credentials and try again",
       })
     } finally {
