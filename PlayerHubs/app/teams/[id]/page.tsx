@@ -10,6 +10,8 @@ import TopPlayers from './components/TopPlayers';
 import TeamRankings from './components/TeamRankings';
 import TeamAchievements from './components/TeamAchievements';
 import Spinner from '@/components/ui/spinner';
+import { useThemeStore } from '@/store/themeStore';
+import DarkModeToggle from '@/components/DarkModeToggle';
 
 interface Team {
     teamNameEn: string;
@@ -75,7 +77,9 @@ interface Team {
 
 export default function TeamDetails() {
     const [team, setTeam] = useState<Team | null>(null);
+    const darkMode = useThemeStore((state) => state.darkMode);
     const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
     useEffect(() => {
         // Fetch data from API
         const fetchData = async () => {
@@ -118,10 +122,10 @@ export default function TeamDetails() {
     }));
     console.log(team.teamMembersDetails)
     return (
-        <div className="min-h-screen bg-white">
+        <div className={`min-h-screen ${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
             {/* Header */}
             <header className="border-b">
-                <div className="container mx-auto px-4 py-4 flex items-center">
+                <div className="container mx-auto px-4 py-4 flex items-center justify-between">
                     <Link href="/teams" className="flex items-center text-gray-600 hover:text-gray-900">
                         <ChevronLeft className="h-5 w-5 mr-1" />
                         <span>Багууд</span>

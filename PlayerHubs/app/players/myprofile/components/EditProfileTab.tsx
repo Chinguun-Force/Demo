@@ -18,7 +18,7 @@ export function EditProfileTab() {
     height: profile?.height || 0,
     weight: profile?.weight || 0,
     position: profile?.position || "",
-    team: profile?.team || "",
+    team: profile?.teamId || "",
     jerseyNumber: profile?.jerseyNumber || 0,
     status: profile?.status || "",
     bio: profile?.bio || "",
@@ -41,11 +41,11 @@ export function EditProfileTab() {
       ...profile,
       name: formData.name,
       age: formData.age,
-      height: formData.height,
-      weight: formData.weight,
+      height: String(formData.height),
+      weight: String(formData.weight),
       position: formData.position,
-      team: formData.team,
-      jerseyNumber: formData.jerseyNumber || undefined,
+      teamId: formData.team,
+      jerseyNumber: formData.jerseyNumber,      
       status: formData.status,
       bio: formData.bio,
       profilePicture: formData.profilePicture,
@@ -63,7 +63,7 @@ export function EditProfileTab() {
       height: profile?.height || 0,
       weight: profile?.weight || 0,
       position: profile?.position || "",
-      team: profile?.team || "",
+      team: profile?.teamId || "",
       jerseyNumber: profile?.jerseyNumber || 0,
       status: profile?.status || "",
       bio: profile?.bio || "",
@@ -96,7 +96,7 @@ export function EditProfileTab() {
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Full Name *</Label>
+            <Label htmlFor="name">Нэр *</Label>
             <Input
               id="name"
               value={formData.name}
@@ -106,7 +106,7 @@ export function EditProfileTab() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="position">Position *</Label>
+            <Label htmlFor="position">Байрлал *</Label>
             <Input
               id="position"
               value={formData.position}
@@ -119,7 +119,7 @@ export function EditProfileTab() {
 
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="age">Age</Label>
+            <Label htmlFor="age">Нас</Label>
             <Input
               id="age"
               type="number"
@@ -130,7 +130,7 @@ export function EditProfileTab() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="height">Height (cm)</Label>
+            <Label htmlFor="height">Өндөр (cm)</Label>
             <Input
               id="height"
               type="number"
@@ -141,7 +141,7 @@ export function EditProfileTab() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="weight">Weight (kg)</Label>
+            <Label htmlFor="weight">Жин (kg)</Label>
             <Input
               id="weight"
               type="number"
@@ -155,7 +155,7 @@ export function EditProfileTab() {
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="team">Team</Label>
+            <Label htmlFor="team">Баг</Label>
             <Input
               id="team"
               value={formData.team}
@@ -165,7 +165,7 @@ export function EditProfileTab() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="jerseyNumber">Jersey Number</Label>
+            <Label htmlFor="jerseyNumber">Өмсөглийн дугаар</Label>
             <Input
               id="jerseyNumber"
               type="number"
@@ -234,3 +234,4 @@ export function EditProfileTab() {
     </Card>
   )
 }
+ 

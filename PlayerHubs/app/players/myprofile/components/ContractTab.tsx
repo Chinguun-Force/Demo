@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { FileText } from "lucide-react"
 import { useProfileStore } from "@/store/profileStore"
-
+ 
+ 
 interface ContractData {
   team: string
   salary: string
@@ -16,32 +17,32 @@ interface ContractData {
     amount: string
   }>
 }
-
+ 
 interface ContractTabProps {
   contractData: ContractData
 }
-
+ 
 export function ContractTab({ contractData }: ContractTabProps) {
   const profile = useProfileStore.getState().profile
-
+ 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <FileText className="h-5 w-5" />
-          Contract Details
+          Гэрээний мэдээлэл
         </CardTitle>
-        <CardDescription>Current contract information and terms</CardDescription>
+        <CardDescription>Одооны гэрээний мэдээлэл</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
-              <Label className="text-sm font-medium">Team</Label>
-              <p className="text-lg">{profile?.team || contractData.team}</p>
+              <Label className="text-sm font-medium">Баг</Label>
+              <p className="text-lg">{profile?.teamId || contractData.team}</p>
             </div>
             <div>
-              <Label className="text-sm font-medium">Monthly Salary</Label>
+              <Label className="text-sm font-medium">Сарын цалин</Label>
               <p className="text-lg font-semibold text-green-600">{contractData.salary}</p>
             </div>
             <div>
@@ -53,20 +54,20 @@ export function ContractTab({ contractData }: ContractTabProps) {
           </div>
           <div className="space-y-4">
             <div>
-              <Label className="text-sm font-medium">Contract Start</Label>
+              <Label className="text-sm font-medium">Гэрээ эхлсэн өдөр</Label>
               <p className="text-lg">{contractData.startDate}</p>
             </div>
             <div>
-              <Label className="text-sm font-medium">Contract End</Label>
+              <Label className="text-sm font-medium">Гэрээ дуусах өдөр</Label>
               <p className="text-lg">{contractData.endDate}</p>
             </div>
           </div>
         </div>
-
+ 
         <Separator />
-
+ 
         <div>
-          <Label className="text-sm font-medium mb-3 block">Performance Bonuses</Label>
+          <Label className="text-sm font-medium mb-3 block">KPI</Label>
           <div className="space-y-2">
             {contractData.bonuses.map((bonus, index) => (
               <div key={index} className="flex justify-between items-center p-3 bg-muted rounded-lg">

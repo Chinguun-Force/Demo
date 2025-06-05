@@ -24,9 +24,9 @@ export function StatsTab({ stats }: StatsTabProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Trophy className="h-5 w-5" />
-            Performance Statistics
+            Хувийн статистик
           </CardTitle>
-          <CardDescription>Your competitive gaming statistics</CardDescription>
+          <CardDescription>Таны улиралын stats</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -35,7 +35,7 @@ export function StatsTab({ stats }: StatsTabProps) {
                 <Target className="h-6 w-6 text-blue-600" />
               </div>
               <div className="text-2xl font-bold">{stats.gamesPlayed}</div>
-              <p className="text-sm text-muted-foreground">Games Played</p>
+              <p className="text-sm text-muted-foreground">Нийт орлоцсон тоглолт</p>
             </div>
 
             <div className="text-center">
@@ -43,7 +43,7 @@ export function StatsTab({ stats }: StatsTabProps) {
                 <Trophy className="h-6 w-6 text-green-600" />
               </div>
               <div className="text-2xl font-bold">{stats.winRate}</div>
-              <p className="text-sm text-muted-foreground">Win Rate</p>
+              <p className="text-sm text-muted-foreground">Хожлын хувь</p>
             </div>
 
             <div className="text-center">
@@ -51,7 +51,7 @@ export function StatsTab({ stats }: StatsTabProps) {
                 <Zap className="h-6 w-6 text-purple-600" />
               </div>
               <div className="text-2xl font-bold">{stats.avgKDA}</div>
-              <p className="text-sm text-muted-foreground">Avg K/D/A</p>
+              <p className="text-sm text-muted-foreground">Нэг тоглолтонд авсан дундаж онооны хувь</p>
             </div>
 
             <div className="text-center">
@@ -59,7 +59,7 @@ export function StatsTab({ stats }: StatsTabProps) {
                 <Target className="h-6 w-6 text-red-600" />
               </div>
               <div className="text-2xl font-bold">{stats.headshots}</div>
-              <p className="text-sm text-muted-foreground">Headshot %</p>
+              <p className="text-sm text-muted-foreground">Холын зайн довтолгооны хувь </p>
             </div>
           </div>
         </CardContent>
@@ -68,7 +68,7 @@ export function StatsTab({ stats }: StatsTabProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Achievements</CardTitle>
+            <CardTitle>Aмжилт</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between items-center">
@@ -76,11 +76,11 @@ export function StatsTab({ stats }: StatsTabProps) {
               <Badge variant="secondary">{stats.mvpAwards}</Badge>
             </div>
             <div className="flex justify-between items-center">
-              <span>Tournament Wins</span>
+              <span>Аваргын тоо</span>
               <Badge variant="secondary">{stats.tournamentWins}</Badge>
             </div>
             <div className="flex justify-between items-center">
-              <span>Total Earnings</span>
+              <span>Нийт авсан орлого</span>
               <Badge variant="secondary" className="text-green-600">
                 {stats.earnings}
               </Badge>
@@ -90,19 +90,19 @@ export function StatsTab({ stats }: StatsTabProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Current Season</CardTitle>
+            <CardTitle>Энэ улиралд</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between items-center">
-              <span>Rank</span>
+              <span>Багийн амжилт</span>
               <Badge className="bg-yellow-500">{stats.rank}</Badge>
             </div>
             <div className="flex justify-between items-center">
-              <span>Season Wins</span>
-              <Badge variant="outline">34</Badge>
+              <span>Энэ улиралын хожил</span>
+              <Badge variant="outline">19-8</Badge>
             </div>
             <div className="flex justify-between items-center">
-              <span>Season Earnings</span>
+              <span>Энэ улиралд олсон олсон орлого</span>
               <Badge variant="outline" className="text-green-600">
                 $12,500
               </Badge>
@@ -113,3 +113,4 @@ export function StatsTab({ stats }: StatsTabProps) {
     </div>
   )
 }
+ 

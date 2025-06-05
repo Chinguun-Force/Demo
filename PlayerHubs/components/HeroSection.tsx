@@ -11,22 +11,24 @@ const HeroSection = () => {
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                Connect Players, Teams, and Fans in One Platform
+              Тоглогчид, багууд болон хөгжөөн дэмжигчдийг нэгтсэн платформ
               </h1>
               <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                Whether you're a team owner, player, or fan, PlayerHub brings the sports community together. Track
-                stats, follow careers, and support your favorite athletes.
+                PlayerHubs нь тоглогчид, багууд болон хөгжөөн дэмжигчдийг нэгтгэн, 
+                тэдний мэдээллийг хуваалцах, харилцах, хамтран ажиллахад зориулагдсан платформ юм. 
+                Бидний зорилго бол тоглогчдын мэдээллийг төвлөрсөн байдлаар хадгалах, 
+                тэдний карьерийг дэмжих, хөгжөөн дэмжигчдийн хамтын ажиллагааг сайжруулах явдал юм.
               </p>
             </div>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
               <Link href="/auth/register">
                 <Button size="lg">
-                  Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                  Эхлэх <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/players">
                 <Button size="lg" variant="outline">
-                  Browse Players
+                  Бүх тоглогчид
                 </Button>
               </Link>
             </div>
