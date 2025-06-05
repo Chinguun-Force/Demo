@@ -17,7 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Filter, Search, AlertCircle, Plus, MoreHorizontal, ChevronRight } from "lucide-react"
+import { Filter, Search, AlertCircle, Plus, MoreHorizontal, ChevronRight, Users } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 interface Player {
@@ -224,119 +224,86 @@ export default function PlayersPage() {
             </div>
           </div>
 
-          <div className="rounded-md border">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead></TableHead>
-                  <TableHead>Нэр</TableHead>
-                  <TableHead>Байрлал</TableHead>
-                  <TableHead>Баг</TableHead>
-                  <TableHead>Нас</TableHead>
-                  <TableHead>Дугаар</TableHead>
-                  <TableHead>Төлөв</TableHead>
-                  <TableHead className="text-right">Дэлгэрэнгүй</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {loading ? (
-                  Array.from({ length: 5 }).map((_, index) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        <Skeleton className="h-4 w-4" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-24" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-24" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-28" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-12" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-4 w-12" />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton className="h-6 w-16" />
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Skeleton className="h-8 w-8 ml-auto" />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : filteredPlayers.length > 0 ? (
-                  filteredPlayers.map((player) => (
-                    <TableRow key={player._id}
-                      className="hover:bg-muted/50 transition-colors cursor-pointer px-10"
-                    >
-                      <TableCell className="font-medium">
-                      <Avatar>
-                        <AvatarImage
-                          src={player.profilePicture || 'github.com/PlayerHubs/player-hubs/assets/placeholder.png'}
-                          alt="User"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {filteredPlayers.length > 0 ? (
+              filteredPlayers.map((player) => (
+                <Card key={player._id} className="group relative overflow-hidden hover:shadow-xl transition-all duration-500 ease-in-out hover:-translate-y-1">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-90" />
+                    <div className="h-40 bg-muted relative overflow-hidden">
+                      {player.profilePicture ? (
+                        <img 
+                          src={player.profilePicture} 
+                          alt={player.name}
+                          className="w-full h-full object-cover transform transition-transform duration-700 ease-in-out group-hover:scale-105"
                         />
-                        <AvatarFallback>US</AvatarFallback>
-                      </Avatar>
-                      </TableCell>
-                      <TableCell className="font-medium">{player.name}</TableCell>
-                      <TableCell>{player.position}</TableCell>
-                      <TableCell>{player.teamId}</TableCell>
-                      <TableCell>{player.age}</TableCell>
-                      <TableCell>#{player.jerseyNumber}</TableCell>
-                      <TableCell>
-                        <Badge className={getStatusColor(player.status)} variant="outline">
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center transition-all duration-500 group-hover:brightness-110">
+                          <Users className="w-16 h-16 text-white/30 transition-transform duration-500 group-hover:scale-110" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-4 z-20 transform transition-transform duration-500 group-hover:translate-y-[-4px]">
+                      <div className="flex items-center justify-between">
+                        <div className="transform transition-all duration-500 group-hover:translate-x-1">
+                          <h3 className="text-lg font-bold text-white tracking-tight transition-all duration-500 group-hover:text-white/90">{player.name}</h3>
+                          <p className="text-white/90 text-xs mt-0.5 transition-all duration-500 group-hover:text-white/80">{player.position}</p>
+                        </div>
+                        <Badge className={`${getStatusColor(player.status)} backdrop-blur-sm transition-all duration-500 group-hover:scale-105 text-xs`} variant="outline">
                           {player.status}
                         </Badge>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        {/* <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <span className="sr-only">Open menu</span>
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/players/${player._id}`}>View details</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/players/${player._id}/edit`}>Edit player</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600" onClick={() => handleDeletePlayer(player._id)}>
-                              Delete player
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu> */}
-                       
-                        <Link href={`/players/${player._id}`} className=""><ChevronRight className="h-5 w-5 text-muted-foreground ml-auto" /></Link>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                      </div>
+                    </div>
+                  </div>
+                  <CardContent className="p-4">
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg transition-all duration-500 ease-in-out group-hover:bg-black/10 dark:group-hover:bg-white/10 group-hover:translate-y-[-2px]">
+                        <div className="font-medium text-muted-foreground mb-0.5 transition-colors duration-500">Team</div>
+                        <div className="font-semibold text-sm transition-colors duration-500">{player.teamId}</div>
+                      </div>
+                      <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg transition-all duration-500 ease-in-out group-hover:bg-black/10 dark:group-hover:bg-white/10 group-hover:translate-y-[-2px]">
+                        <div className="font-medium text-muted-foreground mb-0.5 transition-colors duration-500">Age</div>
+                        <div className="font-semibold text-sm transition-colors duration-500">{player.age}</div>
+                      </div>
+                      <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg transition-all duration-500 ease-in-out group-hover:bg-black/10 dark:group-hover:bg-white/10 group-hover:translate-y-[-2px]">
+                        <div className="font-medium text-muted-foreground mb-0.5 transition-colors duration-500">Jersey</div>
+                        <div className="font-semibold text-sm transition-colors duration-500">#{player.jerseyNumber}</div>
+                      </div>
+                      <div className="bg-black/5 dark:bg-white/5 p-2 rounded-lg transition-all duration-500 ease-in-out group-hover:bg-black/10 dark:group-hover:bg-white/10 group-hover:translate-y-[-2px]">
+                        <div className="font-medium text-muted-foreground mb-0.5 transition-colors duration-500">Nationality</div>
+                        <div className="font-semibold text-sm transition-colors duration-500">{player.nationality}</div>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex justify-end">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        asChild 
+                        className="transition-all duration-500 ease-in-out group-hover:bg-primary/10 hover:bg-primary/20 h-7 text-xs"
+                      >
+                        <Link href={`/players/${player._id}`} className="flex items-center gap-1">
+                          <span className="transition-transform duration-500 group-hover:translate-x-1">View Profile</span>
+                          <ChevronRight className="h-3 w-3 transition-transform duration-500 group-hover:translate-x-1" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                {hasActiveFilters ? (
+                  <div className="flex flex-col items-center gap-2">
+                    <p>No players match your current filters.</p>
+                    <Button variant="outline" size="sm" onClick={clearFilters}>
+                      Clear filters
+                    </Button>
+                  </div>
                 ) : (
-                  <TableRow>
-                    <TableCell colSpan={8} className="h-24 text-center">
-                      {hasActiveFilters ? (
-                        <div className="flex flex-col items-center gap-2">
-                          <p>No players match your current filters.</p>
-                          <Button variant="outline" size="sm" onClick={clearFilters}>
-                            Clear filters
-                          </Button>
-                        </div>
-                      ) : (
-                        "No players found."
-                      )}
-                    </TableCell>
-                  </TableRow>
+                  "No players found."
                 )}
-              </TableBody>
-            </Table>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
