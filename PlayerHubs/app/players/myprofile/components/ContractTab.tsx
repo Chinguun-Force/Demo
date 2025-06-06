@@ -5,9 +5,10 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { FileText } from "lucide-react"
 import { useProfileStore } from "@/store/profileStore"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Spinner from "@/components/ui/spinner"
- 
+import { Team } from "@/types/team"
+import Image from "next/image"
  
 interface ContractData {
   team: string
@@ -28,6 +29,24 @@ interface ContractTabProps {
 export function ContractTab({ contractData }: ContractTabProps) {
   const profile = useProfileStore.getState().profile
   const [loading, setLoading] = useState(true)
+  const [team, setTeam] = useState<Team | null>(null);
+
+  console.log(profile)
+  useEffect(() => {
+    const fetchTeam = async () => {
+      if (profile?.teamId) {
+        setLoading(true);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/teams/${profile.teamId}`);
+        const data = await response.json();
+        setTeam(data.team);
+        setLoading(false);
+      } else {
+        setLoading(false); // No teamId, so we're done loading
+      }
+    };
+
+    fetchTeam();
+  }, [profile]);
   if(!profile?.teamId) {
     setLoading(false)}
   return (
@@ -49,7 +68,7 @@ export function ContractTab({ contractData }: ContractTabProps) {
           <div className="space-y-4">
             <div>
               <Label className="text-sm font-medium">Баг</Label>
-              <p className="text-lg">{profile?.teamId || contractData.team}</p>
+              <Image src={team?.teamLogo || 'https://placehold.co/40x40/png'} alt={team?.teamName || ''} width={40} height={40} className="w-8 h-8 md:w-10 md:h-10 object-contain"/>
             </div>
             <div>
               <Label className="text-sm font-medium">Сарын цалин</Label>
