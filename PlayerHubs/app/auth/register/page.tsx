@@ -25,6 +25,15 @@ export default function RegisterPage() {
   const { toast } = useToast()
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
+  const handleTestClick = () => {
+    setName("Test User");
+    // Using Date.now() to ensure the email is unique for each test run
+    setEmail(`test@gmail.com`);
+    setPassword("Shine2025*");
+    setConfirmPassword("Shine2025*");
+    setRole("PLAYER");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -152,6 +161,9 @@ export default function RegisterPage() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
+          <Button type="button" variant="outline" className="w-full" onClick={handleTestClick}>
+            Fill with Test Data
+          </Button>
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? (
               <>

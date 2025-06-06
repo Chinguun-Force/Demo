@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
@@ -51,6 +51,8 @@ export default function PlayersPage() {
   const [positionFilter, setPositionFilter] = useState<string>("all")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [viewMode, setViewMode] = useState<"list" | "gallery">("list");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8); // Default for gallery view
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
 
@@ -103,6 +105,21 @@ export default function PlayersPage() {
     }
   }
 
+  const handleItemsPerPageChange = (value: string) => {
+    setItemsPerPage(parseInt(value, 10));
+    setCurrentPage(1); // Reset to first page on change
+  };
+
+  useEffect(() => {
+    // Adjust items per page based on view mode
+    if (viewMode === 'list') {
+      setItemsPerPage(5); // Or your preferred number for list view
+    } else {
+      setItemsPerPage(8); // Or your preferred number for gallery view
+    }
+    setCurrentPage(1); // Reset to first page on view mode change
+  }, [viewMode]);
+
   const filteredPlayers = data.filter((player) => {
     const matchesSearch =
       (player.name?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
@@ -113,6 +130,17 @@ export default function PlayersPage() {
 
     return matchesSearch && matchesPosition && matchesStatus;
   })
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredPlayers.length / itemsPerPage);
+  const paginatedPlayers = filteredPlayers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
 
   const getStatusColor = (status: Player["status"]) => {
     switch (status) {
@@ -150,25 +178,12 @@ export default function PlayersPage() {
 
   return (
     <div className="container py-8 mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Players</h1>
-          <p className="text-muted-foreground">Manage your team's player roster</p>
-        </div>
-        <Button asChild>
-          <Link href="/players/createPlayer">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Player
-          </Link>
-        </Button>
-      </div>
-
       <Card>
         <CardHeader>
-          <CardTitle>Player Catalog</CardTitle>
+          <CardTitle>Нийт тамирчид</CardTitle>
           <CardDescription>
-            View and manage all players in the system
-            {!isLoading && ` (${filteredPlayers.length} of ${data.length} players)`}
+            Нийт тамирчидын тоо: {data.length}
+            {!isLoading && ` (${filteredPlayers.length} / ${data.length} тамирчид)`}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -176,7 +191,7 @@ export default function PlayersPage() {
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by name, team, or nationality..."
+                placeholder="Нэр, баг, байрлалаар хайх..."
                 className="pl-8"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -290,7 +305,7 @@ export default function PlayersPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredPlayers.map((player) => (
+                    {paginatedPlayers.map((player) => (
                       <TableRow key={player._id} className="hover:bg-muted/50">
                         <TableCell className="font-medium">
                           <Avatar className="w-16 h-16 ml-20">
@@ -310,7 +325,7 @@ export default function PlayersPage() {
               </div>
             ) : (
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                    {filteredPlayers.map((player) => (
+                    {paginatedPlayers.map((player) => (
                         <Card key={player._id} className="group relative overflow-hidden hover:shadow-xl transition-all duration-500 ease-in-out hover:-translate-y-1">
                             <div className="relative">
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10 transition-opacity duration-500 group-hover:opacity-90" />
@@ -369,21 +384,58 @@ export default function PlayersPage() {
             <div className="text-center py-20">
               {hasActiveFilters ? (
                 <div className="flex flex-col items-center gap-2">
-                  <p className="text-muted-foreground">No players match your current filters.</p>
+                  <p className="text-muted-foreground">Уучлаарай, тамирчид олдсонгүй.</p>
                   <Button variant="outline" size="sm" onClick={clearFilters} className="mt-2">
-                    Clear filters
+                    Хуулах
                   </Button>
                 </div>
               ) : (
                 <div className="flex flex-col items-center gap-4">
                   <Users className="h-16 w-16 text-muted-foreground" />
-                  <h3 className="text-xl font-semibold">No Players Found</h3>
-                  <p className="text-muted-foreground">Get started by adding a new player.</p>
+                  <h3 className="text-xl font-semibold">Тамирчид олдсонгүй</h3>
+                  <p className="text-muted-foreground">Тамирчид нэмэхэд эхлэе.</p>
                 </div>
               )}
             </div>
           )}
         </CardContent>
+        {totalPages > 1 && (
+          <CardFooter className="flex justify-between items-center border-t pt-4">
+             <div>
+              <Select onValueChange={handleItemsPerPageChange} defaultValue={String(itemsPerPage)}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Items per page" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5 per page</SelectItem>
+                  <SelectItem value="10">10 per page</SelectItem>
+                  <SelectItem value="20">20 per page</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                Previous
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                Page {currentPage} of {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </Button>
+            </div>
+          </CardFooter>
+        )}
       </Card>
     </div>
   )
