@@ -36,7 +36,7 @@ const parseGameData = (game: Game, teamName: string, teamNameEn: string, teamLog
   if (scoreParts.length !== 2 || opponentTeams.length !== 2 || isNaN(scoreParts[0]) || isNaN(scoreParts[1])) {
     return { error: true };
   }
-  
+
   const teamAliases = [teamName, teamNameEn, ...teamNameEn.split(' ')].filter(Boolean);
   let teamNameIndex = -1;
 
@@ -47,19 +47,19 @@ const parseGameData = (game: Game, teamName: string, teamNameEn: string, teamLog
           break;
       }
   }
-  
+
   if (teamNameIndex === -1) {
     const probableIndex = opponentTeams.findIndex(t => teamAliases.some(alias => t.toLowerCase().includes(alias.split(' ').pop()!.toLowerCase())));
     if(probableIndex !== -1) teamNameIndex = probableIndex;
   }
-  
+
   if (teamNameIndex === -1) {
       return { error: true };
   }
 
   const homeTeamIndex = teamNameIndex;
   const awayTeamIndex = 1 - homeTeamIndex;
-  
+
   return {
     homeTeam: opponentTeams[homeTeamIndex],
     homeScore: scoreParts[homeTeamIndex],
@@ -79,7 +79,7 @@ const RecentResults: React.FC<RecentResultsProps> = ({ teamName, teamNameEn, tea
   if (!results || results.length === 0) {
     return <div className="text-gray-500 dark:text-gray-400">No results available.</div>;
   }
-  
+
   return (
     <div className="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg overflow-hidden">
       <div className="px-6 py-4 border-b dark:border-gray-700">
@@ -96,7 +96,7 @@ const RecentResults: React.FC<RecentResultsProps> = ({ teamName, teamNameEn, tea
               </div>
             );
           }
-          
+
           const awayTeamData = teams.find(t => t.teamName === gameData.awayTeam || t.teamNameEn === gameData.awayTeam);
           const awayLogo = awayTeamData?.teamLogo || 'https://placehold.co/40x40/png';
 
@@ -104,7 +104,7 @@ const RecentResults: React.FC<RecentResultsProps> = ({ teamName, teamNameEn, tea
 
           return (
             <div key={index} className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg flex items-center justify-between">
-              {/* Home Team */}
+              {}
               <div className="flex flex-col items-start text-left w-1/3">
                 <span className="font-semibold text-sm md:text-base">{gameData.homeTeam}</span>
                 <span className={`text-xl md:text-2xl font-bold ${isWin ? 'text-black dark:text-white' : 'text-gray-400 dark:text-gray-500'}`}>
@@ -112,7 +112,7 @@ const RecentResults: React.FC<RecentResultsProps> = ({ teamName, teamNameEn, tea
                 </span>
               </div>
 
-              {/* Middle Info */}
+              {}
               <div className="flex items-center justify-center space-x-3 md:space-x-4 w-1/3">
                 <Image src={gameData.homeLogo} alt={gameData.homeTeam} width={40} height={40} className="w-8 h-8 md:w-10 md:h-10 object-contain"/>
                 <div className="text-center">
@@ -122,7 +122,7 @@ const RecentResults: React.FC<RecentResultsProps> = ({ teamName, teamNameEn, tea
                 <Image src={awayLogo} alt={gameData.awayTeam} width={40} height={40} className="w-8 h-8 md:w-10 md:h-10 object-contain"/>
               </div>
 
-              {/* Away Team */}
+              {}
               <div className="flex flex-col items-end text-right w-1/3">
                 <span className="font-semibold text-sm md:text-base">{gameData.awayTeam}</span>
                 <span className={`text-xl md:text-2xl font-bold ${!isWin ? 'text-black dark:text-white' : 'text-gray-400 dark:text-gray-500'}`}>
@@ -137,4 +137,4 @@ const RecentResults: React.FC<RecentResultsProps> = ({ teamName, teamNameEn, tea
   );
 };
 
-export default RecentResults; 
+export default RecentResults;

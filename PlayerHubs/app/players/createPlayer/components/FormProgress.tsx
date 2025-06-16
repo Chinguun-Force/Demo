@@ -1,7 +1,7 @@
 interface FormProgressProps {
     progress: number
   }
-  
+
   export function FormProgress({ progress }: FormProgressProps) {
     return (
       <div className="w-full bg-gray-100 rounded-full h-2.5 mb-6">
@@ -16,4 +16,3 @@ interface FormProgressProps {
       </div>
     )
   }
-  

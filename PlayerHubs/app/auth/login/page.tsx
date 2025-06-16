@@ -26,7 +26,7 @@ export default function LoginPage() {
     e.preventDefault()
     setIsLoading(true)
      try {
-    const response = await fetch(`${baseUrl}/api/v1/auth/login`, {
+    const response = await fetch('/api/auth/login', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,10 +52,11 @@ export default function LoginPage() {
       }
     }
     const decodedToken = jwtDecode<DecodedToken>(data.token)
+
     if (decodedToken.user.role === "FAN") {
-      router.push("/home")
+      router.push("/")
     } else if (decodedToken.user.role === "PLAYER") {
-      const profileResponse = await fetch(`${baseUrl}/api/v1/auth/profile`, {
+      const profileResponse = await fetch('/api/auth/profile', {
         headers: {
           Authorization: `Bearer ${data.token}`,
         },
@@ -64,9 +65,8 @@ export default function LoginPage() {
         const profileError = await profileResponse.json()
         if (profileError.message === "Player not found") {
           toast({
-            variant: "destructive",
-            title: "Profile not found",
-            description: "Please create a player profile.",
+            title: "Profile setup required",
+            description: "Please create your player profile to continue.",
           })
           router.push("/players/createPlayer")
           return
@@ -79,6 +79,13 @@ export default function LoginPage() {
       if (myProfile.player) {
         router.push("/players")
       }
+    } else if (decodedToken.user.role === "OWNER") {
+      router.push("/dashboard/team-owner")
+    } else if (decodedToken.user.role === "ADMIN") {
+      router.push("/dashboard")
+    } else {
+
+      router.push("/dashboard")
     }
   } catch (error) {
     toast({
@@ -94,7 +101,7 @@ export default function LoginPage() {
   const checkAuth = useAuthStore(state => state.checkAuth)
 
   useEffect(() => {
-    // Check token expiration when component mounts
+
     checkAuth();
   }, [checkAuth]);
 

@@ -39,4 +39,4 @@ export const uploadToCloudinary = async (file: File): Promise<string> => {
         reject(error);
       });
   });
-}; 
+};

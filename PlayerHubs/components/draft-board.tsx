@@ -8,7 +8,6 @@ import { ArrowUpDown, ChevronDown, ChevronUp } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table"
 import React from "react"
 
-// Sample data - in a real app this would come from an API or database
 const initialPlayers = [
   {
     id: 1,

@@ -12,7 +12,7 @@ import { useTeamStore } from "@/store/teamStore"
 export default function TeamsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const teams = useTeamStore((state) => state.teams)
-  // console.log(teamsData)
+
   const filteredTeams = teams.filter((team) => team.teamNameEn.toLowerCase().includes(searchTerm.toLowerCase()))
   return (
     <div className="container py-8 mx-auto">
@@ -50,22 +50,22 @@ export default function TeamsPage() {
               </div>
               <CardHeader>
                 <CardTitle>{team.teamName}</CardTitle>
-                {/* <CardDescription>Founded: {team.founded}</CardDescription> */}
+                {}
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
                     <span className="text-muted-foreground">Coach:</span>
-                    {/* <p>{team.coach}</p> */}
+                    {}
                   </div>
                   <div>
                     <span className="text-muted-foreground">Home:</span>
-                    {/* <p>{team.homeVenue}</p> */}
+                    {}
                   </div>
                 </div>
                 <div className="mt-4 flex items-center gap-2">
                   <Trophy className="h-4 w-4 text-primary" />
-                  {/* <span className="text-sm">{team.achievements.length} achievements</span> */}
+                  {}
                 </div>
               </CardContent>
             </Card>

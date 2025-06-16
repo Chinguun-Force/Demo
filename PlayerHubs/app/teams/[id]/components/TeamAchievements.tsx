@@ -27,4 +27,4 @@ const TeamAchievements: React.FC<TeamAchievementsProps> = ({ achievements }) => 
   );
 };
 
-export default TeamAchievements; 
+export default TeamAchievements;

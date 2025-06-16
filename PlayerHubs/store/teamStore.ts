@@ -5,12 +5,12 @@ export interface Team {
   _id: string;
   teamName: string;
   teamNameEn: string;
-  teamLogo: string; 
+  teamLogo: string;
   description: string;
   createdAt: string;
   updatedAt: string;
-  members: string[]; // Array of user IDs
-  owner: string; // User ID of the team owner
+  members: string[]; 
+  owner: string; 
   __v: number;
 }
 interface TeamState {
@@ -27,10 +27,10 @@ export const useTeamStore = create<TeamState>()(
       teams: [],
       isLoading: false,
       error: null,
-      fetchTeams: async () => { 
+      fetchTeams: async () => {
         set({ isLoading: true, error: null });
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/teams`, {
+          const response = await fetch(`/api/teams?t=${Date.now()}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -40,8 +40,10 @@ export const useTeamStore = create<TeamState>()(
             throw new Error('Failed to fetch teams');
           }
           const data = await response.json();
+          console.log('Fetched teams:', data.teams.length);
           set({ teams: data.teams, isLoading: false });
         } catch (error) {
+          console.error('Error fetching teams:', error);
           set({ isLoading: false, error: error instanceof Error ? error.message : String(error) });
         }
       }

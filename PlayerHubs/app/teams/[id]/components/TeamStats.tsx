@@ -28,4 +28,4 @@ const TeamStats: React.FC<TeamStatsProps> = ({ stats }) => {
   );
 };
 
-export default TeamStats; 
+export default TeamStats;

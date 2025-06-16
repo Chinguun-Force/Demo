@@ -16,18 +16,18 @@ export default function PlayerPhotoSection() {
   const [currentPhoto, setCurrentPhoto] = useState<string>(
     profile?.profilePicture || "/placeholder.svg?height=128&width=128"
   )
-  
+
   const [isUploading, setIsUploading] = useState(false)
   const { toast } = useToast()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    // Clear profile data when the component mounts
+
     clearProfile()
-  }, [clearProfile])
+  }, [])
 
   useEffect(() => {
-    // Update current photo when profile changes
+
     if (profile?.profilePicture) {
       setCurrentPhoto(profile.profilePicture)
     }
@@ -37,7 +37,6 @@ export default function PlayerPhotoSection() {
     const file = event.target.files?.[0]
     if (!file) return
 
-    // Validate file type
     if (!file.type.startsWith("image/")) {
       toast({
         title: "Invalid file type",
@@ -47,7 +46,6 @@ export default function PlayerPhotoSection() {
       return
     }
 
-    // Validate file size (5MB limit)
     if (file.size > 5 * 1024 * 1024) {
       toast({
         title: "File too large",
@@ -81,7 +79,7 @@ export default function PlayerPhotoSection() {
       })
     } finally {
       setIsUploading(false)
-      // Reset the input value so the same file can be selected again
+
       event.target.value = ""
     }
   }

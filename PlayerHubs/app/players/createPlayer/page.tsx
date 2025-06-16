@@ -1,16 +1,11 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useToast } from "@/hooks/use-toast"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Loader2,
   Save,
@@ -20,40 +15,36 @@ import {
   Trophy,
   LinkIcon,
   BarChart3,
-} from "lucide-react"
-import Link from "next/link"
+} from "lucide-react";
+import Link from "next/link";
 
-import { FormProgress } from "./components/FormProgress"
-import { BasicInfoSection } from "./sections/BasicInfoSection"
-import { TeamInfoSection } from "./sections/TeamInfoSection"
-import { BioSection } from "./sections/BioSection"
-import { CareerHistorySection } from "./sections/CareerHistorySection"
-// import { AchievementsSection } from "./sections/AchievementsSection"
-// import { SocialLinksSection } from "./sections/SocialLinksSection"
+import { FormProgress } from "./components/FormProgress";
+import { BasicInfoSection } from "./sections/BasicInfoSection";
+import { TeamInfoSection } from "./sections/TeamInfoSection";
+import { BioSection } from "./sections/BioSection";
+import { CareerHistorySection } from "./sections/CareerHistorySection";
 
-import { useProfileStore, PlayerProfile } from "@/store/profileStore"
-import { AchievementsSection } from "./sections/AchievementSection"
-import { SocialLinksSection } from "./sections/SocialLinkSection"
-import PlayerPhotoSection from "./sections/PhotoSection"
+import { useProfileStore, PlayerProfile } from "@/store/profileStore";
+import { AchievementsSection } from "./sections/AchievementSection";
+import { SocialLinksSection } from "./sections/SocialLinkSection";
+import PlayerPhotoSection from "./sections/PhotoSection";
 
 export default function PlayerForm() {
-  const [activeTab, setActiveTab] = useState("profile-picture")
-  const [isLoading, setIsLoading] = useState(false)
-  const [formProgress, setFormProgress] = useState(0)
+  const [activeTab, setActiveTab] = useState("profile-picture");
+  const [isLoading, setIsLoading] = useState(false);
+  const [formProgress, setFormProgress] = useState(0);
 
-  const { toast } = useToast()
-  const router = useRouter()
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL
-  // Pull entire profile object from the store
-  const profileState = useProfileStore((state) => state.profile)
-  const setProfile = useProfileStore((state) => state.setProfile)
-  // console.log("profileState", profileState)
-  // console.log("formData", )
+  const { toast } = useToast();
+  const router = useRouter();
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  const profileState = useProfileStore((state) => state.profile);
+  const setProfile = useProfileStore((state) => state.setProfile);
+
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
-    // Ensure profileState is not null before proceeding
     if (!profileState) {
       toast({
         title: "Error",
@@ -65,66 +56,79 @@ export default function PlayerForm() {
     }
 
     try {
-      const playerCreateResponse = await fetch(`${baseUrl}/api/v1/players`, {
+      const playerCreateResponse = await fetch("/api/players", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(profileState), // Use profileState directly
-        })
+      });
 
-      const playerData = await playerCreateResponse.json()
+      const playerData = await playerCreateResponse.json();
       if (!playerCreateResponse.ok) {
-        throw new Error(playerData.message || "Failed to create player profile")
+        throw new Error(
+          playerData.message || "Failed to create player profile"
+        );
       }
-      console.log("playerData", playerData)
+      console.log("playerData", playerData);
       const newPlayerId = playerData.player._id;
 
-      // Check if a team was selected (profileState.teamId exists)
-      // and player creation was successful (newPlayerId exists)
-      
       if (profileState.teamId && newPlayerId) {
         try {
-          // First, fetch the current team data to get existing members
-          const getTeamResponse = await fetch(`${baseUrl}/api/v1/teams/${profileState.teamId}`);
+
+          const getTeamResponse = await fetch(
+            `/api/teams/${profileState.teamId}`
+          );
           if (!getTeamResponse.ok) {
             throw new Error("Failed to fetch team details before updating.");
           }
           const teamData = await getTeamResponse.json();
           const existingTeamMembers = teamData.team.teamMembers || [];
 
-          // Add the new player to the existing list
           const updatedTeamMembers = [...existingTeamMembers, newPlayerId];
 
-          const teamUpdateResponse = await fetch(`${baseUrl}/api/v1/teams/${profileState.teamId}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({ teamMembers: updatedTeamMembers }),
-          });
+          const teamUpdateResponse = await fetch(
+            `/api/teams/${profileState.teamId}`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: JSON.stringify({ teamMembers: updatedTeamMembers }),
+            }
+          );
 
           if (!teamUpdateResponse.ok) {
             const teamUpdateErrorData = await teamUpdateResponse.json();
-            console.error("Failed to update team:", teamUpdateErrorData.message || "Unknown error updating team");
+            console.error(
+              "Failed to update team:",
+              teamUpdateErrorData.message || "Unknown error updating team"
+            );
             toast({
               title: "Profile Created, Team Update Issue",
-              description: `Player profile created, but failed to add player to team: ${teamUpdateErrorData.message || "Unknown error"}`,
-              // Using "default" or "destructive" if "warning" is not available
-              // For now, let's use default and rely on the title/description for context
+              description: `Player profile created, but failed to add player to team: ${
+                teamUpdateErrorData.message || "Unknown error"
+              }`,
+
               variant: "default",
             });
           } else {
-            console.log(`Team ${profileState.teamId} updated successfully with player ${newPlayerId}`);
+            console.log(
+              `Team ${profileState.teamId} updated successfully with player ${newPlayerId}`
+            );
           }
         } catch (teamUpdateErr) {
           console.error("Error during team update API call:", teamUpdateErr);
           toast({
             title: "Profile Created, Team Update Exception",
-            description: `Player profile created, but an error occurred while updating the team. ${teamUpdateErr instanceof Error ? teamUpdateErr.message : "Network error"}`,
-            variant: "default", // Changed from warning
+            description: `Player profile created, but an error occurred while updating the team. ${
+              teamUpdateErr instanceof Error
+                ? teamUpdateErr.message
+                : "Network error"
+            }`,
+            variant: "default",
           });
         }
       }
@@ -133,10 +137,10 @@ export default function PlayerForm() {
         title: "Profile Created Successfully",
         description: "Your player profile has been created.",
         variant: "default",
-      })
-      router.push("/dashboard")
+      });
+      router.push("/dashboard");
     } catch (err) {
-      console.error(err)
+      console.error(err);
       toast({
         title: "Error",
         description:
@@ -144,38 +148,41 @@ export default function PlayerForm() {
             ? err.message
             : "Failed to create player profile",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const updateField = async (field: string, value: string | number) => {
-    setProfile((prev) => ({ ...prev, [field]: value }))
+    setProfile((prev) => ({ ...prev, [field]: value }));
 
     if (field === "teamId") {
       try {
-        const teamResponse = await fetch(`${baseUrl}/api/v1/teams/${value}`, {
+        const teamResponse = await fetch(`/api/teams/${value}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          // Only attempt to update team if playerId exists in profile and playerId is defined
-          body: profileState && (profileState as any).playerId
-            ? JSON.stringify({ $push: { teamMembers: (profileState as any).playerId } })
-            : undefined,
-        })
+
+          body:
+            profileState && (profileState as any).playerId
+              ? JSON.stringify({
+                  $push: { teamMembers: (profileState as any).playerId },
+                })
+              : undefined,
+        });
 
         if (!teamResponse.ok) {
-          const teamData = await teamResponse.json()
-          throw new Error(teamData.message || "Failed to update team")
+          const teamData = await teamResponse.json();
+          throw new Error(teamData.message || "Failed to update team");
         }
       } catch (err) {
-        console.error("Failed to update team:", err)
+        console.error("Failed to update team:", err);
       }
     }
-  }
+  };
 
   const tabOrder = [
     "profile-picture",
@@ -185,23 +192,23 @@ export default function PlayerForm() {
     "career",
     "achievements",
     "social",
-  ]
+  ];
 
   const handleTabChange = (value: string) => {
-    setActiveTab(value)
-    const idx = tabOrder.indexOf(value)
-    setFormProgress(Math.round((idx / (tabOrder.length - 1)) * 100))
-  }
+    setActiveTab(value);
+    const idx = tabOrder.indexOf(value);
+    setFormProgress(Math.round((idx / (tabOrder.length - 1)) * 100));
+  };
 
   const goToNextTab = () => {
-    const idx = tabOrder.indexOf(activeTab)
-    if (idx < tabOrder.length - 1) handleTabChange(tabOrder[idx + 1])
-  }
+    const idx = tabOrder.indexOf(activeTab);
+    if (idx < tabOrder.length - 1) handleTabChange(tabOrder[idx + 1]);
+  };
 
   const goToPrevTab = () => {
-    const idx = tabOrder.indexOf(activeTab)
-    if (idx > 0) handleTabChange(tabOrder[idx - 1])
-  }
+    const idx = tabOrder.indexOf(activeTab);
+    if (idx > 0) handleTabChange(tabOrder[idx - 1]);
+  };
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -222,7 +229,7 @@ export default function PlayerForm() {
             className="mt-6"
           >
             <TabsList className="grid grid-cols-7 mb-8">
-            <TabsTrigger
+              <TabsTrigger
                 value="profile-picture"
                 className="flex flex-col items-center gap-1 py-3"
               >
@@ -236,9 +243,7 @@ export default function PlayerForm() {
                 className="flex flex-col items-center gap-1 py-3"
               >
                 <UserCircle className="h-5 w-5" />
-                <span className="hidden md:inline text-xs">
-                  Basic Info
-                </span>
+                <span className="hidden md:inline text-xs">Basic Info</span>
               </TabsTrigger>
 
               <TabsTrigger
@@ -362,10 +367,7 @@ export default function PlayerForm() {
                   </Link>
 
                   {activeTab !== "social" ? (
-                    <Button
-                      type="button"
-                      onClick={goToNextTab}
-                    >
+                    <Button type="button" onClick={goToNextTab}>
                       Next
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
@@ -395,5 +397,5 @@ export default function PlayerForm() {
         </form>
       </div>
     </div>
-  )
+  );
 }

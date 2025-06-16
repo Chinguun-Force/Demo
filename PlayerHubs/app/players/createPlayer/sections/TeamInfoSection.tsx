@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -19,19 +20,36 @@ interface TeamInfoSectionProps {
 
 export function TeamInfoSection() {
   const teams = useTeamStore((state) => state.teams)
+  const fetchTeams = useTeamStore((state) => state.fetchTeams)
+  const isLoading = useTeamStore((state) => state.isLoading)
   const profile = useProfileStore((state) => state.profile) || {};
-  const { position = "", teamId = "", jerseyNumber = 0, status = "" } = profile as {
+  const { position = "", teamId = "", jerseyNumber = "", status = "" } = profile as {
     position?: string;
     teamId?: string;
-    jerseyNumber?: number;
+    jerseyNumber?: number | string;
     status?: string;
   };
-const setProfile = useProfileStore((state) => state.setProfile)
-   const updateField = (field: string, value: string | number) => {
+  const setProfile = useProfileStore((state) => state.setProfile)
+  const hasFetchedRef = useRef(false)
+
+  useEffect(() => {
+    if (!hasFetchedRef.current && teams.length === 0 && !isLoading) {
+      hasFetchedRef.current = true
+      console.log('Fetching teams from TeamInfoSection...')
+      fetchTeams()
+    }
+  }, [teams.length, isLoading, fetchTeams])
+
+  const handleRefreshTeams = () => {
+    hasFetchedRef.current = false
+    fetchTeams()
+  }
+
+  const updateField = (field: string, value: string | number) => {
     setProfile((prev) => ({ ...prev, [field]: value }))
   }
   console.log("TeamInfoSection data", {
-    position, teamId, jerseyNumber, status
+    position, teamId, jerseyNumber, status, teams: teams.length
   })
   return (
     <div className="space-y-6">
@@ -50,32 +68,47 @@ const setProfile = useProfileStore((state) => state.setProfile)
               <SelectValue placeholder="Select position" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Goalkeeper">Goalkeeper</SelectItem>
-              <SelectItem value="Defender">Defender</SelectItem>
-              <SelectItem value="Midfielder">Midfielder</SelectItem>
-              <SelectItem value="Forward">Forward</SelectItem>
+              <SelectItem value="Point Guard">Point Guard</SelectItem>
+              <SelectItem value="Shooting Guard">Shooting Guard</SelectItem>
+              <SelectItem value="Small Forward">Small Forward</SelectItem>
+              <SelectItem value="Power Forward">Power Forward</SelectItem>
+              <SelectItem value="Center">Center</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="team" className="text-sm font-medium">
-            Current Team
-          </Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="team" className="text-sm font-medium">
+              Team
+            </Label>
+            <button
+              type="button"
+              onClick={handleRefreshTeams}
+              className="text-xs text-blue-500 hover:text-blue-700"
+            >
+              Refresh Teams ({teams.length})
+            </button>
+          </div>
           <Select value={teamId} onValueChange={(value) => updateField("teamId", value)}>
             <SelectTrigger className="h-11">
-              <SelectValue placeholder="Багаа сонгоно уу"/>
+              <SelectValue placeholder={isLoading ? "Loading teams..." : teams.length === 0 ? "No teams available" : "Select team"} />
             </SelectTrigger>
             <SelectContent>
-              {
-                teams.map((team) => (
-                  <SelectItem key={team._id} value={team._id}>
-                    <div className="flex items-center">
-                      <img src={team.teamLogo || "/placeholder.svg"} alt={team.teamName} className="h-6 w-6 mr-2" />
-                      {team.teamName}
-                    </div>
-                  </SelectItem>
-                ))
-              }
+              {teams.map((team) => (
+                <SelectItem key={team._id} value={team._id}>
+                  <div className="flex items-center space-x-2">
+                    <img
+                      src={team.teamLogo || "/placeholder.svg"}
+                      alt={team.teamName}
+                      className="h-6 w-6 rounded object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiByeD0iNCIgZmlsbD0iI0Y0RjRGNSIvPgo8L3N2Zz4K'
+                      }}
+                    />
+                    <span>{team.teamName}</span>
+                  </div>
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -87,7 +120,7 @@ const setProfile = useProfileStore((state) => state.setProfile)
             id="jerseyNumber"
             type="number"
             value={jerseyNumber}
-            onChange={(e) => updateField("jerseyNumber", Number.parseInt(e.target.value))}
+            onChange={(e) => updateField("jerseyNumber", e.target.value ? Number.parseInt(e.target.value) || "" : "")}
             placeholder="Enter jersey number"
             className="h-11"
             required

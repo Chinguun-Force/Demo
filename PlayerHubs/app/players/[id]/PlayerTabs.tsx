@@ -30,4 +30,4 @@ export const PlayerTabs: React.FC<PlayerTabsProps> = ({ player }) => (
       <PlayerDonation player={player} />
     </TabsContent>
   </Tabs>
-); 
+);

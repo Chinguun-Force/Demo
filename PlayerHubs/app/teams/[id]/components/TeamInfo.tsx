@@ -48,4 +48,4 @@ const TeamInfo: React.FC<TeamInfoProps> = ({ founded, homeArena, championships }
   );
 };
 
-export default TeamInfo; 
+export default TeamInfo;

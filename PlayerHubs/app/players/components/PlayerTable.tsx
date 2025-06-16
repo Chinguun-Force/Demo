@@ -19,54 +19,7 @@ const PlayerTable = () => {
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              {/* <TableBody>
-                {filteredPlayers.length > 0 ? (
-                  filteredPlayers.map((player) => (
-                    <TableRow key={player.id}>
-                      <TableCell className="font-medium">{player.name}</TableCell>
-                      <TableCell>{player.position}</TableCell>
-                      <TableCell>{player.team}</TableCell>
-                      <TableCell>{player.age}</TableCell>
-                      <TableCell>{player.nationality}</TableCell>
-                      <TableCell>
-                        <Badge className={getStatusColor(player.status)} variant="outline">
-                          {player.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="sm" asChild>
-                          <Link href={`/players/${player.id}`}>View Stats</Link>
-                        </Button>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <span className="sr-only">Open menu</span>
-                              <ChevronDown className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem asChild>
-                              <Link href={`/players/${player.id}`}>View details</Link>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>Edit player</DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem className="text-red-600">Delete player</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={8} className="h-24 text-center">
-                      No players found.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody> */}
+              {}
             </Table>
   )
 }

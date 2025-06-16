@@ -8,7 +8,7 @@ interface PlayerStatsProps {
 }
 
 export function PlayerStats({ player }: PlayerStatsProps) {
-  // Create some sample performance data for visualization
+
   const performanceData = [
     { month: "Jan", goals: 30, assists: 20, minutesPlayed: 270 },
     { month: "Feb", goals: 20, assists: 30, minutesPlayed: 360 },

@@ -14,7 +14,7 @@ export function BioSection() {
   console.log("BioSection data", {
     bio
   })
-  
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">

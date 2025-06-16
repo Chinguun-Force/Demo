@@ -27,7 +27,7 @@ export default function RegisterPage() {
 
   const handleTestClick = () => {
     setName("Test User");
-    // Using Date.now() to ensure the email is unique for each test run
+
     setEmail(`test@gmail.com`);
     setPassword("Shine2025*");
     setConfirmPassword("Shine2025*");
@@ -49,13 +49,18 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
-      await fetch(`${baseUrl}/api/v1/auth/sign-up`, {
+      const response = await fetch('/api/auth/register', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password, role}),
       })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Registration failed')
+      }
 
       toast({
         title: "Registration successful",

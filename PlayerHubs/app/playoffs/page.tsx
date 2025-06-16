@@ -9,7 +9,7 @@ import { Calendar, Clock, Video } from "lucide-react"
 import Link from "next/link"
 
 export default function PlayoffsPage() {
-  // Group matches by stage
+
   const matchesByStage = playoffMatches.reduce(
     (acc, match) => {
       if (!acc[match.stage]) {
