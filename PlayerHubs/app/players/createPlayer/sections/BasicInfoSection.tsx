@@ -7,11 +7,11 @@ import PlayerPhotoSection from "./PhotoSection"
 
 export function BasicInfoSection() {
   const profile = useProfileStore((state) => state.profile) || {};
-  const { name = "", age = 0, height = 0, weight = 0, profilePicture = "" } = profile as {
+  const { name = "", age = "", height = "", weight = "", profilePicture = "" } = profile as {
     name?: string;
-    age?: number;
-    height?: number;
-    weight?: number;
+    age?: number | string;
+    height?: number | string;
+    weight?: number | string;
     profilePicture?: string;
   };
   const setProfile = useProfileStore((state) => state.setProfile)
@@ -19,7 +19,7 @@ export function BasicInfoSection() {
   const updateField = (field: string, value: string | number) => {
     setProfile((prev) => ({ ...prev, [field]: value }))
   }
-  // console.log("BasicInfoSection profile", profile)
+
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -27,7 +27,7 @@ export function BasicInfoSection() {
         <p className="text-sm text-muted-foreground">Enter the player's personal details and physical attributes.</p>
       </div>
 
-      {/* Photo Section */}
+      {}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
@@ -51,7 +51,7 @@ export function BasicInfoSection() {
             id="age"
             type="number"
             value={age}
-            onChange={(e) => updateField("age", Number.parseInt(e.target.value) || 0)}
+            onChange={(e) => updateField("age", e.target.value ? Number.parseInt(e.target.value) || "" : "")}
             placeholder="Enter player's age"
             className="h-11"
             required
@@ -66,7 +66,7 @@ export function BasicInfoSection() {
             type="number"
             step="0.1"
             value={height}
-            onChange={(e) => updateField("height", Number.parseFloat(e.target.value) || 0)}
+            onChange={(e) => updateField("height", e.target.value ? Number.parseFloat(e.target.value) || "" : "")}
             placeholder="Enter player's height in cm"
             className="h-11"
             required
@@ -82,7 +82,7 @@ export function BasicInfoSection() {
             type="number"
             step="0.1"
             value={weight}
-            onChange={(e) => updateField("weight", Number.parseFloat(e.target.value) || 0)}
+            onChange={(e) => updateField("weight", e.target.value ? Number.parseFloat(e.target.value) || "" : "")}
             placeholder="Enter player's weight in kg"
             className="h-11"
             required

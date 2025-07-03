@@ -16,9 +16,6 @@ export default function TeamOwnerDashboard() {
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([])
   const [loading, setLoading] = useState(true)
 
-  
-
-  // Mock current owner ID - in real app, get from auth
   const currentOwnerId = "1"
 
   useEffect(() => {
@@ -36,7 +33,6 @@ export default function TeamOwnerDashboard() {
           playersRes.json(),
         ])
 
-        // Filter data for current owner
         const ownerTeams = teamsData.filter((team: Team) => team.owner_id === currentOwnerId)
         const ownerContracts = contractsData.filter((contract: Contract) => contract.owner_id === currentOwnerId)
         const freeAgents = playersData.filter((player: Player) => !player.team_id)
@@ -45,7 +41,6 @@ export default function TeamOwnerDashboard() {
         setMyContracts(ownerContracts)
         setAvailablePlayers(freeAgents)
 
-        // Mock owner data
         setOwner({
           id: currentOwnerId,
           name: "John Smith",
@@ -102,7 +97,7 @@ export default function TeamOwnerDashboard() {
         </div>
       </div>
 
-      {/* Owner Stats */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

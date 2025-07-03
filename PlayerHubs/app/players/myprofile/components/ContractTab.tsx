@@ -9,7 +9,7 @@ import { useEffect, useState } from "react"
 import Spinner from "@/components/ui/spinner"
 import { Team } from "@/types/team"
 import Image from "next/image"
- 
+
 interface ContractData {
   team: string
   salary: string
@@ -21,13 +21,13 @@ interface ContractData {
     amount: string
   }>
 }
- 
+
 interface ContractTabProps {
   contractData: ContractData
 }
- 
+
 export function ContractTab({ contractData }: ContractTabProps) {
-  const profile = useProfileStore.getState().profile
+  const profile = useProfileStore((state) => state.profile)
   const [loading, setLoading] = useState(true)
   const [team, setTeam] = useState<Team | null>(null);
 
@@ -36,7 +36,7 @@ export function ContractTab({ contractData }: ContractTabProps) {
     const fetchTeam = async () => {
       if (profile?.teamId) {
         setLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/teams/${profile.teamId}`);
+        const response = await fetch(`/api/teams/${profile.teamId}`);
         const data = await response.json();
         setTeam(data.team);
         setLoading(false);
@@ -46,15 +46,9 @@ export function ContractTab({ contractData }: ContractTabProps) {
     };
 
     fetchTeam();
-  }, [profile]);
-  if(!profile?.teamId) {
-    setLoading(false)}
+  }, [profile?.teamId]);
   return (
-    // loading ? (
-    //   <div className="flex items-center justify-center h-screen">
-    //       <Spinner/>
-    //   </div>
-    // ) : (
+
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
@@ -92,9 +86,9 @@ export function ContractTab({ contractData }: ContractTabProps) {
             </div>
           </div>
         </div>
- 
+
         <Separator />
- 
+
         <div>
           <Label className="text-sm font-medium mb-3 block">KPI</Label>
           <div className="space-y-2">
@@ -109,5 +103,5 @@ export function ContractTab({ contractData }: ContractTabProps) {
       </CardContent>
     </Card>
   )
-// )
+
 }

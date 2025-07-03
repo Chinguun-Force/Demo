@@ -50,4 +50,4 @@ const TeamRankings: React.FC = () => {
   );
 };
 
-export default TeamRankings; 
+export default TeamRankings;

@@ -1,8 +1,5 @@
-// Sample data
 
-// import { Player, PlayoffMatch, Team } from "./type"
 
-// Re-import necessary types
 import { Team, PlayoffMatch } from "./type";
 
 interface Player {
@@ -84,7 +81,7 @@ export const players: Player[] = [
       position: "Forward",
       team: "Red Dragons", // Changed teamId to team to match Player type
       age: 24,
-      height: "6'2\"", 
+      height: "6'2\"",
       nationality: "USA",
       number: 10, // Added required number field
       fromYear: 2020, // Added required fromYear field
@@ -133,8 +130,7 @@ export const players: Player[] = [
         gamesPlayed: 128,
         points: 75,
         assists: 32,
-        // yellowCards: 15,
-        // redCards: 2,
+
         minutesPlayed: 10240,
         fieldGoalsMadeAttempted: "",
         fieldGoalPercentage: 0,

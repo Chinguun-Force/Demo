@@ -8,4 +8,4 @@ interface ThemeState {
 export const useThemeStore = create<ThemeState>((set) => ({
   darkMode: false,
   toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
-})); 
+}));

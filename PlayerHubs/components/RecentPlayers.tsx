@@ -33,7 +33,7 @@ const RecentPlayers = () => {
               </Link>
             </div>
           </CardContent>
-        </Card> 
+        </Card>
     </div>
   )
 }

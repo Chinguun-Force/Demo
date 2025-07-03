@@ -1,4 +1,4 @@
-// Database schema types and utilities
+
 export interface Player {
     id: string
     name: string
@@ -11,7 +11,7 @@ export interface Player {
     created_at: string
     updated_at: string
   }
-  
+
   export interface Team {
     id: string
     name: string
@@ -22,7 +22,7 @@ export interface Player {
     created_at: string
     updated_at: string
   }
-  
+
   export interface TeamOwner {
     id: string
     name: string
@@ -32,7 +32,7 @@ export interface Player {
     created_at: string
     updated_at: string
   }
-  
+
   export interface Contract {
     id: string
     player_id: string
@@ -48,7 +48,7 @@ export interface Player {
     created_at: string
     updated_at: string
   }
-  
+
   export interface Donation {
     id: string
     donor_name: string
@@ -61,7 +61,7 @@ export interface Player {
     payment_id?: string
     created_at: string
   }
-  
+
   export interface PlayerStats {
     games_played: number
     points: number
@@ -70,11 +70,10 @@ export interface Player {
     rating: number
     stell: number
   }
-  
-  // Mock database functions (replace with actual database calls)
+
   export class Database {
     static async getPlayers(): Promise<Player[]> {
-      // Mock data - replace with actual database query
+
       return [
         {
           id: "1",
@@ -100,7 +99,7 @@ export interface Player {
         },
       ]
     }
-  
+
     static async getTeams(): Promise<Team[]> {
       return [
         {
@@ -114,7 +113,7 @@ export interface Player {
         },
       ]
     }
-  
+
     static async getContracts(): Promise<Contract[]> {
       return [
         {
@@ -133,7 +132,7 @@ export interface Player {
         },
       ]
     }
-  
+
     static async getDonations(): Promise<Donation[]> {
       return [
         {
@@ -149,4 +148,3 @@ export interface Player {
       ]
     }
   }
-  

@@ -2,18 +2,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { DollarSign } from "lucide-react"
- 
+
 interface Donation {
   donor: string
   amount: string
   message: string
   date: string
 }
- 
+
 interface DonationsTabProps {
   donations: Donation[]
 }
- 
+
 export function DonationsTab({ donations }: DonationsTabProps) {
   return (
     <Card>
@@ -41,9 +41,9 @@ export function DonationsTab({ donations }: DonationsTabProps) {
             </div>
           ))}
         </div>
- 
+
         <Separator className="my-4" />
- 
+
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
             <div className="text-2xl font-bold text-green-600">250,000₮</div>

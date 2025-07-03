@@ -37,4 +37,4 @@ export const PlayerSocialMedia: React.FC<PlayerSocialMediaProps> = ({ player }) 
       )}
     </div>
   </div>
-); 
+);

@@ -9,7 +9,7 @@ import { useProfileStore } from "@/store/profileStore"
 
 type Profile = {
   achievements?: string[]
-  // add other profile properties if needed
+
 }
 
 export function AchievementsSection() {
@@ -48,7 +48,7 @@ export function AchievementsSection() {
       </div>
 
       <div className="space-y-4">
-        {/* Input + Add button */}
+        {}
         <div className="flex gap-3">
           <Input
             placeholder="Add achievement or award"
@@ -68,7 +68,7 @@ export function AchievementsSection() {
           </Button>
         </div>
 
-        {/* No achievements placeholder or list */}
+        {}
         {achievements.length === 0 ? (
           <div className="text-center py-8 border border-dashed rounded-lg">
             <Award className="h-10 w-10 mx-auto text-gray-400 mb-2" />
@@ -116,7 +116,6 @@ export function AchievementsSection() {
   )
 }
 
-/** SVG Trophy icon */
 function Trophy(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg

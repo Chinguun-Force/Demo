@@ -26,7 +26,7 @@ export default function PlayerDetailsPage() {
     const getData = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${baseUrl}/api/v1/players/${playerId}`, {
+        const res = await fetch(`/api/players/${playerId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export default function PlayerDetailsPage() {
         if (!res.ok) {
           throw new Error(`Failed to fetch players: ${res.status} ${res.statusText}`)
         }
-        
+
         const result = await res.json()
         setData(result)
         console.log(result)
@@ -133,8 +133,8 @@ export default function PlayerDetailsPage() {
                     <span className="font-medium">{player?.weight}</span>
                 </div>
                 <div className="col-span-2 flex flex-col items-center">
-                  {/* <span className="text-muted-foreground">Nationality</span> */}
-                  {/* <span className="font-medium">{player?.nationality}</span> */}
+                  {}
+                  {}
                 </div>
               </div>
               <Separator className="my-6" />

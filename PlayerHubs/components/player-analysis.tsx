@@ -21,7 +21,6 @@ import {
   Radar,
 } from "recharts"
 
-// Sample player data
 const playerData = {
   "James Wilson": {
     stats: [

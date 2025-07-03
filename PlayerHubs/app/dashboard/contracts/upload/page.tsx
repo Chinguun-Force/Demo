@@ -84,12 +84,11 @@ export default function ContractUpload() {
 
     try {
       const uploadPromises = Array.from(files).map(async (file) => {
-        // Validate file type
+
         if (file.type !== "application/pdf" && !file.type.startsWith("image/")) {
           throw new Error(`Invalid file type: ${file.name}. Only PDF and image files are allowed.`)
         }
 
-        // Validate file size (10MB limit for contracts)
         const maxSize = 10 * 1024 * 1024 // 10MB
         if (file.size > maxSize) {
           throw new Error(`File too large: ${file.name}. Maximum size is 10MB.`)
@@ -120,7 +119,6 @@ export default function ContractUpload() {
       const uploadedFiles = await Promise.all(uploadPromises)
       setUploadedFiles((prev) => [...prev, ...uploadedFiles])
 
-      // Add file URLs to form data
       const fileUrls = uploadedFiles.map((file) => file.url)
       setFormData((prev) => ({
         ...prev,
@@ -226,7 +224,7 @@ export default function ContractUpload() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Contract Details */}
+        {}
         <Card>
           <CardHeader>
             <CardTitle>Contract Information</CardTitle>
@@ -341,7 +339,7 @@ export default function ContractUpload() {
           </CardContent>
         </Card>
 
-        {/* File Upload */}
+        {}
         <div className="space-y-6">
           <Card>
             <CardHeader>
@@ -368,32 +366,7 @@ export default function ContractUpload() {
                 <Input
                   type="file"
                   multiple
-                  accept=".pdf,image/*"
-                  onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
-                  className="hidden"
-                  id="file-upload"
-                />
-                <Button asChild variant="outline" disabled={uploading}>
-                  <label htmlFor="file-upload" className="cursor-pointer">
-                    {uploading ? "Uploading..." : "Browse Files"}
-                  </label>
-                </Button>
-                <p className="text-xs text-muted-foreground mt-2">Supports PDF and image files up to 10MB each</p>
-              </div>
-
-              {uploading && (
-                <div className="mt-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm">Uploading files...</span>
-                    <span className="text-sm">{uploadProgress}%</span>
-                  </div>
-                  <Progress value={uploadProgress} className="w-full" />
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Uploaded Files */}
+                  accept=".pdf,image}
           {uploadedFiles.length > 0 && (
             <Card>
               <CardHeader>
@@ -437,7 +410,7 @@ export default function ContractUpload() {
             </Card>
           )}
 
-          {/* Upload Guidelines */}
+          {}
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>

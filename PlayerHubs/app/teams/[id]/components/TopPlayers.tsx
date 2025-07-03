@@ -35,7 +35,7 @@ const TopPlayers: React.FC<TopPlayersProps> = ({ players }) => {
                     className='w-10 h-10 rounded-full'/>
                 <AvatarFallback>US</AvatarFallback>
             </Avatar>
-            
+
             <div className="flex-1 min-w-0">
               <p className="font-medium truncate">{player.name}</p>
               <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -74,4 +74,4 @@ const TopPlayers: React.FC<TopPlayersProps> = ({ players }) => {
   );
 };
 
-export default TopPlayers; 
+export default TopPlayers;

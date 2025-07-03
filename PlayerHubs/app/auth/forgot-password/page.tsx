@@ -16,18 +16,24 @@ export default function ForgotPasswordPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const { toast } = useToast()
-  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const response = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
 
-      // In a real app, you would call your password reset API here
-      // const response = await requestPasswordReset(email)
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Password reset failed')
+      }
 
       setIsSubmitted(true)
       toast({
@@ -38,7 +44,7 @@ export default function ForgotPasswordPage() {
       toast({
         variant: "destructive",
         title: "Something went wrong",
-        description: "There was a problem sending the reset link",
+        description: error instanceof Error ? error.message : "There was a problem sending the reset link",
       })
     } finally {
       setIsLoading(false)

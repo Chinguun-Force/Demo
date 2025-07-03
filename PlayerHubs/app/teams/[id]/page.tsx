@@ -82,7 +82,7 @@ export default function TeamDetails() {
             try {
                 const pathSegments = window.location.pathname.split('/');
                 const teamId = pathSegments[pathSegments.length - 1];
-                const response = await fetch(`${baseUrl}/api/v1/teams/${teamId}`);
+                const response = await fetch(`/api/teams/${teamId}`);
                 const data = await response.json();
                 setTeam(data.success ? data.team : null);
             } catch (error) {
@@ -118,7 +118,7 @@ export default function TeamDetails() {
     }));
   return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-black dark:text-white">
-      {/* Header */}
+      {}
       <header className="sticky top-0 z-10 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
                 <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/teams" className="flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
@@ -136,7 +136,7 @@ export default function TeamDetails() {
             />
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column */}
+          {}
           <div className="lg:col-span-2 space-y-8">
                         <TeamInfo
                             founded={parseInt(team.createdAt)}
@@ -145,15 +145,15 @@ export default function TeamDetails() {
                             championships={team.teamAchievements.length}
                         />
                         <TeamStats stats={transformedStats} />
-                        <RecentResults 
-                          teamName={team.teamName} 
-                          teamNameEn={team.teamNameEn} 
+                        <RecentResults
+                          teamName={team.teamName}
+                          teamNameEn={team.teamNameEn}
                           teamLogo={team.teamLogo}
-                          results={team.games} 
+                          results={team.games}
                         />
           </div>
 
-          {/* Right Column */}
+          {}
                     <div className="space-y-8">
                         <TopPlayers players={team.teamMembersDetails.map(member => ({
                             profilePicture: member.profilePicture,

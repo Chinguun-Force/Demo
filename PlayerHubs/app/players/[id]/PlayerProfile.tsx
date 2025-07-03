@@ -61,4 +61,4 @@ export const PlayerProfile: React.FC<PlayerProfileProps> = ({ player, getStatusC
       </>
     )}
   </div>
-); 
+);

@@ -25,7 +25,6 @@ export function EditProfileTab() {
     profilePicture: "",
   })
 
-  // Use useEffect to sync formData with the profile from the store
   useEffect(() => {
     if (profile) {
       setFormData({
@@ -49,7 +48,6 @@ export function EditProfileTab() {
       return
     }
 
-    // Validate required fields
     if (!formData.name || !formData.position) {
       toast.error("Name and position are required fields")
       return
@@ -63,7 +61,7 @@ export function EditProfileTab() {
       weight: String(formData.weight),
       position: formData.position,
       teamId: formData.team,
-      jerseyNumber: formData.jerseyNumber,      
+      jerseyNumber: formData.jerseyNumber,
       status: formData.status,
       bio: formData.bio,
       profilePicture: formData.profilePicture,
@@ -74,7 +72,7 @@ export function EditProfileTab() {
   }
 
   const handleCancel = () => {
-    // Reset form data to original profile values
+
     if (profile) {
       setFormData({
         name: profile.name || "",
@@ -143,8 +141,8 @@ export function EditProfileTab() {
             <Input
               id="age"
               type="number"
-              value={formData.age}
-              onChange={(e) => setFormData({ ...formData, age: Number.parseInt(e.target.value) || 0 })}
+              value={formData.age || ""}
+              onChange={(e) => setFormData({ ...formData, age: e.target.value ? Number.parseInt(e.target.value) || "" : "" })}
               disabled={!isEditing}
               placeholder="Age"
             />
@@ -154,8 +152,8 @@ export function EditProfileTab() {
             <Input
               id="height"
               type="number"
-              value={formData.height}
-              onChange={(e) => setFormData({ ...formData, height: Number.parseInt(e.target.value) || 0 })}
+              value={formData.height || ""}
+              onChange={(e) => setFormData({ ...formData, height: e.target.value ? Number.parseInt(e.target.value) || "" : "" })}
               disabled={!isEditing}
               placeholder="Height in cm"
             />
@@ -165,8 +163,8 @@ export function EditProfileTab() {
             <Input
               id="weight"
               type="number"
-              value={formData.weight}
-              onChange={(e) => setFormData({ ...formData, weight: Number.parseInt(e.target.value) || 0 })}
+              value={formData.weight || ""}
+              onChange={(e) => setFormData({ ...formData, weight: e.target.value ? Number.parseInt(e.target.value) || "" : "" })}
               disabled={!isEditing}
               placeholder="Weight in kg"
             />
@@ -189,8 +187,8 @@ export function EditProfileTab() {
             <Input
               id="jerseyNumber"
               type="number"
-              value={formData.jerseyNumber}
-              onChange={(e) => setFormData({ ...formData, jerseyNumber: Number.parseInt(e.target.value) || 0 })}
+              value={formData.jerseyNumber || ""}
+              onChange={(e) => setFormData({ ...formData, jerseyNumber: e.target.value ? Number.parseInt(e.target.value) || "" : "" })}
               disabled={!isEditing}
               placeholder="Jersey number"
             />
@@ -254,4 +252,3 @@ export function EditProfileTab() {
     </Card>
   )
 }
- 

@@ -9,7 +9,7 @@ import { useProfileStore } from "@/store/profileStore"
 
 type Profile = {
   careerHistory?: string[]
-  // add other profile properties as needed
+
 }
 
 export function CareerHistorySection() {
@@ -46,7 +46,7 @@ export function CareerHistorySection() {
       </div>
 
       <div className="space-y-4">
-        {/* Input + Add button */}
+        {}
         <div className="flex gap-3">
           <Input
             placeholder="Add previous team"
@@ -66,7 +66,7 @@ export function CareerHistorySection() {
           </Button>
         </div>
 
-        {/* No data placeholder */}
+        {}
         {careerHistory.length === 0 ? (
           <div className="text-center py-8 border border-dashed rounded-lg">
             <Calendar className="h-10 w-10 mx-auto text-gray-400 mb-2" />

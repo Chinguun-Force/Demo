@@ -33,4 +33,4 @@ const TeamHeader: React.FC<TeamHeaderProps> = ({ name, fullName, logo, currentRa
   );
 };
 
-export default TeamHeader; 
+export default TeamHeader;

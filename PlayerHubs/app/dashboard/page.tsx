@@ -1,7 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, useCallback, useMemo } from "react"
-import { useLoaderStore } from "@/store/loaderStore"
+import React, { useEffect, useState, useCallback, useMemo, useRef } from "react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -19,8 +18,6 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Skeleton } from "@/components/ui/skeleton"
 
-// Basic type definitions to avoid errors.
-// These should ideally be imported from a central types file.
 interface Player {
   _id: string;
   name: string;
@@ -67,48 +64,52 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<Tab>("players");
   const [tabLoading, setTabLoading] = useState<Partial<Record<Tab, boolean>>>({ players: true });
   const [tabError, setTabError] = useState<Partial<Record<Tab, string | null>>>({});
-  const { isLoading, setLoading } = useLoaderStore()
+  const [initialLoading, setInitialLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL
+  const fetchedTabsRef = useRef<Set<Tab>>(new Set())
 
   const fetchDataForTab = useCallback(async (tab: Tab) => {
-    if (tabLoading[tab] || (tab === 'players' && players.length > 0) || (tab === 'teams' && teams.length > 0) || (tab === 'contracts' && contracts.length > 0)) {
+    if (fetchedTabsRef.current.has(tab)) {
         return;
     }
 
-    setTabLoading(prev => ({ ...prev, [tab]: true }));
+    setTabLoading(prev => {
+      if (prev[tab]) return prev; // Already loading
+      return { ...prev, [tab]: true };
+    });
     setTabError(prev => ({ ...prev, [tab]: null }));
 
     try {
-      const response = await fetch(`${baseUrl}/api/v1/${tab}`);
+      const response = await fetch(`/api/${tab}`);
       if (!response.ok) throw new Error(`Failed to fetch ${tab}`);
       const data = await response.json();
-      
+
       if (tab === 'players') setPlayers(data.players || []);
       if (tab === 'teams') setTeams(data.teams || []);
       if (tab === 'contracts') setContracts(data.contracts || []);
 
+      fetchedTabsRef.current.add(tab);
     } catch (error) {
       console.error(`Error fetching ${tab}:`, error);
       setTabError(prev => ({ ...prev, [tab]: error instanceof Error ? error.message : `An unknown error occurred` }));
     } finally {
       setTabLoading(prev => ({ ...prev, [tab]: false }));
     }
-  }, [baseUrl, contracts.length, players.length, teams.length, tabLoading]);
+  }, []);
 
   useEffect(() => {
-    // Initial load for global stats and the first tab
+
     const fetchInitialData = async () => {
-      setLoading(true);
+      setInitialLoading(true);
       await Promise.all([
-          // We can pre-fetch teams since we need it for player cards anyway
-          fetchDataForTab('teams'), 
+
+          fetchDataForTab('teams'),
           fetchDataForTab('players')
       ]);
-      setLoading(false);
+      setInitialLoading(false);
     };
     fetchInitialData();
-  }, [fetchDataForTab, setLoading]);
+  }, []);
 
   const onTabChange = (tab: string) => {
       const newTab = tab as Tab;
@@ -224,7 +225,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Stats Cards */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium">Total Players</CardTitle><Users className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent>{tabLoading.players ? <Skeleton className="h-6 w-1/4 mt-2"/> : <div className="text-2xl font-bold">{players.length}</div>}</CardContent></Card>
         <Card><CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"><CardTitle className="text-sm font-medium">Active Teams</CardTitle><Trophy className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent>{tabLoading.teams ? <Skeleton className="h-6 w-1/4 mt-2"/> : <div className="text-2xl font-bold">{teams.length}</div>}</CardContent></Card>

@@ -39,7 +39,7 @@ export default function CreateContractPage() {
     const fetchPlayers = async () => {
       setIsFetchingPlayers(true);
       try {
-        const response = await fetch(`${baseUrl}/api/v1/players`);
+        const response = await fetch('/api/players');
         if (!response.ok) throw new Error('Failed to fetch players');
         const data = await response.json();
         setPlayers(data.players || []);
@@ -71,12 +71,8 @@ export default function CreateContractPage() {
     };
 
     try {
-      // NOTE: File upload logic is complex and backend-dependent.
-      // This example will submit the data without the file.
-      // A real implementation would require a multipart/form-data request
-      // or a separate upload to a service like S3.
 
-      const response = await fetch(`${baseUrl}/api/v1/contracts`, {
+      const response = await fetch('/api/contracts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(contractData),
@@ -192,4 +188,4 @@ export default function CreateContractPage() {
       </div>
     </div>
   );
-} 
+}

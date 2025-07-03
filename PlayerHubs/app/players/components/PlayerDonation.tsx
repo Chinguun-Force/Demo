@@ -27,7 +27,7 @@ export function PlayerDonation({ player }: PlayerDonationProps) {
     setIsSubmitting(true)
 
     try {
-      // Simulate API call
+
       await new Promise((resolve) => setTimeout(resolve, 1500))
 
       toast({

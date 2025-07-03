@@ -70,7 +70,6 @@ export const useAuthStore = create<AuthState>()(
       storage: createJSONStorage(() => localStorage),
       version: 1,
       onRehydrateStorage: () => (state) => {
-        // Check token expiration when rehydrating from storage
         if (state?.user?.token && isTokenExpired(state.user.token)) {
           state.logout();
         }
@@ -78,5 +77,4 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 );
-
 

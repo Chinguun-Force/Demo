@@ -56,12 +56,10 @@ export default function CreateContract() {
         const [playersRes, teamsRes] = await Promise.all([fetch("/api/players"), fetch("/api/teams")])
         const [playersData, teamsData] = await Promise.all([playersRes.json(), teamsRes.json()])
 
-        // Filter teams owned by current user
         const myTeams = teamsData.filter((team: Team) => team.owner_id === "1")
         setPlayers(playersData)
         setTeams(myTeams)
 
-        // Mock contract templates
         setTemplates([
           {
             id: "standard",
@@ -217,7 +215,7 @@ Player: _______________________ Date: ___________
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Contract Form */}
+        {}
         <div className="space-y-6">
           <Card>
             <CardHeader>
@@ -398,7 +396,7 @@ Player: _______________________ Date: ___________
           </Card>
         </div>
 
-        {/* Contract Preview */}
+        {}
         <div className="space-y-6">
           <Card>
             <CardHeader>

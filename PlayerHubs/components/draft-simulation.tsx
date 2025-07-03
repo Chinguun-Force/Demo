@@ -7,7 +7,6 @@ import { Badge } from "./ui/badge"
 import { Play, RefreshCw } from "lucide-react"
 import React from "react"
 
-// Sample draft order and team data
 const draftOrder = [
   { pick: 1, team: "Detroit Pistons" },
   { pick: 2, team: "Houston Rockets" },
@@ -25,7 +24,6 @@ const draftOrder = [
   { pick: 14, team: "Your Team" },
 ]
 
-// Sample players for mock draft
 const draftPlayers = [
   { name: "James Wilson", position: "PG", college: "Duke" },
   { name: "Marcus Johnson", position: "SF", college: "Kentucky" },
@@ -55,10 +53,8 @@ export function DraftSimulation() {
     setSimulationComplete(false)
     setMockDraft([])
 
-    // Shuffle players to create randomness in the mock draft
     const shuffledPlayers = [...draftPlayers].sort(() => 0.5 - Math.random()).slice(0, draftOrder.length)
 
-    // Create initial empty draft
     const initialDraft = draftOrder.map((pick) => ({
       ...pick,
       player: null,
@@ -66,7 +62,6 @@ export function DraftSimulation() {
 
     setMockDraft(initialDraft)
 
-    // Simulate picks one by one with delay
     draftOrder.forEach((pick, index) => {
       setTimeout(
         () => {
@@ -79,7 +74,6 @@ export function DraftSimulation() {
             return updated
           })
 
-          // Check if simulation is complete
           if (index === draftOrder.length - 1) {
             setIsSimulating(false)
             setSimulationComplete(true)

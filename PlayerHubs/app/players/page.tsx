@@ -55,14 +55,13 @@ export default function PlayersPage() {
   const [itemsPerPage, setItemsPerPage] = useState(8); // Default for gallery view
   const baseUrl = process.env.NEXT_PUBLIC_API_URL
 
-
   useEffect(() => {
     const getData = async () => {
       try {
         setLoading(true)
         setError(null)
 
-        const res = await fetch(`${baseUrl}/api/v1/players`, {
+        const res = await fetch('/api/players', {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -90,7 +89,7 @@ export default function PlayersPage() {
     if (!confirm("Are you sure you want to delete this player?")) return
 
     try {
-      const res = await fetch(`/api/v1/players/${playerId}`, {
+              const res = await fetch(`/api/players/${playerId}`, {
         method: "DELETE",
       })
 
@@ -111,7 +110,7 @@ export default function PlayersPage() {
   };
 
   useEffect(() => {
-    // Adjust items per page based on view mode
+
     if (viewMode === 'list') {
       setItemsPerPage(5); // Or your preferred number for list view
     } else {
@@ -131,7 +130,6 @@ export default function PlayersPage() {
     return matchesSearch && matchesPosition && matchesStatus;
   })
 
-  // Pagination logic
   const totalPages = Math.ceil(filteredPlayers.length / itemsPerPage);
   const paginatedPlayers = filteredPlayers.slice(
     (currentPage - 1) * itemsPerPage,
